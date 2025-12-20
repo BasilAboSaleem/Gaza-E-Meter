@@ -16,16 +16,16 @@ const session = require("express-session");
 const flash = require("connect-flash");
 
 // --------- Database ----------
-const connectDB = require("./config/db");
+//const connectDB = require("./config/db");
 
 // --------- Custom Middlewares ----------
-const authMiddleware = require("./app/middlewares/authMiddleware");
+//const authMiddleware = require("./app/middlewares/authMiddleware");
 
 // --------- Routes ----------
-const landingRouter = require("./app/routes/landing");
-const authRoutes = require("./app/routes/authRoutes");
+const landingRouter = require("./src/routes/landing");
+/*const authRoutes = require("./app/routes/authRoutes");
 const dashboardRoutes = require("./app/routes/dashboardRoutes");
-const superAdminRoutes = require("./app/routes/superAdminRoutes");
+const superAdminRoutes = require("./app/routes/superAdminRoutes");*/
 
 // --------- App Init ----------
 const app = express();
@@ -35,7 +35,7 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
 // --------- Database Init ----------
-connectDB();
+//connectDB();
 
 // --------- Global Middlewares ----------
 app.use(express.json());
@@ -70,15 +70,15 @@ app.use((req, res, next) => {
 
 // --------- Public Routes ----------
 app.use("/", landingRouter);
-app.use("/auth", authRoutes);
+//app.use("/auth", authRoutes);
 
 // --------- Auth Middleware ----------
-app.use(authMiddleware);
+//app.use(authMiddleware);
 
 // --------- Global User ----------
-const ROLES = require("./app/constants/roles");
+//const ROLES = require("./app/constants/roles");
 
-app.use((req, res, next) => {
+/*app.use((req, res, next) => {
   res.locals.user = req.user
     ? {
         id: req.user._id,
@@ -92,11 +92,11 @@ app.use((req, res, next) => {
 
   res.locals.ROLES = ROLES;
   next();
-});
+});*/
 
 // --------- Protected Routes ----------
-app.use("/dashboard", dashboardRoutes);
-app.use("/", superAdminRoutes);
+/*app.use("/dashboard", dashboardRoutes);
+app.use("/", superAdminRoutes);*/
 
 // --------- 404 ----------
 app.use((req, res) => {
