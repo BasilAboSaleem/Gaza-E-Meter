@@ -75,7 +75,7 @@ app.use("/", landingRouter);
 // --------- Auth Middleware ----------
 //app.use(authMiddleware);
 
-// --------- Global User ----------
+// --------- Global User ---------- 
 //const ROLES = require("./app/constants/roles");
 
 /*app.use((req, res, next) => {
