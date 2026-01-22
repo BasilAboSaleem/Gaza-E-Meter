@@ -2,10 +2,20 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
-const USER_ROLES = ['ADMIN', 'COLLECTOR', 'ACCOUNTANT'];
+const USER_ROLES = ['SUPER_ADMIN' ,'COMPANY_ADMIN', 'COLLECTOR', 'ACCOUNTANT', 'SUBSCRIBER'];
 
 const userSchema = new mongoose.Schema(
   {
+    company: {
+  type: mongoose.Schema.Types.ObjectId,
+  ref: "Company",
+  default: null, // null = سوبر أدمن
+},
+subscriber: {
+  type: mongoose.Schema.Types.ObjectId,
+  ref: 'Subscriber',
+  default: null
+},
     fullName: {
       type: String,
       required: true,
@@ -15,17 +25,14 @@ const userSchema = new mongoose.Schema(
     },
 
     email: {
-      type: String,
-      required: true,
-      unique: true,
+      type: String, unique: true, sparse: true,
       lowercase: true,
       trim: true,
       index: true
     },
 
     phone: {
-      type: String,
-      trim: true
+    type: String, unique: true, sparse: true
     },
 
     password: {
@@ -66,7 +73,4 @@ userSchema.methods.comparePassword = function (candidatePassword) {
   return bcrypt.compare(candidatePassword, this.password);
 };
 
-userSchema.methods.isAdmin = function () {
-  return this.role === 'ADMIN';
-};
 module.exports = mongoose.model('User', userSchema);
