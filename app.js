@@ -16,16 +16,20 @@ const session = require("express-session");
 const flash = require("connect-flash");
 
 // --------- Database ----------
-//const connectDB = require("./config/db");
+const connectDB = require("./app/config/db");
 
 // --------- Custom Middlewares ----------
-//const authMiddleware = require("./app/middlewares/authMiddleware");
+const authMiddleware = require("./app/middlewares/auth");
 
 // --------- Routes ----------
-const landingRouter = require("./src/routes/landing");
-/*const authRoutes = require("./app/routes/authRoutes");
-const dashboardRoutes = require("./app/routes/dashboardRoutes");
-const superAdminRoutes = require("./app/routes/superAdminRoutes");*/
+const landingRouter = require("./app/routes/landing");
+const authRoutes = require("./app/routes/auth");
+/*const dashboardRoutes = require("./app/routes/dashboardRoutes");
+const superAdminRoutes = require("./app/routes/superAdminRoutes");
+const companyAdminRoutes = require("./app/routes/companyAdminRoutes");
+const accountantRoutes = require("./app/routes/accountantRoutes");
+const collectorRoutes = require("./app/routes/collectorRoutes");
+const subscriberRoutes = require("./app/routes/subscriberRoutes");*/
 
 // --------- App Init ----------
 const app = express();
@@ -35,7 +39,7 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
 // --------- Database Init ----------
-//connectDB();
+connectDB();
 
 // --------- Global Middlewares ----------
 app.use(express.json());
@@ -61,42 +65,48 @@ app.use(
 // Flash
 app.use(flash());
 
-// Flash variables
+// --------- Flash variables ----------
 app.use((req, res, next) => {
   res.locals.success_msg = req.flash("success_msg");
   res.locals.error_msg = req.flash("error_msg");
   next();
 });
 
-// --------- Public Routes ----------
-app.use("/", landingRouter);
-//app.use("/auth", authRoutes);
+// --------- Global User & Roles ----------
+const { USER_ROLES } = require("./app/models/User");
 
-// --------- Auth Middleware ----------
-//app.use(authMiddleware);
-
-// --------- Global User ---------- 
-//const ROLES = require("./app/constants/roles");
-
-/*app.use((req, res, next) => {
+app.use((req, res, next) => {
   res.locals.user = req.user
     ? {
         id: req.user._id,
-        name: req.user.name,
-        email: req.user.email,
+        fullName: req.user.fullName,
+        email: req.user.email || null,
+        phone: req.user.phone || null,
         role: req.user.role,
-        companyId: req.user.companyId || null,
-        companyRole: req.user.companyRole || null,
+        company: req.user.company || null,
+        subscriber: req.user.subscriber || null,
+        isSuperAdmin: req.user.role === 'SUPER_ADMIN',
       }
     : null;
 
-  res.locals.ROLES = ROLES;
+  res.locals.USER_ROLES = USER_ROLES;
   next();
-});*/
+});
+
+// --------- Public Routes ----------
+app.use("/", landingRouter);
+app.use("/auth", authRoutes);
+
+// --------- Auth Middleware ----------
+app.use(authMiddleware); // كل ما بعده محمي
 
 // --------- Protected Routes ----------
 /*app.use("/dashboard", dashboardRoutes);
-app.use("/", superAdminRoutes);*/
+app.use("/super-admin", superAdminRoutes);
+app.use("/company-admin", companyAdminRoutes);
+app.use("/accountant", accountantRoutes);
+app.use("/collector", collectorRoutes);
+app.use("/subscriber", subscriberRoutes);*/
 
 // --------- 404 ----------
 app.use((req, res) => {
@@ -106,7 +116,17 @@ app.use((req, res) => {
 // --------- Error Handler ----------
 app.use((err, req, res, next) => {
   console.error(err);
-  res.status(err.status || 500).render("errors/500");
+  const status = err.status || 500;
+
+  // لو API
+  if (req.xhr || req.headers.accept?.includes("json") || req.path.startsWith("/api")) {
+    return res.status(status).json({ error: err.message || "Internal Server Error" });
+  }
+
+  res.status(status).render("errors/500", {
+    message: err.message || "Internal Server Error",
+    error: process.env.NODE_ENV === "development" ? err : {},
+  });
 });
 
 // --------- Export ----------
