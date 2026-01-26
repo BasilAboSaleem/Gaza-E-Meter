@@ -47,15 +47,94 @@
                     </a>
                 </li>
 
-                <!-- SUPER_ADMIN Menu -->
-                <% if(user?.role === 'SUPER_ADMIN'){ %>
-                    <li class="nav-title">إدارة النظام</li>
-                    <li class="nav-item"><a class="nav-link" href="/plans"><i class="icon">📦</i> <span class="item-name">الباقات</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/companies"><i class="icon">🏢</i> <span class="item-name">الشركات</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/company-admins"><i class="icon">👤</i> <span class="item-name">مدراء الشركات</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/system-users"><i class="icon">👥</i> <span class="item-name">مستخدمو النظام</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/settings"><i class="icon">⚙️</i> <span class="item-name">إعدادات النظام</span></a></li>
-                <% } %>
+            <!-- SUPER_ADMIN Menu -->
+<% if(user?.role === 'SUPER_ADMIN'){ %>
+    <li class="nav-title">إدارة النظام</li>
+
+    <!-- الباقات - مع submenu (collapse) -->
+    <li class="nav-item">
+        <a class="nav-link" 
+           data-bs-toggle="collapse" 
+           href="#plans-submenu" 
+           role="button" 
+           aria-expanded="false" 
+           aria-controls="plans-submenu">
+            <i class="icon">📦</i>
+            <span class="item-name">الباقات</span>
+            <i class="right-icon">
+                <svg class="icon-18" xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </i>
+        </a>
+        <ul class="sub-nav collapse" id="plans-submenu" data-bs-parent="#sidebar-menu">
+            <li class="nav-item">
+                <a class="nav-link" href="/super-admin/plans">
+                    <i class="icon">
+                        <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                            <circle cx="12" cy="12" r="4" fill="currentColor"/>
+                        </svg>
+                    </i>
+                    <span class="item-name">عرض الباقات</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/super-admin/plans/create">  <!-- أو /plans/new أو أي مسار عندك للإضافة -->
+                    <i class="icon">
+                        <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2a1 1 0 011 1v18a1 1 0 11-2 0V3a1 1 0 011-1z"/>
+                            <path d="M2 12a1 1 0 011-1h18a1 1 0 110 2H3a1 1 0 01-1-1z"/>
+                        </svg>
+                    </i>
+                    <span class="item-name">إضافة باقة</span>
+                </a>
+            </li>
+        </ul>
+    </li>
+
+   <li class="nav-item">
+        <a class="nav-link" 
+           data-bs-toggle="collapse" 
+           href="#companies-submenu" 
+           role="button" 
+           aria-expanded="false" 
+           aria-controls="companies-submenu">
+            <i class="icon">🏢</i>
+            <span class="item-name">الشركات</span>
+            <i class="right-icon">
+                <svg class="icon-18" xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </i>
+        </a>
+        <ul class="sub-nav collapse" id="companies-submenu" data-bs-parent="#sidebar-menu">
+            <li class="nav-item">
+                <a class="nav-link" href="/super-admin/companies">
+                    <i class="icon">
+                        <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                            <circle cx="12" cy="12" r="4" fill="currentColor"/>
+                        </svg>
+                    </i>
+                    <span class="item-name">عرض الشركات</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/super-admin/companies/create">  <!-- أو /companies/new أو أي مسار عندك للإضافة -->
+                    <i class="icon">
+                        <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2a1 1 0 011 1v18a1 1 0 11-2 0V3a1 1 0 011-1z"/>
+                            <path d="M2 12a1 1 0 011-1h18a1 1 0 110 2H3a1 1 0 01-1-1z"/>
+                        </svg>
+                    </i>
+                    <span class="item-name">إضافة شركة</span>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li class="nav-item"><a class="nav-link" href="/company-admins"><i class="icon">👤</i> <span class="item-name">مدراء الشركات</span></a></li>
+    <li class="nav-item"><a class="nav-link" href="/system-users"><i class="icon">👥</i> <span class="item-name">مستخدمو النظام</span></a></li>
+    <li class="nav-item"><a class="nav-link" href="/settings"><i class="icon">⚙️</i> <span class="item-name">إعدادات النظام</span></a></li>
+<% } %>
 
                 <!-- COMPANY_ADMIN Menu -->
                 <% if(user?.role === 'COMPANY_ADMIN'){ %>

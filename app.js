@@ -20,10 +20,14 @@ const connectDB = require("./app/config/db");
 
 // --------- Custom Middlewares ----------
 const authMiddleware = require("./app/middlewares/auth");
+require('./cron/companyExpire'); // استيراد ملف الكرون
+
 
 // --------- Routes ----------
 const landingRouter = require("./app/routes/landing");
 const authRoutes = require("./app/routes/auth");
+const superAdminRoutes = require("./app/routes/super-admin");
+
 /*const dashboardRoutes = require("./app/routes/dashboardRoutes");
 const superAdminRoutes = require("./app/routes/superAdminRoutes");
 const companyAdminRoutes = require("./app/routes/companyAdminRoutes");
@@ -48,6 +52,11 @@ app.use(cookieParser());
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
 
+// هذا المسار لو موجود فعلياً
+app.use('/super-admin/assets', (req, res, next) => {
+  const filePath = path.join(__dirname, 'public', 'assets', req.path.replace('/super-admin/assets', ''));
+  express.static(path.join(__dirname, 'public/assets'))(req, res, next);
+});
 // Logger (dev only)
 if (process.env.NODE_ENV !== "production") {
   app.use(morgan("dev"));
@@ -94,16 +103,17 @@ app.use((req, res, next) => {
 });
 
 // --------- Public Routes ----------
-app.use("/", landingRouter);
+
 app.use("/auth", authRoutes);
 
 // --------- Auth Middleware ----------
 app.use(authMiddleware); // كل ما بعده محمي
 
+app.use("/", landingRouter);
 // --------- Protected Routes ----------
-/*app.use("/dashboard", dashboardRoutes);
+
 app.use("/super-admin", superAdminRoutes);
-app.use("/company-admin", companyAdminRoutes);
+/*app.use("/company-admin", companyAdminRoutes);
 app.use("/accountant", accountantRoutes);
 app.use("/collector", collectorRoutes);
 app.use("/subscriber", subscriberRoutes);*/
