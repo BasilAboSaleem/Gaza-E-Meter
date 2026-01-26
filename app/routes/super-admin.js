@@ -16,4 +16,6 @@ router.get("/companies/create", authMiddleware, authorizMiddleware(['SUPER_ADMIN
 router.post("/companies/create", authMiddleware, authorizMiddleware(['SUPER_ADMIN']), superAdminController.createCompany);
 router.get('/companies/:id/edit', authMiddleware, authorizMiddleware(['SUPER_ADMIN']), superAdminController.renderEditCompanyPage);
 router.put("/companies/:id/update", authMiddleware, authorizMiddleware(['SUPER_ADMIN']), superAdminController.updateCompany);
+router.get("/companies/:id/view", authMiddleware, authorizMiddleware(['SUPER_ADMIN']), superAdminController.renderCompanyDetailsPage);
+
 module.exports = router;

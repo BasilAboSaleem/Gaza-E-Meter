@@ -224,3 +224,21 @@ exports.updateCompany = async (req, res) => {
     });
   }
 };
+exports.renderCompanyDetailsPage = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const companyData = await CompanyService.findCompanyWithAdmin(id);
+
+    if (!companyData) {
+      return res.status(404).render('errors/404', { title: 'الشركة غير موجودة' });
+    }
+    return res.render('dashboard/superAdmin/companys/show-company', {
+      title: 'تفاصيل الشركة',
+      company: companyData.company,
+      admin: companyData.admin
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send('خطأ في تحميل صفحة تفاصيل الشركة');
+  }
+};
