@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en" dir="rtl">
+  <%- include('../../../partials/head.ejs') %>
+  <body class="">
+    <!-- loader Start -->
+    <div id="loading">
+      <div class="loader simple-loader">
+        <div class="loader-body"></div>
+      </div>
+    </div>
+    <!-- loader END -->
+    <%- include('../../../partials/sidebar.ejs') %>
+    <main class="main-content">
+      <div class="position-relative iq-banner">
+        <!--Nav Start-->
+        <%- include('../../../partials/navbar.ejs') %>
+        <!--Nav End-->
+      </div>
+
+      <div class="container-fluid content-inner mt-n5 py-0">
+        <div class="row">
+          <div class="col-lg-8 mx-auto">
+            <div class="card">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <div>
+                  <h4 class="card-title mb-0">إضافة باقة جديدة</h4>
+                  <p class="text-muted mb-0 mt-1">أدخل خصائص الباقة الجديدة</p>
+                </div>
+              </div>
+
+              <div class="card-body">
+                <form id="planForm">
+                  <div class="row">
+                    <!-- اسم الباقة -->
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">اسم الباقة</label>
+                      <input
+                        type="text"
+                        id="planName"
+                        class="form-control"
+                        required
+                      >
+                      <div class="text-danger small mt-1 error-name"></div>
+                    </div>
+
+                    <!-- عدد المشتركين -->
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">الحد الأقصى للمشتركين</label>
+                      <input
+                        type="number"
+                        id="planMaxSubscribers"
+                        class="form-control"
+                        value="-1"
+                        required
+                      >
+                      <small class="text-muted">استخدم -1 في حال الباقة غير محدودة</small>
+                      <div class="text-danger small mt-1 error-maxSubscribers"></div>
+                    </div>
+
+                    <!-- السعر -->
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">السعر الشهري</label>
+                      <div class="input-group">
+                        <span class="input-group-text">₪</span>
+                        <input
+                          type="number"
+                          id="planPriceMonthly"
+                          class="form-control"
+                          value="0"
+                          required
+                        >
+                      </div>
+                      <div class="text-danger small mt-1 error-priceMonthly"></div>
+                    </div>
+
+                    <!-- التفعيل -->
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label d-block">حالة الباقة</label>
+                      <div class="form-check form-switch">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          id="planActive"
+                          checked
+                        >
+                        <label class="form-check-label" for="planActive">
+                          الباقة مفعّلة
+                        </label>
+                      </div>
+                    </div>
+
+                    <!-- المميزات -->
+                    <div class="col-12 mb-4">
+                      <label class="form-label">مميزات الباقة</label>
+                      <textarea
+                        id="planFeatures"
+                        class="form-control"
+                        rows="3"
+                      ></textarea>
+                      <small class="text-muted">افصل بين كل ميزة بفاصلة (,)</small>
+                      <div class="text-danger small mt-1 error-features"></div>
+                    </div>
+                  </div>
+
+                  <!-- أزرار -->
+                  <div class="d-flex justify-content-end gap-2">
+                    <button type="reset" class="btn btn-light">إفراغ الحقول</button>
+                    <button type="submit" class="btn btn-primary">إضافة الباقة</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <%- include('../../../partials/footer.ejs') %>
+    </main>
+
+    <%- include('../../../partials/offcanvas.ejs') %>
+    <%- include('../../../partials/scripts.ejs') %>
+
+    <script>
+      const planForm = document.getElementById('planForm');
+
+      function clearErrors() {
+        document.querySelectorAll('[class^="error-"]').forEach(el => el.innerText = '');
+      }
+
+      function showErrors(errors) {
+        Object.keys(errors).forEach(key => {
+          const errorDiv = document.querySelector('.error-' + key);
+          if (errorDiv) errorDiv.innerText = errors[key];
+        });
+      }
+
+      planForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        clearErrors();
+
+        const data = {
+          name: document.getElementById('planName').value,
+          maxSubscribers: Number(document.getElementById('planMaxSubscribers').value),
+          priceMonthly: Number(document.getElementById('planPriceMonthly').value),
+          features: document.getElementById('planFeatures').value
+            .split(',')
+            .map(f => f.trim())
+            .filter(Boolean),
+          isActive: document.getElementById('planActive').checked
+        };
+
+        try {
+          const response = await fetch('/super-admin/plans/create', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+
+          const result = await response.json();
+
+          if (response.ok) {
+            window.location.href = '/super-admin/plans';
+            return;
+          }
+
+          if (result.errors) {
+            showErrors(result.errors);
+          } else {
+            alert(result.message || 'حدث خطأ أثناء إضافة الباقة.');
+          }
+
+        } catch (err) {
+          alert('خطأ في الاتصال بالخادم');
+          console.error(err);
+        }
+      });
+    </script>
+  </body>
+</html>
