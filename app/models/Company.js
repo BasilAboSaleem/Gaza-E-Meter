@@ -8,16 +8,9 @@ const companySchema = new mongoose.Schema(
     },
     ownerName: {
       type: String,
-      required: true,
     },
     phone: {
       type: String,
-      required: true,
-    },
-    email: {
-      type: String,
-      required: true,
-      unique: true,
     },
 
     plan: {
@@ -37,7 +30,7 @@ const companySchema = new mongoose.Schema(
 
     status: {
       type: String,
-      enum: ["active", "suspended", "expired"],
+      enum: ["active", "expired"],
       default: "active",
     },
 
