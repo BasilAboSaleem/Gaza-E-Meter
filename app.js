@@ -27,6 +27,7 @@ require('./cron/companyExpire'); // استيراد ملف الكرون
 const landingRouter = require("./app/routes/landing");
 const authRoutes = require("./app/routes/auth");
 const superAdminRoutes = require("./app/routes/super-admin");
+const companyAdminRoutes = require("./app/routes/company-admin");
 
 /*const dashboardRoutes = require("./app/routes/dashboardRoutes");
 const superAdminRoutes = require("./app/routes/superAdminRoutes");
@@ -113,6 +114,7 @@ app.use("/", landingRouter);
 // --------- Protected Routes ----------
 
 app.use("/super-admin", superAdminRoutes);
+app.use("/company-admin", companyAdminRoutes);
 /*app.use("/company-admin", companyAdminRoutes);
 app.use("/accountant", accountantRoutes);
 app.use("/collector", collectorRoutes);
