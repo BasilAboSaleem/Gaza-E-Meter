@@ -28,6 +28,12 @@ const companySchema = new mongoose.Schema(
       required: true,
     },
 
+      subscriptionType: {
+      type: String,
+      enum: ["monthly", "3month", "6month", "yearly", "permanent"],
+      default: "monthly",
+    },
+
     status: {
       type: String,
       enum: ["active", "expired"],

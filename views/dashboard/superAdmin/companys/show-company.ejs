@@ -34,6 +34,21 @@
               <li class="list-group-item"><strong>اسم المالك:</strong> <%= company.ownerName || 'غير محدد' %></li>
               <li class="list-group-item"><strong>هاتف الشركة:</strong> <%= company.phone || 'غير محدد' %></li>
               <li class="list-group-item"><strong>الباقة:</strong> <%= company.plan?.name || 'غير محددة' %></li>
+<%
+  const subscriptionTypeMap = {
+    monthly: 'شهري',
+    '3month': '3 أشهر',
+    '6month': '6 أشهر',
+    yearly: 'سنوي',
+    permanent: 'دائم'
+  };
+%>
+
+<li class="list-group-item">
+  <strong>مدة الاشتراك:</strong>
+  <%= subscriptionTypeMap[company.subscriptionType] || 'غير محددة' %>
+</li>
+              
               <li class="list-group-item">
                 <strong>حالة الاشتراك:</strong>
                 <span class="<%= company.status === 'active' ? 'text-success' : 'text-danger' %>">

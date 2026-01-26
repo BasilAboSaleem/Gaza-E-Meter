@@ -102,6 +102,17 @@
   </div>
 
   <div class="col-md-6 mb-3">
+    <label class="form-label">نوع الاشتراك *</label>
+    <select id="subscriptionType" class="form-select" required>
+      <option value="monthly" <%= company.subscriptionType === 'monthly' ? 'selected' : '' %>>شهري</option>
+      <option value="3month" <%= company.subscriptionType === '3month' ? 'selected' : '' %>>3 أشهر</option>
+      <option value="6month" <%= company.subscriptionType === '6month' ? 'selected' : '' %>>6 أشهر</option>
+      <option value="yearly" <%= company.subscriptionType === 'yearly' ? 'selected' : '' %>>سنوي</option>
+      <option value="permanent" <%= company.subscriptionType === 'permanent' ? 'selected' : '' %>>دائم</option>
+    </select>
+  </div>
+
+  <div class="col-md-6 mb-3">
     <label class="form-label">حالة الشركة *</label>
     <select id="companyStatus" class="form-select" required>
       <option value="active" <%= company.status === 'active' ? 'selected' : '' %>>
@@ -204,6 +215,7 @@
             ownerName: ownerName.value,
             phone: companyPhone.value,
             plan: plan.value,
+            subscriptionType: subscriptionType.value,
             status: companyStatus.value
           },
           admin: {

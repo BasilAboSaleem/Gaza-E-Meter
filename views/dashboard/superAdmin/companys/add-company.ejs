@@ -94,6 +94,17 @@
               <% }) %>
             </select>
           </div>
+          <div class="col-md-6 mb-3">
+  <label class="form-label">نوع الاشتراك *</label>
+  <select id="subscriptionType" class="form-select" required>
+    <option value="monthly">شهري</option>
+    <option value="3month">3 أشهر</option>
+    <option value="6month">6 أشهر</option>
+    <option value="yearly">سنوي</option>
+    <option value="permanent">دائم</option>
+  </select>
+</div>
+
         </div>
       </div>
       <button type="button" class="btn btn-primary next action-button float-end">التالي</button>
@@ -217,7 +228,8 @@
         name: companyName.value,
         ownerName: ownerName.value,
         phone: companyPhone.value,
-        plan: plan.value
+        plan: plan.value,
+        subscriptionType: subscriptionType.value
       },
       admin: {
         fullName: adminName.value,
