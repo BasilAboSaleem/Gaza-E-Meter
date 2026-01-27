@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en" dir="rtl">
+  <%- include('../../../partials/head.ejs') %>
+  <body>
+
+    <!-- loader Start -->
+    <div id="loading">
+      <div class="loader simple-loader">
+        <div class="loader-body"></div>
+      </div>
+    </div>
+    <!-- loader END -->
+
+    <%- include('../../../partials/sidebar.ejs') %>
+
+    <main class="main-content">
+      <div class="position-relative iq-banner">
+        <%- include('../../../partials/navbar.ejs') %>
+      </div>
+
+      <div class="conatiner-fluid content-inner mt-n5 py-0">
+        <div class="row">
+          <div class="col-12">
+
+            <!-- بطاقة المنطقة الرئيسية -->
+            <% if (area) { %>
+              <div class="card mb-3">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                  <h4 class="card-title mb-0"><%= area.name %></h4>
+                  <a href="/company-admin/main-areas/<%= area._id %>/edit" class="btn btn-warning btn-sm">
+                    تعديل المنطقة
+                  </a>
+                </div>
+                <div class="card-body">
+                  <p><strong>الوصف:</strong> <%= area.description || 'لا يوجد وصف' %></p>
+                  <p>
+                    <strong>الحالة:</strong>
+                    <% if (area.isActive) { %>
+                      <span class="badge bg-success">مفعّلة</span>
+                    <% } else { %>
+                      <span class="badge bg-danger">غير مفعلة</span>
+                    <% } %>
+                  </p>
+                  <p><strong>تاريخ الإنشاء:</strong> <%= new Date(area.createdAt).toLocaleDateString('ar-EG') %></p>
+                </div>
+              </div>
+
+              <!-- جدول المناطق الفرعية -->
+              <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                  <h4 class="card-title mb-0">المناطق الفرعية</h4>
+                  <a href="/company-admin/main-areas/<%= area._id %>/sub-area/new" class="btn btn-primary btn-sm">
+                    إضافة منطقة فرعية
+                  </a>
+                </div>
+                <div class="card-body">
+                  <% if (subAreas && subAreas.length > 0) { %>
+                    <div class="table-responsive">
+                      <table class="table table-striped table-hover">
+                        <thead>
+                          <tr>
+                            <th>الاسم</th>
+                            <th>الحالة</th>
+                            <th>تاريخ الإنشاء</th>
+                            <th>إجراءات</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <% subAreas.forEach(sub => { %>
+                            <tr>
+                              <td><%= sub.name %></td>
+                              <td>
+                                <% if (sub.isActive) { %>
+                                  <span class="badge bg-success">مفعّلة</span>
+                                <% } else { %>
+                                  <span class="badge bg-danger">غير مفعلة</span>
+                                <% } %>
+                              </td>
+                              <td><%= new Date(sub.createdAt).toLocaleDateString('ar-EG') %></td>
+                              <td>
+                                <a href="/company-admin/sub-areas/<%= sub._id %>/edit" class="btn btn-warning btn-sm">
+                                  تعديل
+                                </a>
+                                <button class="btn btn-danger btn-sm delete-subarea" data-id="<%= sub._id %>">
+                                  حذف
+                                </button>
+                              </td>
+                            </tr>
+                          <% }) %>
+                        </tbody>
+                      </table>
+                    </div>
+                  <% } else { %>
+                    <p class="text-muted">لا توجد مناطق فرعية بعد.</p>
+                  <% } %>
+                </div>
+              </div>
+
+            <% } else { %>
+              <div class="alert alert-danger">المنطقة غير موجودة</div>
+            <% } %>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <%- include('../../../partials/footer.ejs') %>
+    </main>
+
+    <%- include('../../../partials/offcanvas.ejs') %>
+    <%- include('../../../partials/scripts.ejs') %>
+
+    <script>
+      document.querySelectorAll('.delete-subarea').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          if (!confirm('هل أنت متأكد من حذف المنطقة الفرعية؟')) return;
+
+          const id = btn.dataset.id;
+
+          try {
+            const res = await fetch('/company-admin/sub-areas/' + id, {
+              method: 'DELETE'
+            });
+
+            if (res.ok) {
+              location.reload();
+            } else {
+              alert('حدث خطأ أثناء الحذف');
+            }
+          } catch (err) {
+            console.error(err);
+            alert('خطأ في الاتصال بالخادم');
+          }
+        });
+      });
+    </script>
+
+  </body>
+</html>

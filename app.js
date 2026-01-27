@@ -6,10 +6,12 @@
 const express = require("express");
 const path = require("path");
 
+
 // --------- Middlewares ----------
 const cookieParser = require("cookie-parser");
 const methodOverride = require("method-override");
 const morgan = require("morgan");
+
 
 // --------- Session & Flash ----------
 const session = require("express-session");
@@ -20,8 +22,9 @@ const connectDB = require("./app/config/db");
 
 // --------- Custom Middlewares ----------
 const authMiddleware = require("./app/middlewares/auth");
-require('./cron/companyExpire'); // استيراد ملف الكرون
+const fixStaticPaths = require('./app/middlewares/fixStaticPaths');
 
+require('./cron/companyExpire'); // استيراد ملف الكرون
 
 // --------- Routes ----------
 const landingRouter = require("./app/routes/landing");
@@ -52,6 +55,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
+app.use(fixStaticPaths);
+// ملفات static
+app.use('/assets', express.static(path.join(__dirname, 'public/assets')));
+
+
 
 // هذا المسار لو موجود فعلياً
 app.use('/super-admin/assets', (req, res, next) => {

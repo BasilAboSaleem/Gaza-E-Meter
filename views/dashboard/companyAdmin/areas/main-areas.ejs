@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en" dir="rtl">
+  <%- include('../../../partials/head.ejs') %>
+  <body>
+    <!-- loader Start -->
+    <div id="loading">
+      <div class="loader simple-loader">
+        <div class="loader-body"></div>
+      </div>
+    </div>
+    <!-- loader END -->
+
+    <%- include('../../../partials/sidebar.ejs') %>
+
+    <main class="main-content">
+      <div class="position-relative iq-banner">
+        <!--Nav Start-->
+        <%- include('../../../partials/navbar.ejs') %>
+        <!--Nav End-->
+      </div>
+
+      <div class="conatiner-fluid content-inner mt-n5 py-0">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="card-title mb-0">قائمة المناطق الرئيسية</h4>
+                <a href="/company-admin/areas/create" class="btn btn-primary btn-sm">
+                  إضافة منطقة رئيسية
+                </a>
+              </div>
+
+              <div class="card-body">
+                <% if (areas.length === 0) { %>
+                  <p>لا توجد مناطق رئيسية بعد.</p>
+                <% } else { %>
+                  <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                      <thead>
+                        <tr>
+                          <th>اسم المنطقة</th>
+                          <th>عدد المناطق الفرعية</th>
+                          <th>الحالة</th>
+                          <th>تاريخ الإنشاء</th>
+                          <th>إجراءات</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <% areas.forEach(area => { %>
+                          <tr>
+                            <td><%= area.name %></td>
+                            <td><%= area.subAreasCount || 0 %></td>
+                            <td>
+                              <% if (area.isActive) { %>
+                                <span class="badge bg-success">مفعلة</span>
+                              <% } else { %>
+                                <span class="badge bg-danger">غير مفعلة</span>
+                              <% } %>
+                            </td>
+                            <td>
+                              <%= new Date(area.createdAt).toLocaleDateString('ar-EG') %>
+                            </td>
+                            <td>
+                              <a
+                                href="/company-admin/main-areas/<%= area._id %>"
+                                class="btn btn-info btn-sm"
+                              >
+                                عرض
+                              </a>
+
+                              <a
+                                href="/company-admin/main-areas/<%= area._id %>/edit"
+                                class="btn btn-warning btn-sm"
+                              >
+                                تعديل
+                              </a>
+
+                              <button
+                                class="btn btn-danger btn-sm delete-btn"
+                                data-id="<%= area._id %>"
+                              >
+                                حذف
+                              </button>
+                            </td>
+                          </tr>
+                        <% }) %>
+                      </tbody>
+                    </table>
+                  </div>
+                <% } %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <%- include('../../../partials/footer.ejs') %>
+    </main>
+
+    <%- include('../../../partials/offcanvas.ejs') %>
+    <%- include('../../../partials/scripts.ejs') %>
+
+    <script>
+      document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          if (!confirm('هل أنت متأكد من حذف المنطقة؟')) return;
+
+          const id = btn.dataset.id;
+
+          try {
+            const res = await fetch('/company-admin/areas/' + id, {
+              method: 'DELETE'
+            });
+
+            if (res.ok) {
+              location.reload();
+            } else {
+              alert('حدث خطأ أثناء الحذف');
+            }
+          } catch (err) {
+            console.error(err);
+            alert('خطأ في الاتصال بالخادم');
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
