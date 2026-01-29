@@ -23,4 +23,7 @@ router.put(
   authorizMiddleware('COMPANY_ADMIN'),
   companyAdminController.updateArea
 );
+
+router.get("/collectors/create", authMiddleware, authorizMiddleware("COMPANY_ADMIN"), companyAdminController.showCreateCollectorForm);
+router.post("/collectors/create", authMiddleware, authorizMiddleware("COMPANY_ADMIN"), companyAdminController.createCollector);
 module.exports = router;

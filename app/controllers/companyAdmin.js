@@ -1,4 +1,5 @@
 const areaService = require('../services/companyAdmin/areas');
+const collectorService = require('../services/companyAdmin/collectors');
 
 exports.showCreateAreaForm = (req, res) => {
   res.render("dashboard/companyAdmin/areas/add-area", {
@@ -9,6 +10,7 @@ exports.showCreateAreaForm = (req, res) => {
 
 exports.createArea = async (req, res) => {
   try {
+    console.log(req.body);
     const { name, description, isActive } = req.body;
 
     // Validate
@@ -151,5 +153,42 @@ exports.updateArea = async (req, res, next) => {
     });
   } catch (err) {
     next(err);
+  }
+};
+
+exports.showCreateCollectorForm = (req, res) => {
+  res.render("dashboard/companyAdmin/collectors/add-collector", {
+  });
+};
+exports.createCollector = async (req, res) => {
+  try {
+    const { fullName, email, phone, password, isActive } = req.body;
+
+    // التحققات البسيطة (اختياري، ممكن تحطها في السيرفس بس)
+    if (!fullName?.trim()) return res.status(400).json({ errors: { fullName: 'الاسم الكامل مطلوب' } });
+    if (!phone?.trim())    return res.status(400).json({ errors: { phone: 'رقم الهاتف مطلوب' } });
+    if (!password?.trim()) return res.status(400).json({ errors: { password: 'كلمة المرور مطلوبة' } });
+
+    const collector = await collectorService.createCollector(
+      { fullName, email, phone, password, isActive },
+      req.user   // ← هنا بنمرر اليوزر كامل عشان ناخد company منه
+    );
+
+    return res.status(201).json({
+      message: 'تم إنشاء المحصل بنجاح',
+      collector
+    });
+  } catch (err) {
+    console.error(err);
+
+    if (err.statusCode === 400) {
+      return res.status(400).json({
+        errors: { [err.field]: err.message }
+      });
+    }
+
+    return res.status(500).json({
+      message: 'حدث خطأ أثناء إنشاء المحصل'
+    });
   }
 };
