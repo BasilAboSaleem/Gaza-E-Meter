@@ -26,4 +26,7 @@ router.put(
 
 router.get("/collectors/create", authMiddleware, authorizMiddleware("COMPANY_ADMIN"), companyAdminController.showCreateCollectorForm);
 router.post("/collectors/create", authMiddleware, authorizMiddleware("COMPANY_ADMIN"), companyAdminController.createCollector);
+router.get("/collectors", authMiddleware, authorizMiddleware("COMPANY_ADMIN"), companyAdminController.listCollectors);
+router.get("/collectors/:id/edit", authMiddleware, authorizMiddleware("COMPANY_ADMIN"), companyAdminController.showEditCollectorForm);
+router.put("/collectors/:id", authMiddleware, authorizMiddleware("COMPANY_ADMIN"), companyAdminController.updateCollector);
 module.exports = router;

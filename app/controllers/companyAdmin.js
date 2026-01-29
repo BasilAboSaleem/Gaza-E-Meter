@@ -1,3 +1,4 @@
+const e = require('connect-flash');
 const areaService = require('../services/companyAdmin/areas');
 const collectorService = require('../services/companyAdmin/collectors');
 
@@ -190,5 +191,60 @@ exports.createCollector = async (req, res) => {
     return res.status(500).json({
       message: 'حدث خطأ أثناء إنشاء المحصل'
     });
+  }
+};
+
+exports.listCollectors = async (req, res, next) => {
+  try {
+    // جلب المحصلين التابعين لشركة اليوزر الحالي
+    companyId = req.user.company;
+    const collectors = await collectorService.getCollectorsByCompany(companyId);
+    return res.render('dashboard/companyAdmin/collectors/collectors', {
+      title: 'المحصلين',
+      collectors
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.showEditCollectorForm = async (req, res, next) => {
+  try {
+    const collectorId = req.params.id;
+    const collector = await collectorService.getCollectorById(collectorId);
+    if (!collector) {
+      return res.status(404).render('errors/404', {
+        message: 'المحصل غير موجود'
+      });
+    }
+    return res.render('dashboard/companyAdmin/collectors/edit-collector', {
+      title: 'تعديل بيانات المحصل',
+      collector
+    });
+  }
+  catch (error) {
+    next(error);
+  }
+};
+
+exports.updateCollector = async (req, res, next) => {
+  try {
+    const collectorId = req.params.id;
+    const { fullName, email, phone, password, isActive } = req.body;
+    // هنا ممكن تضيف تحقق من البيانات لو حبيت
+
+    const updatedCollector = await collectorService.updateCollector(collectorId, {
+      fullName,
+      email,
+      phone,
+      password,
+      isActive
+    });
+    return res.json({
+      message: 'تم تحديث بيانات المحصل بنجاح',
+      collector: updatedCollector
+    });
+  } catch (error) {
+    next(error);
   }
 };

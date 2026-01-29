@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en" dir="rtl">
+  <%- include('../../../partials/head.ejs') %>
+  <body class="">
+    <!-- loader Start -->
+    <div id="loading">
+      <div class="loader simple-loader">
+        <div class="loader-body"></div>
+      </div>
+    </div>
+    <!-- loader END -->
+
+    <%- include('../../../partials/sidebar.ejs') %>
+
+    <main class="main-content">
+      <div class="position-relative iq-banner">
+        <%- include('../../../partials/navbar.ejs') %>
+      </div>
+
+      <div class="container-fluid content-inner mt-n5 py-0">
+        <div class="row">
+          <div class="col-lg-6 mx-auto">
+            <div class="card">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <div>
+                  <h4 class="card-title mb-0">تعديل بيانات المحصل</h4>
+                  <p class="text-muted mb-0 mt-1">قم بتعديل بيانات المحصل ثم حفظها</p>
+                </div>
+              </div>
+
+              <div class="card-body">
+                <form id="collectorForm">
+                  <div class="row">
+
+                    <!-- الاسم الكامل -->
+                    <div class="col-12 mb-3">
+                      <label class="form-label">الاسم الكامل</label>
+                      <input type="text" id="fullName" class="form-control" required>
+                      <div class="text-danger small mt-1 error-fullName"></div>
+                    </div>
+
+                    <!-- البريد الإلكتروني -->
+                    <div class="col-12 mb-3">
+                      <label class="form-label">البريد الإلكتروني (اختياري)</label>
+                      <input type="email" id="email" class="form-control">
+                      <div class="text-danger small mt-1 error-email"></div>
+                    </div>
+
+                    <!-- رقم الهاتف -->
+                    <div class="col-12 mb-3">
+                      <label class="form-label">رقم الهاتف</label>
+                      <input type="text" id="phone" class="form-control" required>
+                      <div class="text-danger small mt-1 error-phone"></div>
+                    </div>
+
+                    <!-- كلمة المرور -->
+                    <div class="col-12 mb-3">
+                      <label class="form-label">كلمة المرور</label>
+                      <input type="password" id="password" class="form-control">
+                      <div class="text-danger small mt-1 error-password"></div>
+                      <small class="text-muted">اترك الحقل فارغًا إذا لم ترغب بتغيير كلمة المرور</small>
+                    </div>
+
+                    <!-- التفعيل -->
+                    <div class="col-12 mb-3">
+                      <label class="form-label d-block">حالة المحصل</label>
+                      <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="isActive">
+                        <label class="form-check-label" for="isActive">مفعّل</label>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <!-- أزرار -->
+                  <div class="d-flex justify-content-end gap-2">
+                    <button type="reset" class="btn btn-light">إعادة تعيين</button>
+                    <button type="submit" class="btn btn-primary">حفظ التغييرات</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <%- include('../../../partials/footer.ejs') %>
+    </main>
+
+    <%- include('../../../partials/offcanvas.ejs') %>
+    <%- include('../../../partials/scripts.ejs') %>
+
+    <script>
+      const collectorForm = document.getElementById('collectorForm');
+      const collectorId = "<%= collector._id %>"; // ID من السيرفر
+
+      // تعبئة البيانات المبدئية
+      document.getElementById('fullName').value = "<%= collector.fullName %>";
+      document.getElementById('email').value = "<%= collector.email %>";
+      document.getElementById('phone').value = "<%= collector.phone %>";
+      document.getElementById('isActive').checked = <%= collector.isActive %>;
+
+      function clearErrors() {
+        document.querySelectorAll('[class^="error-"]').forEach(el => el.innerText = '');
+      }
+
+      function showErrors(errors) {
+        Object.keys(errors).forEach(key => {
+          const errorDiv = document.querySelector('.error-' + key);
+          if (errorDiv) errorDiv.innerText = errors[key];
+        });
+      }
+
+      collectorForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        clearErrors();
+
+        const data = {
+          fullName: document.getElementById('fullName').value.trim(),
+          email: document.getElementById('email').value.trim(),
+          phone: document.getElementById('phone').value.trim(),
+          password: document.getElementById('password').value || undefined,
+          isActive: document.getElementById('isActive').checked
+        };
+
+        try {
+          const response = await fetch('/company-admin/collectors/' + collectorId, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+
+          const result = await response.json();
+
+          if (response.ok) {
+            window.location.href = '/company-admin/collectors';
+            return;
+          }
+
+          if (result.errors) {
+            showErrors(result.errors);
+          } else {
+            alert(result.message || 'حدث خطأ أثناء تحديث بيانات المحصل.');
+          }
+
+        } catch (err) {
+          alert('خطأ في الاتصال بالخادم');
+          console.error(err);
+        }
+      });
+    </script>
+  </body>
+</html>

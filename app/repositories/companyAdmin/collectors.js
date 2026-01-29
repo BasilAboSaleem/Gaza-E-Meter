@@ -13,6 +13,10 @@ exports.findByPhone = async (phone) => {
   return await User.findOne({role: "COLLECTOR", phone: phone.trim() });
 };
 
+exports.findByCompany = async (companyId) => {
+    return await User.find({ role: "COLLECTOR", company: companyId });
+};
+
 exports.findById = async (id) => {
     return await User.findById(id);
 };
