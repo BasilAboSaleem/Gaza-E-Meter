@@ -72,3 +72,22 @@ exports.getSubAreas = async (parentAreaId) => {
   const subAreas = await Area.find({ parentArea: parentAreaId }).sort({ createdAt: -1 });
   return subAreas;
 };
+
+exports.createSubArea = async ({ parentAreaId, name, description, isActive = true }) => {
+  const existing = await areaRepository.findByName(name);
+  if (existing) {
+    const error = new Error('اسم المنطقة موجود مسبقاً');
+    error.statusCode = 400;
+    error.field = 'name';
+    throw error;
+  }
+
+  const areaData = {
+    name: name.trim(),
+    description: description ? description.trim() : '',
+    isActive,
+    parentArea: parentAreaId 
+  };
+
+  return await areaRepository.create(areaData);
+};

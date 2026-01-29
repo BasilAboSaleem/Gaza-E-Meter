@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en" dir="rtl">
+  <%- include('../../../partials/head.ejs') %>
+  <body class="">
+    <!-- loader Start -->
+    <div id="loading">
+      <div class="loader simple-loader">
+        <div class="loader-body"></div>
+      </div>
+    </div>
+    <!-- loader END -->
+
+    <%- include('../../../partials/sidebar.ejs') %>
+
+    <main class="main-content">
+      <div class="position-relative iq-banner">
+        <!--Nav Start-->
+        <%- include('../../../partials/navbar.ejs') %>
+        <!--Nav End-->
+      </div>
+
+      <div class="container-fluid content-inner mt-n5 py-0">
+        <div class="row">
+          <div class="col-lg-6 mx-auto">
+            <div class="card">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <div>
+                  <h4 class="card-title mb-0">إضافة منطقة فرعية تابعة لمنطقة (<%= area.name %>)</h4>
+                  <p class="text-muted mb-0 mt-1">أدخل اسم المنطقة الجديدة</p>
+                </div>
+              </div>
+
+              <div class="card-body">
+                <form id="areaForm">
+                  <div class="row">
+                    <!-- اسم المنطقة -->
+                    <div class="col-12 mb-3">
+                      <label class="form-label">اسم المنطقة</label>
+                      <input
+                        type="text"
+                        id="areaName"
+                        class="form-control"
+                        required
+                      >
+                      <div class="text-danger small mt-1 error-name"></div>
+                    </div>
+
+                    <!-- وصف المنطقة -->
+                    <div class="col-12 mb-3">
+                      <label class="form-label">وصف المنطقة (اختياري)</label>
+                      <textarea
+                        id="areaDescription"
+                        class="form-control"
+                        rows="3"
+                      ></textarea>
+
+                        <div class="text-danger small mt-1 error-description"></div>
+                    </div>
+
+                    <!-- التفعيل -->
+                    <div class="col-12 mb-3">
+                      <label class="form-label d-block">حالة المنطقة</label>
+                      <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="areaActive" checked>
+                        <label class="form-check-label" for="areaActive">مفعّلة</label>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <!-- أزرار -->
+                  <div class="d-flex justify-content-end gap-2">
+                    <button type="reset" class="btn btn-light">إفراغ الحقول</button>
+                    <button type="submit" class="btn btn-primary">إضافة المنطقة</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <%- include('../../../partials/footer.ejs') %>
+    </main>
+
+    <%- include('../../../partials/offcanvas.ejs') %>
+    <%- include('../../../partials/scripts.ejs') %>
+
+<script>
+  const areaForm = document.getElementById('areaForm');
+
+  function clearErrors() {
+    document.querySelectorAll('[class^="error-"]').forEach(el => el.innerText = '');
+  }
+
+  function showErrors(errors) {
+    Object.keys(errors).forEach(key => {
+      const errorDiv = document.querySelector('.error-' + key);
+      if (errorDiv) errorDiv.innerText = errors[key];
+    });
+  }
+
+  areaForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    clearErrors();
+
+    const data = {
+      name: document.getElementById('areaName').value.trim(),
+      description: document.getElementById('areaDescription').value.trim(),
+      isActive: document.getElementById('areaActive').checked
+    };
+
+    try {
+      const response = await fetch(
+        '/company-admin/main-areas/<%= area._id %>/sub-area/new',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        }
+      );
+
+      const result = await response.json();
+
+      if (response.ok) {
+        window.location.href = '/company-admin/main-areas/<%= area._id %>';
+        return;
+      }
+
+      if (result.errors) {
+        showErrors(result.errors);
+      } else {
+        alert(result.message || 'حدث خطأ أثناء إضافة المنطقة الفرعية');
+      }
+
+    } catch (err) {
+      console.error(err);
+      alert('خطأ في الاتصال بالخادم');
+    }
+  });
+</script>
+
+  </body>
+</html>

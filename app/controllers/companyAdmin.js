@@ -81,3 +81,37 @@ exports.showCreateSubAreaForm = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.createSubArea = async (req, res) => {
+  try {
+    const parentAreaId = req.params.id; // ✅
+    const { name, description, isActive } = req.body;
+
+    if (!name || !name.trim()) {
+      return res.status(400).json({
+        errors: { name: 'اسم المنطقة مطلوب' }
+      });
+    }
+
+    const area = await areaService.createSubArea({
+      parentAreaId,
+      name,
+      description,
+      isActive
+    });
+
+    return res.status(201).json(area);
+  } catch (err) {
+    console.error(err);
+
+    if (err.statusCode === 400) {
+      return res.status(400).json({
+        errors: { [err.field]: err.message }
+      });
+    }
+
+    return res.status(500).json({
+      message: 'حدث خطأ أثناء إنشاء المنطقة الفرعية'
+    });
+  }
+};
