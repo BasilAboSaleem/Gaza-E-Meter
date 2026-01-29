@@ -115,3 +115,41 @@ exports.createSubArea = async (req, res) => {
     });
   }
 };
+
+exports.showEditAreaForm = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const area = await areaService.getAreaById(id);
+
+    if (!area) {
+      return res.status(404).render('errors/404');
+    }
+
+    res.render('dashboard/companyAdmin/areas/edit-area', {
+      area
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.updateArea = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { name, description, isActive } = req.body;
+
+    const updatedArea = await areaService.updateArea(id, {
+      name,
+      description,
+      isActive
+    });
+
+    res.json({
+      message: 'Area updated successfully',
+      area: updatedArea
+    });
+  } catch (err) {
+    next(err);
+  }
+};

@@ -91,3 +91,35 @@ exports.createSubArea = async ({ parentAreaId, name, description, isActive = tru
 
   return await areaRepository.create(areaData);
 };
+
+exports.getAreaById = async (id) => {
+  return areaRepository.findById(id);
+};
+
+exports.updateArea = async (id, data) => {
+  const area = await areaRepository.findById(id);
+
+  if (!area) {
+    const error = new Error('المنطقة غير موجودة');
+    error.statusCode = 404;
+    throw error;
+  }
+
+  // تحقق من الاسم (بدون تكرار)
+  if (data.name && data.name.trim() !== area.name) {
+    const exists = await areaRepository.findByName(data.name.trim());
+    if (exists) {
+      const error = new Error('اسم المنطقة موجود مسبقاً');
+      error.statusCode = 400;
+      error.field = 'name';
+      throw error;
+    }
+  }
+
+  area.name = data.name.trim();
+  area.description = data.description || '';
+  area.isActive = data.isActive;
+
+  await area.save();
+  return area;
+};

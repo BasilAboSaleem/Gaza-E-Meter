@@ -10,5 +10,17 @@ router.get("/main-areas", authMiddleware, authorizMiddleware("COMPANY_ADMIN"), c
 router.get("/main-areas/:id", authMiddleware, authorizMiddleware("COMPANY_ADMIN"), companyAdminController.showMainAreaDetails);
 router.get("/main-areas/:id/sub-area/new", authMiddleware, authorizMiddleware("COMPANY_ADMIN"), companyAdminController.showCreateSubAreaForm);
 router.post("/main-areas/:id/sub-area/new", authMiddleware, authorizMiddleware("COMPANY_ADMIN"), companyAdminController.createSubArea);
+router.get(
+  '/areas/:id/edit',
+  authMiddleware,
+  authorizMiddleware('COMPANY_ADMIN'),
+  companyAdminController.showEditAreaForm
+);
 
+router.put(
+  '/areas/:id',
+  authMiddleware,
+  authorizMiddleware('COMPANY_ADMIN'),
+  companyAdminController.updateArea
+);
 module.exports = router;

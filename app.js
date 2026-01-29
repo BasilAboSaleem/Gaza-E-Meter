@@ -66,6 +66,10 @@ app.use('/super-admin/assets', (req, res, next) => {
   const filePath = path.join(__dirname, 'public', 'assets', req.path.replace('/super-admin/assets', ''));
   express.static(path.join(__dirname, 'public/assets'))(req, res, next);
 });
+app.use('/company-admin/assets', (req, res, next) => {
+  const filePath = path.join(__dirname, 'public', 'assets', req.path.replace('/company-admin/assets', ''));
+  express.static(path.join(__dirname, 'public/assets'))(req, res, next);
+});
 // Logger (dev only)
 if (process.env.NODE_ENV !== "production") {
   app.use(morgan("dev"));
