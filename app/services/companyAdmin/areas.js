@@ -50,4 +50,25 @@ exports.getPrimaryAreas = async () => {
   return areas;
 };
 
+exports.getPrimaryAreaWithSubAreas = async (areaId) => {
+  // جلب المنطقة الرئيسية فقط
+  const area = await areaRepository.findPrimaryAreaById(areaId);
+  if (!area) return null;
 
+  // جلب المناطق الفرعية التابعة
+  const subAreas = await areaRepository.findSubAreas(areaId);
+
+  return { area, subAreas };
+};
+
+exports.getPrimaryArea = async (areaId) => {
+  const area = await areaRepository.findPrimaryAreaById(areaId);
+  return area;
+};
+  
+
+
+exports.getSubAreas = async (parentAreaId) => {
+  const subAreas = await Area.find({ parentArea: parentAreaId }).sort({ createdAt: -1 });
+  return subAreas;
+};

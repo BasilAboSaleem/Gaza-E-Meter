@@ -8,5 +8,6 @@ router.get("/areas/create", authMiddleware, authorizMiddleware("COMPANY_ADMIN"),
 router.post("/areas/create", authMiddleware, authorizMiddleware("COMPANY_ADMIN"), companyAdminController.createArea);
 router.get("/main-areas", authMiddleware, authorizMiddleware("COMPANY_ADMIN"), companyAdminController.listMainAreas);
 router.get("/main-areas/:id", authMiddleware, authorizMiddleware("COMPANY_ADMIN"), companyAdminController.showMainAreaDetails);
+router.get("/main-areas/:id/sub-area/new", authMiddleware, authorizMiddleware("COMPANY_ADMIN"), companyAdminController.showCreateSubAreaForm);
 
 module.exports = router;

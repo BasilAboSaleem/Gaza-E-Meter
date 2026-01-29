@@ -43,14 +43,16 @@ exports.listMainAreas = async (req, res, next) => {
 exports.showMainAreaDetails = async (req, res, next) => {
   try {
     const areaId = req.params.id;
-    const area = await areaService.getPrimaryAreaById(areaId);
 
-    if (!area) {
-      return res.status(404).send('المنطقة غير موجودة');
+    const result = await areaService.getPrimaryAreaWithSubAreas(areaId);
+
+    if (!result) {
+      return res.status(404).render('errors/404', {
+        message: 'المنطقة غير موجودة'
+      });
     }
 
-    // جلب المناطق الفرعية
-    const subAreas = await areaService.getSubAreas(areaId);
+    const { area, subAreas } = result;
 
     return res.render('dashboard/companyAdmin/areas/show-main-area', {
       title: 'تفاصيل المنطقة الرئيسية',
@@ -62,4 +64,20 @@ exports.showMainAreaDetails = async (req, res, next) => {
   }
 };
 
-  
+
+exports.showCreateSubAreaForm = async (req, res, next) => {
+  try {
+    const areaId = req.params.id;
+    const area = await areaService.getPrimaryArea(areaId);
+    if (!area) {
+      return res.status(404).send('المنطقة غير موجودة');
+    }
+
+    return res.render('dashboard/companyAdmin/areas/add-sub-area', {
+      title: 'إضافة منطقة فرعية',
+      area
+    });
+  } catch (error) {
+    next(error);
+  }
+};
