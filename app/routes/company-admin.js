@@ -31,5 +31,11 @@ router.get("/collectors/:id/edit", authMiddleware, authorizMiddleware("COMPANY_A
 router.put("/collectors/:id", authMiddleware, authorizMiddleware("COMPANY_ADMIN"), companyAdminController.updateCollector);
 router.get('/areas/:id/sub-areas',authMiddleware, authorizMiddleware("COMPANY_ADMIN"),companyAdminController.getSubAreas);
 router.get("/subscribers/create", authMiddleware, authorizMiddleware("COMPANY_ADMIN"), companyAdminController.showCreateSubscriberForm);
+router.post(
+  '/subscribers/create',
+  authMiddleware,
+  authorizMiddleware('COMPANY_ADMIN'),
+  companyAdminController.createSubscriber
+);
 
 module.exports = router; 

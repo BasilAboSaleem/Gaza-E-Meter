@@ -1,6 +1,7 @@
 const e = require('connect-flash');
 const areaService = require('../services/companyAdmin/areas');
 const collectorService = require('../services/companyAdmin/collectors');
+const subscriberService = require('../services/companyAdmin/subscribers');
 
 exports.showCreateAreaForm = (req, res) => {
   res.render("dashboard/companyAdmin/areas/add-area", {
@@ -296,3 +297,22 @@ exports.getSubAreas = async (req, res) => {
   }
 };
 
+exports.createSubscriber = async (req, res, next) => {
+  try {
+    const companyId = req.user.company;
+    const { subscriber, meter } = req.body;
+
+    await subscriberService.createSubscriberWithMeterAndUser(
+      companyId,
+      subscriber,
+      meter
+    );
+
+    res.status(201).json({ message: 'Subscriber created successfully' });
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({
+      message: err.message || 'Failed to create subscriber'
+    });
+  }
+};
