@@ -349,3 +349,38 @@ exports.listFunds = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.showCreateFundForm = (req, res) => {
+  res.render("dashboard/companyAdmin/funds/add-fund", {
+  });
+}
+
+exports.createFund = async (req, res, next) => {
+  try {
+    const { name, type, currency, notes } = req.body; // ✅ type موجود الآن
+    const companyId = req.user.company;
+
+    // Validate اسم الصندوق فقط (type يتم التحقق منه بالسيرفس)
+    if (!name || name.trim() === '') {
+      return res.status(400).json({ errors: { name: 'اسم الصندوق مطلوب' } });
+    }
+
+    const fund = await fundService.createFund({
+      companyId,
+      name,
+      type,
+      currency,
+      notes
+    });
+
+    return res.status(201).json(fund);
+  } catch (err) {
+    console.error(err);
+
+    if (err.statusCode === 400) {
+      return res.status(400).json({ errors: { [err.field]: err.message } });
+    }
+
+    next(err);
+  }
+};

@@ -22,3 +22,7 @@ exports.findByCompany = async (companyId) => {
     })
     .sort({ createdAt: -1 });
 };
+
+exports.findOne = async (query) => {
+  return await Fund.findOne(query);
+};

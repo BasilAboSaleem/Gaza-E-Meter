@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const CompanyRepository = require('../../repositories/super-admin/company');
 const UserRepository = require('../../repositories/super-admin/user');
 const User = require('../../models/User');
+const Fund = require('../../models/Fund')
 
 class CompanyService {
 
@@ -77,6 +78,21 @@ class CompanyService {
         },
         session
       );
+
+      //انشاء صندوق الشركة
+      const fundCompany = await Fund.create({
+        company: newCompany._id,
+        name: `الصندوق الرئيسي لشركة ${newCompany.name}`,
+        type: 'COMPANY',
+        owner: newCompany.name,
+        balance: 0,
+        currency: 'شيكل',
+        isActive: true
+
+      }
+        
+      )
+
 
       await session.commitTransaction();
       session.endSession();

@@ -46,5 +46,6 @@ router.get(
 );
 
 router.get("/funds", authMiddleware, authorizMiddleware("COMPANY_ADMIN"), companyAdminController.listFunds);
-
+router.get("/funds/create", authMiddleware, authorizMiddleware("COMPANY_ADMIN"), companyAdminController.showCreateFundForm);
+router.post("/funds/create", authMiddleware, authorizMiddleware("COMPANY_ADMIN"), companyAdminController.createFund);
 module.exports = router; 

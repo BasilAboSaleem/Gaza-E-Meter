@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <%- include('../../../partials/head.ejs') %>
+  <body>
+    <!-- loader -->
+    <div id="loading">
+      <div class="loader simple-loader">
+        <div class="loader-body"></div>
+      </div>
+    </div>
+
+    <%- include('../../../partials/sidebar.ejs') %>
+
+    <main class="main-content">
+      <div class="position-relative iq-banner">
+        <%- include('../../../partials/navbar.ejs') %>
+      </div>
+
+      <div class="container-fluid content-inner mt-n5 py-0">
+        <div class="row">
+          <div class="col-lg-8 mx-auto">
+            <div class="card">
+              <div class="card-header">
+                <h4 class="card-title mb-0">إضافة صندوق جديد</h4>
+                <p class="text-muted mt-1 mb-0">
+                  يمكنك إضافة صناديق من نوع بنك، مصروفات أو أخرى
+                </p>
+              </div>
+
+              <div class="card-body">
+                <form id="fundForm">
+                  <div class="row">
+
+                    <!-- اسم الصندوق -->
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">اسم الصندوق</label>
+                      <input
+                        type="text"
+                        id="fundName"
+                        class="form-control"
+                        required
+                      >
+                      <div class="text-danger small mt-1 error-name"></div>
+                    </div>
+
+                    <!-- نوع الصندوق -->
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">نوع الصندوق</label>
+                      <select
+                        id="fundType"
+                        class="form-select"
+                        required
+                      >
+                        <option value="">اختر النوع</option>
+                        <option value="BANK">بنك</option>
+                        <option value="EXPENSES">مصروفات</option>
+                        <option value="OTHER">أخرى</option>
+                      </select>
+                      <div class="text-danger small mt-1 error-type"></div>
+                    </div>
+
+                    <!-- العملة -->
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">العملة</label>
+                      <input
+                        type="text"
+                        id="fundCurrency"
+                        class="form-control"
+                        value="شيكل"
+                      >
+                      <div class="text-danger small mt-1 error-currency"></div>
+                    </div>
+
+                    <!-- ملاحظات -->
+                    <div class="col-12 mb-4">
+                      <label class="form-label">ملاحظات</label>
+                      <textarea
+                        id="fundNotes"
+                        class="form-control"
+                        rows="3"
+                      ></textarea>
+                      <div class="text-danger small mt-1 error-notes"></div>
+                    </div>
+
+                  </div>
+
+                  <!-- أزرار -->
+                  <div class="d-flex justify-content-end gap-2">
+                    <button type="reset" class="btn btn-light">
+                      إفراغ الحقول
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                      إضافة الصندوق
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <%- include('../../../partials/footer.ejs') %>
+    </main>
+
+    <%- include('../../../partials/offcanvas.ejs') %>
+    <%- include('../../../partials/scripts.ejs') %>
+
+    <script>
+      const fundForm = document.getElementById('fundForm');
+
+      function clearErrors() {
+        document
+          .querySelectorAll('[class^="error-"]')
+          .forEach(el => el.innerText = '');
+      }
+
+      function showErrors(errors) {
+        Object.keys(errors).forEach(key => {
+          const el = document.querySelector('.error-' + key);
+          if (el) el.innerText = errors[key];
+        });
+      }
+
+      fundForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        clearErrors();
+
+        const data = {
+          name: document.getElementById('fundName').value,
+          type: document.getElementById('fundType').value,
+          currency: document.getElementById('fundCurrency').value,
+          notes: document.getElementById('fundNotes').value
+        };
+
+        try {
+          const res = await fetch('/company-admin/funds/create', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+
+          const result = await res.json();
+
+          if (res.ok) {
+            window.location.href = '/company-admin/funds';
+            return;
+          }
+
+          if (result.errors) {
+            showErrors(result.errors);
+          } else {
+            alert(result.message || 'حدث خطأ أثناء إضافة الصندوق');
+          }
+
+        } catch (err) {
+          console.error(err);
+          alert('خطأ في الاتصال بالخادم');
+        }
+      });
+    </script>
+  </body>
+</html>
