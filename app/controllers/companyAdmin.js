@@ -316,3 +316,22 @@ exports.createSubscriber = async (req, res, next) => {
     });
   }
 };
+
+exports.showSubscribersPage = async (req, res, next) => {
+  try {
+    const companyId = req.user.company;
+
+    // جلب المشتركين مع العلاقات
+    const subscribers = await subscriberService.getSubscribersByCompany(companyId);
+
+    // جلب المناطق الرئيسية (للفلاتر)
+    const primaryAreas = await areaService.getPrimaryAreasByCompany(companyId);
+
+    res.render('dashboard/companyAdmin/subscribers/subscribers', {
+      subscribers,
+      primaryAreas
+    });
+  } catch (err) {
+    next(err);
+  }
+};

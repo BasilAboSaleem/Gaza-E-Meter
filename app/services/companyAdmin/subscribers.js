@@ -1,6 +1,7 @@
 const Subscriber = require('../../models/Subscriber');
 const Meter = require('../../models/Meter');
 const User = require('../../models/User');
+const subscriberRepository = require('../../repositories/companyAdmin/subscribers');
 
 exports.createSubscriberWithMeterAndUser = async (
   companyId,
@@ -58,4 +59,8 @@ exports.createSubscriberWithMeterAndUser = async (
     meter,
     user: subscriberUser
   };
+};
+
+exports.getSubscribersByCompany = async (companyId) => {
+  return await subscriberRepository.findByCompany(companyId);
 };

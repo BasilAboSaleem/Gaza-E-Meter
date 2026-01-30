@@ -37,5 +37,12 @@ router.post(
   authorizMiddleware('COMPANY_ADMIN'),
   companyAdminController.createSubscriber
 );
+// عرض صفحة المشتركين
+router.get(
+  '/subscribers',
+  authMiddleware,
+  authorizMiddleware('COMPANY_ADMIN'),
+  companyAdminController.showSubscribersPage
+);
 
 module.exports = router; 
