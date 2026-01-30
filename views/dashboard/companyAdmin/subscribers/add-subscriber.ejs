@@ -26,35 +26,35 @@
               </div>
 
               <div class="card-body">
-<form id="form-wizard1" class="mt-3 text-center">
+<form id="form-wizard1" class="mt-3 text-center" novalidate autocomplete="off">
 
-                  <!-- Wizard Steps -->
+                  <!-- Wizard Steps (الشريط العلوي) -->
                   <ul id="top-tab-list" class="p-0 row list-inline">
-                    <li class="col-md-4 active">
+                    <li class="col-md-4 active" data-step="0">
                       <a href="javascript:void();">بيانات المشترك</a>
                     </li>
-                    <li class="col-md-4">
+                    <li class="col-md-4" data-step="1">
                       <a href="javascript:void();">بيانات العداد</a>
                     </li>
-                    <li class="col-md-4">
+                    <li class="col-md-4" data-step="2">
                       <a href="javascript:void();">تأكيد</a>
                     </li>
                   </ul>
 
                   <!-- STEP 1: Subscriber -->
-                  <fieldset class="active">
+                  <div class="step active">
                     <div class="form-card text-start">
                       <h3 class="mb-4">بيانات المشترك</h3>
 
                       <div class="row">
                         <div class="col-md-6 mb-3">
                           <label class="form-label">الاسم الكامل *</label>
-                          <input type="text" id="fullName" class="form-control" required>
+                          <input type="text" id="fullName" class="form-control">
                         </div>
 
                         <div class="col-md-6 mb-3">
                           <label class="form-label">رقم الهاتف *</label>
-                          <input type="text" id="phone" class="form-control" required>
+                          <input type="text" id="phone" class="form-control">
                         </div>
 
                         <div class="col-md-6 mb-3">
@@ -67,24 +67,22 @@
                           <input type="text" id="address" class="form-control">
                         </div>
 
-                        <!-- المنطقة الرئيسية -->
-<div class="col-md-6 mb-3">
-  <label class="form-label">المنطقة الرئيسية *</label>
-  <select id="primaryArea" class="form-select" required>
-    <% areas.forEach(area => { %>
-      <option value="<%= area._id %>"><%= area.name %></option>
-    <% }) %>
-  </select>
-</div>
+                        <div class="col-md-6 mb-3">
+                          <label class="form-label">المنطقة الرئيسية *</label>
+                          <select id="primaryArea" class="form-select">
+                            <option value="">--- اختر المنطقة الرئيسية ---</option>
+                            <% areas.forEach(area => { %>
+                              <option value="<%= area._id %>"><%= area.name %></option>
+                            <% }) %>
+                          </select>
+                        </div>
 
-<!-- المنطقة الفرعية -->
-<div class="col-md-6 mb-3">
-  <label class="form-label">المنطقة الفرعية</label>
-  <select id="secondaryArea" class="form-select">
-    <option value="">---</option>
-  </select>
-</div>
-
+                        <div class="col-md-6 mb-3">
+                          <label class="form-label">المنطقة الفرعية</label>
+                          <select id="secondaryArea" class="form-select">
+                            <option value="">---</option>
+                          </select>
+                        </div>
 
                         <div class="col-md-6 mb-3">
                           <label class="form-label">نوع الاشتراك</label>
@@ -105,7 +103,8 @@
 
                         <div class="col-md-6 mb-3">
                           <label class="form-label">المحصل *</label>
-                          <select id="assignedCollector" class="form-select" required>
+                          <select id="assignedCollector" class="form-select">
+                            <option value="">--- اختر المحصل ---</option>
                             <% collectors.forEach(c => { %>
                               <option value="<%= c._id %>"><%= c.fullName %></option>
                             <% }) %>
@@ -122,25 +121,39 @@
                       </div>
                     </div>
 
-<button type="button" class="btn btn-primary next action-button float-end">
-  التالي
-</button>
-                  </fieldset>
+                    <button type="button" class="btn btn-primary next action-button float-end">
+                      التالي
+                    </button>
+                  </div>
 
                   <!-- STEP 2: Meter -->
-                  <fieldset>
+                  <div class="step">
                     <div class="form-card text-start">
                       <h3 class="mb-4">بيانات العداد</h3>
 
                       <div class="row">
                         <div class="col-md-6 mb-3">
                           <label class="form-label">رقم العداد *</label>
-                          <input type="text" id="serialNumber" class="form-control" required>
+                          <input type="text" id="serialNumber" class="form-control">
                         </div>
 
                         <div class="col-md-6 mb-3">
-                          <label class="form-label">تاريخ التركيب</label>
+                          <label class="form-label">تاريخ التركيب *</label>
                           <input type="date" id="installationDate" class="form-control">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                          <label class="form-label">القراءة الأولية</label>
+                          <input 
+                            type="number" 
+                            id="initialReading" 
+                            class="form-control" 
+                            value="0" 
+                            min="0" 
+                            step="1"
+                            placeholder="0"
+                          >
+                          <small class="form-text text-muted">اتركه 0 إذا ما في قراءة أولية</small>
                         </div>
 
                         <div class="col-md-6 mb-3">
@@ -153,16 +166,16 @@
                       </div>
                     </div>
 
-<button type="button" class="btn btn-primary next action-button float-end">
-  التالي
-</button>
-<button type="button" class="btn btn-dark previous action-button-previous float-end me-2">
-  السابق
-</button>
-                  </fieldset>
+                    <button type="button" class="btn btn-primary next action-button float-end">
+                      التالي
+                    </button>
+                    <button type="button" class="btn btn-dark previous action-button-previous float-end me-2">
+                      السابق
+                    </button>
+                  </div>
 
                   <!-- STEP 3: Confirm -->
-                  <fieldset>
+                  <div class="step">
                     <div class="form-card text-center">
                       <h3 class="mb-4">تأكيد العملية</h3>
                       <p class="text-muted">سيتم إنشاء المشترك والعداد تلقائيًا</p>
@@ -170,7 +183,7 @@
                     </div>
 
                     <button type="button" class="btn btn-dark previous action-button-previous float-end mt-3">السابق</button>
-                  </fieldset>
+                  </div>
 
                 </form>
               </div>
@@ -184,84 +197,171 @@
 
     <%- include('../../../partials/scripts.ejs') %>
 
-    <!-- Wizard Logic -->
-<script>
-const form = document.getElementById('form-wizard1');
+    <!-- CSS بسيط للخطوات -->
+    <style>
+      .step {
+        display: none;
+      }
+      .step.active {
+        display: block;
+      }
+      #top-tab-list li {
+        cursor: pointer;
+        padding: 10px;
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+      }
+      #top-tab-list li.active {
+        background: #007bff;
+        color: white;
+      }
+    </style>
 
-const primaryAreaSelect = document.getElementById('primaryArea');
-const secondaryAreaSelect = document.getElementById('secondaryArea');
+    <!-- Wizard Logic البسيط -->
+    <script>
+    const form = document.getElementById('form-wizard1');
 
-const fullName = document.getElementById('fullName');
-const phone = document.getElementById('phone');
-const nationalId = document.getElementById('nationalId');
-const address = document.getElementById('address');
-const type = document.getElementById('type');
-const collectionFrequency = document.getElementById('collectionFrequency');
-const assignedCollector = document.getElementById('assignedCollector');
-const isActive = document.getElementById('isActive');
-const serialNumber = document.getElementById('serialNumber');
-const installationDate = document.getElementById('installationDate');
-const meterStatus = document.getElementById('meterStatus');
+    const primaryAreaSelect = document.getElementById('primaryArea');
+    const secondaryAreaSelect = document.getElementById('secondaryArea');
 
-// تحميل المناطق الفرعية
-primaryAreaSelect.addEventListener('change', async () => {
-  const primaryAreaId = primaryAreaSelect.value;
-  secondaryAreaSelect.innerHTML = '<option value="">---</option>';
+    const fullName = document.getElementById('fullName');
+    const phone = document.getElementById('phone');
+    const nationalId = document.getElementById('nationalId');
+    const address = document.getElementById('address');
+    const type = document.getElementById('type');
+    const collectionFrequency = document.getElementById('collectionFrequency');
+    const assignedCollector = document.getElementById('assignedCollector');
+    const isActive = document.getElementById('isActive');
+    const serialNumber = document.getElementById('serialNumber');
+    const initialReading = document.getElementById('initialReading');
+    const installationDate = document.getElementById('installationDate');
+    const meterStatus = document.getElementById('meterStatus');
 
-  if (!primaryAreaId) return;
+    // تحميل المناطق الفرعية
+    primaryAreaSelect.addEventListener('change', async () => {
+      const primaryAreaId = primaryAreaSelect.value;
+      secondaryAreaSelect.innerHTML = '<option value="">---</option>';
 
-  try {
-    const res = await fetch(`/company-admin/areas/${primaryAreaId}/sub-areas`);
-    const subAreas = await res.json();
+      if (!primaryAreaId) return;
 
-    subAreas.forEach(area => {
-      const opt = document.createElement('option');
-      opt.value = area._id;
-      opt.textContent = area.name;
-      secondaryAreaSelect.appendChild(opt);
+      try {
+        const res = await fetch(`/company-admin/areas/${primaryAreaId}/sub-areas`);
+        const subAreas = await res.json();
+
+        subAreas.forEach(area => {
+          const opt = document.createElement('option');
+          opt.value = area._id;
+          opt.textContent = area.name;
+          secondaryAreaSelect.appendChild(opt);
+        });
+      } catch (err) {
+        console.error(err);
+      }
     });
-  } catch (err) {
-    console.error(err);
-  }
-});
 
-// إرسال الفورم
-form.addEventListener('submit', async (e) => {
-  e.preventDefault();
+    // منطق التنقل بين الخطوات
+    let currentStep = 0;
+    const steps = document.querySelectorAll('.step');
+    const tabItems = document.querySelectorAll('#top-tab-list li');
 
-  const data = {
-    subscriber: {
-      fullName: fullName.value,
-      phone: phone.value,
-      nationalId: nationalId.value,
-      address: address.value,
-      primaryArea: primaryAreaSelect.value,
-      secondaryArea: secondaryAreaSelect.value || null,
-      type: type.value,
-      collectionFrequency: collectionFrequency.value,
-      assignedCollector: assignedCollector.value,
-      isActive: isActive.checked
-    },
-    meter: {
-      serialNumber: serialNumber.value,
-      installationDate: installationDate.value,
-      status: meterStatus.value
+    function showStep(index) {
+      steps.forEach((step, i) => {
+        step.classList.toggle('active', i === index);
+      });
+
+      tabItems.forEach((tab, i) => {
+        tab.classList.toggle('active', i === index);
+      });
+
+      currentStep = index;
     }
-  };
 
-  const res = await fetch('/company-admin/subscribers/create', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
-  });
+    // Next buttons
+    document.querySelectorAll('.next').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (currentStep < steps.length - 1) {
+          showStep(currentStep + 1);
+        }
+      });
+    });
 
-  if (res.ok) {
-    window.location.href = '/company-admin/subscribers';
-  }
-});
-</script>
+    // Previous buttons
+    document.querySelectorAll('.previous').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (currentStep > 0) {
+          showStep(currentStep - 1);
+        }
+      });
+    });
 
+    // تبديل عبر التبويب العلوي (اختياري)
+    tabItems.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const stepIndex = parseInt(tab.dataset.step);
+        showStep(stepIndex);
+      });
+    });
 
+    // ابدأ بالخطوة الأولى
+    showStep(0);
+
+    // إرسال الفورم مع تحقق يدوي
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      // تحقق يدوي من الحقول الإجبارية
+      if (!fullName.value.trim()) return alert("الرجاء إدخال الاسم الكامل");
+      if (!phone.value.trim()) return alert("الرجاء إدخال رقم الهاتف");
+      if (!primaryAreaSelect.value) return alert("الرجاء اختيار المنطقة الرئيسية");
+      if (!assignedCollector.value) return alert("الرجاء اختيار المحصل");
+      if (!serialNumber.value.trim()) return alert("الرجاء إدخال رقم العداد");
+      if (!installationDate.value) return alert("الرجاء اختيار تاريخ التركيب");
+
+      const readingValue = initialReading.value.trim();
+      const initialReadingNum = readingValue ? Number(readingValue) : 0;
+      if (isNaN(initialReadingNum) || initialReadingNum < 0) return alert("القراءة الأولية يجب أن تكون رقم موجب أو صفر");
+
+      const data = {
+        subscriber: {
+          fullName: fullName.value.trim(),
+          phone: phone.value.trim(),
+          nationalId: nationalId.value.trim() || null,
+          address: address.value.trim() || null,
+          primaryArea: primaryAreaSelect.value,
+          secondaryArea: secondaryAreaSelect.value || null,
+          type: type.value,
+          collectionFrequency: collectionFrequency.value,
+          assignedCollector: assignedCollector.value,
+          isActive: isActive.checked
+        },
+        meter: {
+          serialNumber: serialNumber.value.trim(),
+          initialReading: initialReadingNum,
+          installationDate: installationDate.value,
+          status: meterStatus.value
+        }
+      };
+
+      try {
+        const res = await fetch('/company-admin/subscribers/create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        if (res.ok) {
+          alert("تم إضافة المشترك بنجاح");
+          window.location.href = '/company-admin/subscribers';
+        } else {
+          const errorData = await res.json();
+          alert(errorData.message || "حدث خطأ أثناء الحفظ");
+        }
+      } catch (err) {
+        console.error("Fetch error:", err);
+        alert("فشل الاتصال بالخادم");
+      }
+    });
+    </script>
 
   </body>
 </html>

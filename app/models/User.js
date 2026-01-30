@@ -9,10 +9,10 @@ const userSchema = new mongoose.Schema(
     company: {
   type: mongoose.Schema.Types.ObjectId,
   ref: "Company",
-  default: null, // null = سوبر أدمن
+  default: null, // null = سوبر أدمن 
 },
 subscriber: {
-  type: mongoose.Schema.Types.ObjectId,
+  type: mongoose.Schema.Types.ObjectId, 
   ref: 'Subscriber',
   default: null
 },

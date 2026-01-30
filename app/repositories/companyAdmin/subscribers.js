@@ -7,3 +7,4 @@ exports.findByCompany = async (companyId) => {
     .populate('assignedCollector', 'fullName')
     .sort({ createdAt: -1 });
 };
+ 

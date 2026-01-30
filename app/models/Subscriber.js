@@ -19,7 +19,6 @@ const subscriberSchema = new mongoose.Schema(
 
     // Meter Info
     meterId: { type: mongoose.Schema.Types.ObjectId, ref: 'Meter' },
-    initialReading: { type: Number, default: 0 },
 
     // Subscription Settings
     type: { type: String, enum: ['HOME', 'COMMERCIAL'], default: 'HOME' },
