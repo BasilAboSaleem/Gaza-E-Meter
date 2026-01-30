@@ -45,4 +45,6 @@ router.get(
   companyAdminController.showSubscribersPage
 );
 
+router.get("/funds", authMiddleware, authorizMiddleware("COMPANY_ADMIN"), companyAdminController.listFunds);
+
 module.exports = router; 

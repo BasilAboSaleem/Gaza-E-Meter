@@ -2,7 +2,7 @@ const e = require('connect-flash');
 const areaService = require('../services/companyAdmin/areas');
 const collectorService = require('../services/companyAdmin/collectors');
 const subscriberService = require('../services/companyAdmin/subscribers');
-
+const fundService = require('../services/companyAdmin/funds');
 exports.showCreateAreaForm = (req, res) => {
   res.render("dashboard/companyAdmin/areas/add-area", {
   });
@@ -173,6 +173,7 @@ exports.showCreateCollectorForm = (req, res) => {
 exports.createCollector = async (req, res) => {
   try {
     const { fullName, email, phone, password, isActive } = req.body;
+    const companyId = req.user.company;
 
     // التحققات البسيطة (اختياري، ممكن تحطها في السيرفس بس)
     if (!fullName?.trim()) return res.status(400).json({ errors: { fullName: 'الاسم الكامل مطلوب' } });
@@ -180,7 +181,7 @@ exports.createCollector = async (req, res) => {
     if (!password?.trim()) return res.status(400).json({ errors: { password: 'كلمة المرور مطلوبة' } });
 
     const collector = await collectorService.createCollector(
-      { fullName, email, phone, password, isActive },
+      { fullName, email, phone, password, isActive, companyId },
       req.user   // ← هنا بنمرر اليوزر كامل عشان ناخد company منه
     );
 
@@ -333,5 +334,18 @@ exports.showSubscribersPage = async (req, res, next) => {
     });
   } catch (err) {
     next(err);
+  }
+};
+
+exports.listFunds = async (req, res, next) => {
+  try {
+    const companyId = req.user.company;
+    const funds = await fundService.getFundsByCompany(companyId);
+
+    return res.render('dashboard/companyAdmin/funds/funds', {
+      funds
+    });
+  } catch (error) {
+    next(error);
   }
 };

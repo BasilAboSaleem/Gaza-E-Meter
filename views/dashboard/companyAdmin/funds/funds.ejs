@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <%- include('../../../partials/head.ejs') %>
+  <body>
+    <!-- loader -->
+    <div id="loading">
+      <div class="loader simple-loader">
+        <div class="loader-body"></div>
+      </div>
+    </div>
+
+    <%- include('../../../partials/sidebar.ejs') %>
+
+    <main class="main-content">
+      <div class="position-relative iq-banner">
+        <%- include('../../../partials/navbar.ejs') %>
+      </div>
+
+      <div class="container-fluid content-inner mt-n5 py-0">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h4 class="card-title mb-0">صناديق الشركة</h4>
+              </div>
+
+              <div class="card-body">
+
+                <!-- Search & Filters -->
+                <div class="row mb-3">
+                  <div class="col-md-6 mb-2">
+                    <input
+                      type="text"
+                      id="fundSearch"
+                      class="form-control"
+                      placeholder="ابحث باسم الصندوق..."
+                    />
+                  </div>
+
+                  <div class="col-md-4 mb-2">
+                    <select id="fundTypeFilter" class="form-select">
+                      <option value="">كل الأنواع</option>
+                      <option value="COMPANY">صندوق شركة</option>
+                      <option value="COLLECTOR">صندوق محصل</option>
+                      <option value="BANK">صندوق بنك</option>
+                      <option value="EXPENSES">مصروفات</option>
+                      <option value="OTHER">أخرى</option>
+                    </select>
+                  </div>
+                </div>
+
+                <% if (funds.length === 0) { %>
+                  <p>لا توجد صناديق بعد.</p>
+                <% } else { %>
+                  <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                      <thead>
+                        <tr>
+                          <th>اسم الصندوق</th>
+                          <th>النوع</th>
+                          <th>المالك</th>
+                          <th>الرصيد</th>
+                          <th>الحالة</th>
+                          <th>تاريخ الإنشاء</th>
+                          <th>إجراءات</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <% funds.forEach(fund => { %>
+                          <tr
+                            class="fund-row"
+                            data-name="<%= fund.name.toLowerCase() %>"
+                            data-type="<%= fund.type %>"
+                          >
+                            <td><%= fund.name %></td>
+
+                            <td>
+                              <% if (fund.type === 'COLLECTOR') { %>
+                                محصل
+                              <% } else if (fund.type === 'COMPANY') { %>
+                                شركة
+                              <% } else if (fund.type === 'BANK') { %>
+                                بنك
+                              <% } else if (fund.type === 'EXPENSES') { %>
+                                مصروفات
+                              <% } else { %>
+                                أخرى
+                              <% } %>
+                            </td>
+
+                            <td>
+                              <% if (fund.owner) { %>
+                                <%= fund.owner.fullName %>
+                              <% } else { %>
+                                -
+                              <% } %>
+                            </td>
+
+                            <td>
+                              <strong>
+                                <%= fund.balance.toLocaleString('ar-EG') %>
+                              </strong>
+                              <%= fund.currency %>
+                            </td>
+
+                            <td>
+                              <% if (fund.isActive) { %>
+                                <span class="badge bg-success">مفعّل</span>
+                              <% } else { %>
+                                <span class="badge bg-danger">مغلق</span>
+                              <% } %>
+                            </td>
+
+                            <td>
+                              <%= new Date(fund.createdAt).toLocaleDateString('ar-EG') %>
+                            </td>
+
+                            <td>
+                              <a
+                                href="/company-admin/funds/<%= fund._id %>"
+                                class="btn btn-info btn-sm"
+                              >
+                                عرض
+                              </a>
+                            </td>
+                          </tr>
+                        <% }) %>
+                      </tbody>
+                    </table>
+                  </div>
+                <% } %>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <%- include('../../../partials/footer.ejs') %>
+    </main>
+
+    <%- include('../../../partials/offcanvas.ejs') %>
+    <%- include('../../../partials/scripts.ejs') %>
+
+    <!-- Search & Filter Script -->
+    <script>
+      const searchInput = document.getElementById('fundSearch');
+      const typeFilter = document.getElementById('fundTypeFilter');
+      const rows = document.querySelectorAll('.fund-row');
+
+      function filterFunds() {
+        const searchValue = searchInput.value.toLowerCase();
+        const selectedType = typeFilter.value;
+
+        rows.forEach(row => {
+          const fundName = row.dataset.name;
+          const fundType = row.dataset.type;
+
+          const matchName = fundName.includes(searchValue);
+          const matchType = !selectedType || fundType === selectedType;
+
+          row.style.display = matchName && matchType ? '' : 'none';
+        });
+      }
+
+      searchInput.addEventListener('input', filterFunds);
+      typeFilter.addEventListener('change', filterFunds);
+    </script>
+  </body>
+</html>

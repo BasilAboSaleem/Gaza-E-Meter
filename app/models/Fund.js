@@ -4,6 +4,11 @@ const FUND_TYPES = ['COMPANY', 'COLLECTOR', 'BANK', 'EXPENSES', 'OTHER'];
 
 const fundSchema = new mongoose.Schema(
   {
+    company: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Company',
+      required: true
+    },
     name: {
       type: String,
       required: true,

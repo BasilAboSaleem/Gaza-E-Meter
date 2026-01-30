@@ -1,5 +1,7 @@
 const e = require('connect-flash');
 const collectorRepo = require('../../repositories/companyAdmin/collectors');
+const fundRepo = require('../../repositories/companyAdmin/fund');
+const { name } = require('ejs');
 
 exports.createCollector = async (data, currentUser) => {
   const { fullName, email, phone, password, isActive = true } = data;
@@ -55,6 +57,16 @@ exports.createCollector = async (data, currentUser) => {
     role: 'COLLECTOR',
     isActive
   });
+
+  //4. انشاء صندوق خاص بالمحصل
+  await fundRepo.create({
+    company: currentUser.company,
+    name: `صندوق المحصل ${newCollector.fullName}`,
+    type: 'COLLECTOR',
+    owner: newCollector._id,
+    balance: 0
+  });
+
 
   return newCollector;
 };
