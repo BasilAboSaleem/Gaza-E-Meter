@@ -29,4 +29,7 @@ router.post("/collectors/create", authMiddleware, authorizMiddleware("COMPANY_AD
 router.get("/collectors", authMiddleware, authorizMiddleware("COMPANY_ADMIN"), companyAdminController.listCollectors);
 router.get("/collectors/:id/edit", authMiddleware, authorizMiddleware("COMPANY_ADMIN"), companyAdminController.showEditCollectorForm);
 router.put("/collectors/:id", authMiddleware, authorizMiddleware("COMPANY_ADMIN"), companyAdminController.updateCollector);
-module.exports = router;
+router.get('/areas/:id/sub-areas',authMiddleware, authorizMiddleware("COMPANY_ADMIN"),companyAdminController.getSubAreas);
+router.get("/subscribers/create", authMiddleware, authorizMiddleware("COMPANY_ADMIN"), companyAdminController.showCreateSubscriberForm);
+
+module.exports = router; 

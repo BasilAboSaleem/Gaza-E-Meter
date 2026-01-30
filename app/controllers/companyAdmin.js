@@ -11,15 +11,15 @@ exports.showCreateAreaForm = (req, res) => {
 
 exports.createArea = async (req, res) => {
   try {
-    console.log(req.body);
     const { name, description, isActive } = req.body;
+    const companyId = req.user.company;
 
     // Validate
     if (!name || name.trim() === '') {
       return res.status(400).json({ errors: { name: 'اسم المنطقة مطلوب' } });
     }
 
-    const area = await areaService.createPrimaryArea({ name, description, isActive });
+    const area = await areaService.createPrimaryArea({ companyId, name, description, isActive });
     return res.status(201).json(area);
   } catch (err) {
     console.error(err);
@@ -32,7 +32,8 @@ exports.createArea = async (req, res) => {
 
 exports.listMainAreas = async (req, res, next) => {
   try {
-    const areas = await areaService.getPrimaryAreas();
+    const companyId = req.user.company;
+    const areas = await areaService.getPrimaryAreas(companyId);
 
     return res.render('dashboard/companyAdmin/areas/main-areas', {
       title: 'المناطق الرئيسية',
@@ -46,6 +47,7 @@ exports.listMainAreas = async (req, res, next) => {
 exports.showMainAreaDetails = async (req, res, next) => {
   try {
     const areaId = req.params.id;
+    const companyId = req.user.company;
 
     const result = await areaService.getPrimaryAreaWithSubAreas(areaId);
 
@@ -88,6 +90,7 @@ exports.showCreateSubAreaForm = async (req, res, next) => {
 exports.createSubArea = async (req, res) => {
   try {
     const parentAreaId = req.params.id; // ✅
+    const companyId = req.user.company;
     const { name, description, isActive } = req.body;
 
     if (!name || !name.trim()) {
@@ -97,6 +100,7 @@ exports.createSubArea = async (req, res) => {
     }
 
     const area = await areaService.createSubArea({
+      companyId,
       parentAreaId,
       name,
       description,
@@ -122,8 +126,9 @@ exports.createSubArea = async (req, res) => {
 exports.showEditAreaForm = async (req, res, next) => {
   try {
     const { id } = req.params;
+    const companyId = req.user.company;
 
-    const area = await areaService.getAreaById(id);
+    const area = await areaService.getAreaById(companyId, id);
 
     if (!area) {
       return res.status(404).render('errors/404');
@@ -140,9 +145,11 @@ exports.showEditAreaForm = async (req, res, next) => {
 exports.updateArea = async (req, res, next) => {
   try {
     const { id } = req.params;
+    const companyId = req.user.company;
     const { name, description, isActive } = req.body;
 
-    const updatedArea = await areaService.updateArea(id, {
+    // ⚡ مرر companyId و id بشكل صحيح
+    const updatedArea = await areaService.updateArea(companyId, id, {
       name,
       description,
       isActive
@@ -156,6 +163,7 @@ exports.updateArea = async (req, res, next) => {
     next(err);
   }
 };
+
 
 exports.showCreateCollectorForm = (req, res) => {
   res.render("dashboard/companyAdmin/collectors/add-collector", {
@@ -248,3 +256,43 @@ exports.updateCollector = async (req, res, next) => {
     next(error);
   }
 };
+
+// عرض الفورم مع المناطق الرئيسية فقط
+exports.showCreateSubscriberForm = async (req, res, next) => {
+  try {
+    const companyId = req.user.company;
+    const collectors = await collectorService.getCollectorsByCompany(companyId);
+    const areas = await areaService.getPrimaryAreasByCompany(companyId); // مناطق رئيسية فقط
+
+    res.render("dashboard/companyAdmin/subscribers/add-subscriber", {
+      collectors,
+      areas
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// endpoint لجلب المناطق الفرعية عند اختيار منطقة رئيسية
+// controllers/companyAdmin/areas.js
+exports.getSubAreas = async (req, res) => {
+  try {
+    console.log({
+  company: req.user.company,
+  primaryArea: req.params.id
+});
+    const companyId = req.user.company;
+    const { id: primaryAreaId } = req.params;
+
+    const subAreas = await areaService.getSubAreasByPrimaryArea(
+      companyId,
+      primaryAreaId
+    );
+
+    res.json(subAreas);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'حدث خطأ أثناء جلب المناطق الفرعية' });
+  }
+};
+

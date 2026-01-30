@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en" dir="rtl">
+  <%- include('../../../partials/head.ejs') %>
+  <body>
+    <!-- loader -->
+    <div id="loading">
+      <div class="loader simple-loader">
+        <div class="loader-body"></div>
+      </div>
+    </div>
+
+    <%- include('../../../partials/sidebar.ejs') %>
+
+    <main class="main-content">
+      <div class="position-relative iq-banner">
+        <%- include('../../../partials/navbar.ejs') %>
+      </div>
+
+      <div class="container-fluid content-inner mt-n5 py-0">
+        <div class="row">
+          <div class="col-lg-10 mx-auto">
+            <div class="card">
+              <div class="card-header">
+                <h4 class="card-title mb-0">إضافة مشترك جديد</h4>
+                <p class="text-muted mt-1">إدخال بيانات المشترك ثم بيانات العداد</p>
+              </div>
+
+              <div class="card-body">
+<form id="form-wizard1" class="mt-3 text-center">
+
+                  <!-- Wizard Steps -->
+                  <ul id="top-tab-list" class="p-0 row list-inline">
+                    <li class="col-md-4 active">
+                      <a href="javascript:void();">بيانات المشترك</a>
+                    </li>
+                    <li class="col-md-4">
+                      <a href="javascript:void();">بيانات العداد</a>
+                    </li>
+                    <li class="col-md-4">
+                      <a href="javascript:void();">تأكيد</a>
+                    </li>
+                  </ul>
+
+                  <!-- STEP 1: Subscriber -->
+                  <fieldset class="active">
+                    <div class="form-card text-start">
+                      <h3 class="mb-4">بيانات المشترك</h3>
+
+                      <div class="row">
+                        <div class="col-md-6 mb-3">
+                          <label class="form-label">الاسم الكامل *</label>
+                          <input type="text" id="fullName" class="form-control" required>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                          <label class="form-label">رقم الهاتف *</label>
+                          <input type="text" id="phone" class="form-control" required>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                          <label class="form-label">رقم الهوية</label>
+                          <input type="text" id="nationalId" class="form-control">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                          <label class="form-label">العنوان</label>
+                          <input type="text" id="address" class="form-control">
+                        </div>
+
+                        <!-- المنطقة الرئيسية -->
+<div class="col-md-6 mb-3">
+  <label class="form-label">المنطقة الرئيسية *</label>
+  <select id="primaryArea" class="form-select" required>
+    <% areas.forEach(area => { %>
+      <option value="<%= area._id %>"><%= area.name %></option>
+    <% }) %>
+  </select>
+</div>
+
+<!-- المنطقة الفرعية -->
+<div class="col-md-6 mb-3">
+  <label class="form-label">المنطقة الفرعية</label>
+  <select id="secondaryArea" class="form-select">
+    <option value="">---</option>
+  </select>
+</div>
+
+
+                        <div class="col-md-6 mb-3">
+                          <label class="form-label">نوع الاشتراك</label>
+                          <select id="type" class="form-select">
+                            <option value="HOME">منزلي</option>
+                            <option value="COMMERCIAL">تجاري</option>
+                          </select>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                          <label class="form-label">دورية التحصيل</label>
+                          <select id="collectionFrequency" class="form-select">
+                            <option value="MONTHLY">شهري</option>
+                            <option value="WEEKLY">أسبوعي</option>
+                            <option value="DAILY">يومي</option>
+                          </select>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                          <label class="form-label">المحصل *</label>
+                          <select id="assignedCollector" class="form-select" required>
+                            <% collectors.forEach(c => { %>
+                              <option value="<%= c._id %>"><%= c.fullName %></option>
+                            <% }) %>
+                          </select>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                          <label class="form-label d-block">الحالة</label>
+                          <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="isActive" checked>
+                            <label class="form-check-label">مفعّل</label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+<button type="button" class="btn btn-primary next action-button float-end">
+  التالي
+</button>
+                  </fieldset>
+
+                  <!-- STEP 2: Meter -->
+                  <fieldset>
+                    <div class="form-card text-start">
+                      <h3 class="mb-4">بيانات العداد</h3>
+
+                      <div class="row">
+                        <div class="col-md-6 mb-3">
+                          <label class="form-label">رقم العداد *</label>
+                          <input type="text" id="serialNumber" class="form-control" required>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                          <label class="form-label">تاريخ التركيب</label>
+                          <input type="date" id="installationDate" class="form-control">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                          <label class="form-label">حالة العداد</label>
+                          <select id="meterStatus" class="form-select">
+                            <option value="ACTIVE">مفعل</option>
+                            <option value="INACTIVE">غير مفعل</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+
+<button type="button" class="btn btn-primary next action-button float-end">
+  التالي
+</button>
+<button type="button" class="btn btn-dark previous action-button-previous float-end me-2">
+  السابق
+</button>
+                  </fieldset>
+
+                  <!-- STEP 3: Confirm -->
+                  <fieldset>
+                    <div class="form-card text-center">
+                      <h3 class="mb-4">تأكيد العملية</h3>
+                      <p class="text-muted">سيتم إنشاء المشترك والعداد تلقائيًا</p>
+                      <button type="submit" class="btn btn-success px-5">حفظ</button>
+                    </div>
+
+                    <button type="button" class="btn btn-dark previous action-button-previous float-end mt-3">السابق</button>
+                  </fieldset>
+
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <%- include('../../../partials/footer.ejs') %>
+    </main>
+
+    <%- include('../../../partials/scripts.ejs') %>
+
+    <!-- Wizard Logic -->
+<script>
+const form = document.getElementById('form-wizard1');
+
+const primaryAreaSelect = document.getElementById('primaryArea');
+const secondaryAreaSelect = document.getElementById('secondaryArea');
+
+const fullName = document.getElementById('fullName');
+const phone = document.getElementById('phone');
+const nationalId = document.getElementById('nationalId');
+const address = document.getElementById('address');
+const type = document.getElementById('type');
+const collectionFrequency = document.getElementById('collectionFrequency');
+const assignedCollector = document.getElementById('assignedCollector');
+const isActive = document.getElementById('isActive');
+const serialNumber = document.getElementById('serialNumber');
+const installationDate = document.getElementById('installationDate');
+const meterStatus = document.getElementById('meterStatus');
+
+// تحميل المناطق الفرعية
+primaryAreaSelect.addEventListener('change', async () => {
+  const primaryAreaId = primaryAreaSelect.value;
+  secondaryAreaSelect.innerHTML = '<option value="">---</option>';
+
+  if (!primaryAreaId) return;
+
+  try {
+    const res = await fetch(`/company-admin/areas/${primaryAreaId}/sub-areas`);
+    const subAreas = await res.json();
+
+    subAreas.forEach(area => {
+      const opt = document.createElement('option');
+      opt.value = area._id;
+      opt.textContent = area.name;
+      secondaryAreaSelect.appendChild(opt);
+    });
+  } catch (err) {
+    console.error(err);
+  }
+});
+
+// إرسال الفورم
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const data = {
+    subscriber: {
+      fullName: fullName.value,
+      phone: phone.value,
+      nationalId: nationalId.value,
+      address: address.value,
+      primaryArea: primaryAreaSelect.value,
+      secondaryArea: secondaryAreaSelect.value || null,
+      type: type.value,
+      collectionFrequency: collectionFrequency.value,
+      assignedCollector: assignedCollector.value,
+      isActive: isActive.checked
+    },
+    meter: {
+      serialNumber: serialNumber.value,
+      installationDate: installationDate.value,
+      status: meterStatus.value
+    }
+  };
+
+  const res = await fetch('/company-admin/subscribers/create', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  });
+
+  if (res.ok) {
+    window.location.href = '/company-admin/subscribers';
+  }
+});
+</script>
+
+
+
+  </body>
+</html>

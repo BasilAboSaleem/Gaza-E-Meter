@@ -1,10 +1,11 @@
 // services/areaService.js
 const areaRepository = require('../../repositories/companyAdmin/areas');
 const Area = require('../../models/Area');
+const e = require('connect-flash');
 
-exports.createPrimaryArea = async ({ name, description, isActive = true }) => {
+exports.createPrimaryArea = async ({ companyId, name, description, isActive = true }) => {
   // تحقق من التكرار
-  const existing = await areaRepository.findByName(name);
+  const existing = await areaRepository.findByName(companyId, name);
   if (existing) {
     const error = new Error('اسم المنطقة موجود مسبقاً');
     error.statusCode = 400;
@@ -14,6 +15,7 @@ exports.createPrimaryArea = async ({ name, description, isActive = true }) => {
 
   // إنشاء المنطقة
   const areaData = {
+    company: companyId,
     name: name.trim(),
     description: description ? description.trim() : '',
     isActive,
@@ -24,16 +26,31 @@ exports.createPrimaryArea = async ({ name, description, isActive = true }) => {
   return area;
 };
 
-exports.getPrimaryAreas = async () => {
+exports.getPrimaryAreas = async (companyId) => {
   const areas = await Area.aggregate([
     {
-      $match: { parentArea: null }
+      $match: {
+        company: companyId,
+        parentArea: null
+      }
     },
     {
       $lookup: {
         from: 'areas',
-        localField: '_id',
-        foreignField: 'parentArea',
+        let: { parentId: '$_id', companyId: '$company' },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $and: [
+                  { $eq: ['$parentArea', '$$parentId'] },
+                  { $eq: ['$company', '$$companyId'] },
+                  
+                ]
+              }
+            }
+          }
+        ],
         as: 'subAreas'
       }
     },
@@ -46,9 +63,10 @@ exports.getPrimaryAreas = async () => {
       $sort: { createdAt: -1 }
     }
   ]);
- 
+
   return areas;
 };
+
 
 exports.getPrimaryAreaWithSubAreas = async (areaId) => {
   // جلب المنطقة الرئيسية فقط
@@ -73,8 +91,9 @@ exports.getSubAreas = async (parentAreaId) => {
   return subAreas;
 };
 
-exports.createSubArea = async ({ parentAreaId, name, description, isActive = true }) => {
-  const existing = await areaRepository.findByName(name);
+exports.createSubArea = async ({ companyId, parentAreaId, name, description, isActive = true }) => {
+  const existing = await areaRepository.findByName(companyId, name);
+
   if (existing) {
     const error = new Error('اسم المنطقة موجود مسبقاً');
     error.statusCode = 400;
@@ -83,6 +102,7 @@ exports.createSubArea = async ({ parentAreaId, name, description, isActive = tru
   }
 
   const areaData = {
+    company: companyId,
     name: name.trim(),
     description: description ? description.trim() : '',
     isActive,
@@ -92,12 +112,13 @@ exports.createSubArea = async ({ parentAreaId, name, description, isActive = tru
   return await areaRepository.create(areaData);
 };
 
-exports.getAreaById = async (id) => {
-  return areaRepository.findById(id);
+exports.getAreaById = async (companyId, id) => {
+  return await areaRepository.findById(companyId, id);
 };
 
-exports.updateArea = async (id, data) => {
-  const area = await areaRepository.findById(id);
+
+exports.updateArea = async (companyId, id, data) => {
+  const area = await areaRepository.findById(companyId, id);
 
   if (!area) {
     const error = new Error('المنطقة غير موجودة');
@@ -107,7 +128,7 @@ exports.updateArea = async (id, data) => {
 
   // تحقق من الاسم (بدون تكرار)
   if (data.name && data.name.trim() !== area.name) {
-    const exists = await areaRepository.findByName(data.name.trim());
+    const exists = await areaRepository.findByName(companyId, data.name.trim());
     if (exists) {
       const error = new Error('اسم المنطقة موجود مسبقاً');
       error.statusCode = 400;
@@ -123,3 +144,16 @@ exports.updateArea = async (id, data) => {
   await area.save();
   return area;
 };
+
+exports.getPrimaryAreasByCompany = async (companyId) => {
+  return await areaRepository.findPrimaryAreasByCompany(companyId);
+};
+
+exports.getSubAreasByPrimaryArea = async (companyId, primaryAreaId) => {
+  return await areaRepository.findSubAreasByParent(
+    companyId,
+    primaryAreaId
+  );
+};
+
+ 

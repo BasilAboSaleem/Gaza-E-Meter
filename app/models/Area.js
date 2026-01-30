@@ -2,11 +2,16 @@ const mongoose = require('mongoose');
 
 const areaSchema = new mongoose.Schema(
   {
+       company: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Company',
+      required: true,
+      index: true
+    },
     name: {
       type: String,
       required: true,
-      trim: true,
-      unique: true
+      trim: true
     },
     parentArea: {
       type: mongoose.Schema.Types.ObjectId,

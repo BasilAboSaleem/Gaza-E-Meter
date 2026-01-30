@@ -65,7 +65,7 @@ exports.getCollectorsByCompany = async (companyId) => {
 
 exports.getCollectorById = async (id) => {
   return await collectorRepo.findById(id);
-}
+};
 
 exports.updateCollector = async (id, data) => {
   const collector = await collectorRepo.findById(id);
@@ -118,4 +118,8 @@ exports.updateCollector = async (id, data) => {
 
   await collector.save();
   return collector;
+};
+
+exports.getCollectorsByCompany = async (companyId) => {
+  return await collectorRepo.findByCompany(companyId);
 };

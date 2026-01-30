@@ -6,8 +6,8 @@ exports.create = async (data) => {
   return await area.save();
 };
 
-exports.findByName = async (name) => {
-  return await Area.findOne({ name: name.trim() });
+exports.findByName = async (companyId, name) => {
+  return await Area.findOne({ company: companyId, name: name.trim() });
 };
 
 // منطقة رئيسية
@@ -24,6 +24,28 @@ exports.findAllPrimary = async () => {
   return await Area.find({ parentArea: null }).sort({ name: 1 });
 };
 
-exports.findById = async (id) => {
-  return await Area.findById(id);
+exports.findById = async (companyId, id) => {
+  return await Area.findOne({ _id: id, company: companyId });
+};
+
+exports.findByCompany = async (companyId) => {
+  return await Area.find({ company: companyId });
+};
+
+// جلب كل المناطق الرئيسية لشركة معينة
+exports.findPrimaryAreasByCompany = async (companyId) => {
+  return await Area.find({
+    company: companyId,
+    parentArea: null,
+    isActive: true
+  }).sort({ name: 1 });
+};
+
+// جلب المناطق الفرعية التابعة لمنطقة رئيسية معينة
+exports.findSubAreasByParent = async (companyId, parentAreaId) => {
+  return await Area.find({
+    company: companyId,
+    parentArea: parentAreaId,
+    isActive: true
+  }).sort({ name: 1 });
 };
