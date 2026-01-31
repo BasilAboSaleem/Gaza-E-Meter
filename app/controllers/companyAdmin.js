@@ -448,3 +448,17 @@ exports.createTransaction = async (req, res, next) => {
     next(err);
   }
 };
+
+exports.listTransactions = async (req, res, next) => {
+  try {
+    const companyId = req.user.company;
+    const transactions = await transactionService.getTransactionsByCompany(companyId);
+    return res.render('dashboard/companyAdmin/transactions/transactions', {
+      title: 'الحركات المالية',
+      transactions
+    });
+  }
+  catch (error) {
+    next(error);
+  }
+};

@@ -65,3 +65,7 @@ exports.createTransaction = async ({ companyId, type, direction, sourceFund, des
 
   return transaction;
 };
+
+exports.getTransactionsByCompany = async (companyId) => {
+  return await transactionRepo.findByCompany(companyId);
+}

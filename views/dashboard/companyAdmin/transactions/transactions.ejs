@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <%- include('../../../partials/head.ejs') %>
+  <body>
+    <!-- loader -->
+    <div id="loading">
+      <div class="loader simple-loader">
+        <div class="loader-body"></div>
+      </div>
+    </div>
+
+    <%- include('../../../partials/sidebar.ejs') %>
+
+    <main class="main-content">
+      <div class="position-relative iq-banner">
+        <%- include('../../../partials/navbar.ejs') %>
+      </div>
+
+      <div class="container-fluid content-inner mt-n5 py-0">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="card-title mb-0">الحركات المالية / التحويلات</h4>
+                <a href="/company-admin/transactions/create" class="btn btn-primary btn-sm">إضافة حركة جديدة</a>
+              </div>
+
+              <div class="card-body">
+                <!-- Search & Filters -->
+                <div class="row mb-3">
+                  <div class="col-md-4 mb-2">
+                    <input
+                      type="text"
+                      id="transactionSearch"
+                      class="form-control"
+                      placeholder="ابحث بالوصف أو النوع..."
+                    />
+                  </div>
+
+                  <div class="col-md-4 mb-2">
+                    <select id="transactionTypeFilter" class="form-select">
+                      <option value="">كل الأنواع</option>
+                      <option value="COLLECTION">قبض</option>
+                      <option value="EXPENSE">صرف</option>
+                      <option value="TRANSFER">تحويل بين الصناديق</option>
+                      <option value="ADJUSTMENT">رصيد افتتاحي / تعديل</option>
+                    </select>
+                  </div>
+                </div>
+
+                <% if (transactions.length === 0) { %>
+                  <p>لا توجد حركات مالية بعد.</p>
+                <% } else { %>
+                  <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                      <thead>
+                        <tr>
+                          <th>الوصف</th>
+                          <th>النوع</th>
+                          <th>الصندوق المصدر</th>
+                          <th>الصندوق الوجهة</th>
+                          <th>المبلغ</th>
+                          <th>المنفذ</th>
+                          <th>التاريخ</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <% transactions.forEach(tx => { %>
+                          <tr
+                            class="transaction-row"
+                            data-type="<%= tx.type %>"
+                            data-description="<%= tx.description.toLowerCase() %>"
+                          >
+                            <td><%= tx.description %></td>
+
+                            <td>
+                              <% if (tx.type === 'COLLECTION') { %>
+                                قبض
+                              <% } else if (tx.type === 'EXPENSE') { %>
+                                صرف
+                              <% } else if (tx.type === 'TRANSFER') { %>
+                                تحويل بين الصناديق
+                              <% } else { %>
+                                رصيد افتتاحي / تعديل
+                              <% } %>
+                            </td>
+
+                            <td>
+                              <%= tx.sourceFund ? tx.sourceFund.name : '-' %>
+                            </td>
+
+                            <td>
+                              <%= tx.destinationFund ? tx.destinationFund.name : '-' %>
+                            </td>
+
+                            <td>
+                              <strong><%= tx.amount.toLocaleString('ar-EG') %></strong> <%= tx.fund?.currency || '₪' %>
+                            </td>
+
+                            <td>
+                              <%= tx.performedBy?.fullName || '—' %>
+                            </td>
+
+                            <td>
+                              <%= new Date(tx.createdAt).toLocaleDateString('ar-EG') %>
+                            </td>
+                          </tr>
+                        <% }) %>
+                      </tbody>
+                    </table>
+                  </div>
+                <% } %>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <%- include('../../../partials/footer.ejs') %>
+    </main>
+
+    <%- include('../../../partials/offcanvas.ejs') %>
+    <%- include('../../../partials/scripts.ejs') %>
+
+    <!-- Search & Filter Script -->
+    <script>
+      const searchInput = document.getElementById('transactionSearch');
+      const typeFilter = document.getElementById('transactionTypeFilter');
+      const rows = document.querySelectorAll('.transaction-row');
+
+      function filterTransactions() {
+        const searchValue = searchInput.value.toLowerCase();
+        const selectedType = typeFilter.value;
+
+        rows.forEach(row => {
+          const description = row.dataset.description;
+          const type = row.dataset.type;
+
+          const matchDescription = description.includes(searchValue);
+          const matchType = !selectedType || type === selectedType;
+
+          row.style.display = matchDescription && matchType ? '' : 'none';
+        });
+      }
+
+      searchInput.addEventListener('input', filterTransactions);
+      typeFilter.addEventListener('change', filterTransactions);
+    </script>
+  </body>
+</html>
