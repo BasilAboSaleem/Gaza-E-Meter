@@ -68,3 +68,7 @@ exports.getFundById = async (fundId) => {
     return await fundRepo.findById(fundId);
 };
 
+exports.getFundsByCompany = async (companyId) => {
+    return await fundRepo.findByCompany(companyId);
+}
+

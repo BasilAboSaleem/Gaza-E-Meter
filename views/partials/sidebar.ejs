@@ -261,6 +261,61 @@
                     <li class="nav-item"><a class="nav-link" href="/readings"><i class="icon">📷</i> <span class="item-name">القراءات</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="/invoices"><i class="icon">🧾</i> <span class="item-name">الفواتير</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="/payments"><i class="icon">💰</i> <span class="item-name">الدفعات</span></a></li>
+                    <li class="nav-item">
+    <a class="nav-link"
+       data-bs-toggle="collapse"
+       href="#transactions-submenu"
+       role="button"
+       aria-expanded="false"
+       aria-controls="transactions-submenu">
+
+        <i class="icon">
+        💰
+        </i>
+
+        <span class="item-name">الحركات المالية</span>
+
+        <i class="right-icon">
+            <svg class="icon-18" xmlns="http://www.w3.org/2000/svg" fill="none"
+                 viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M9 5l7 7-7 7"/>
+            </svg>
+        </i>
+    </a>
+
+    <ul class="sub-nav collapse" id="transactions-submenu" data-bs-parent="#transactions-submenu">
+
+        <!-- عرض المناطق الرئيسية -->
+        <li class="nav-item">
+            <a class="nav-link" href="/company-admin/transactions">
+                <i class="icon">
+                    <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                         viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="4"/>
+                    </svg>
+                </i>
+                <span class="item-name">عرض الحركات المالية</span>
+            </a>
+        </li>
+
+        <!-- إضافة منطقة رئيسية -->
+        <li class="nav-item">
+            <a class="nav-link" href="/company-admin/transactions/create">
+                <i class="icon">
+                    <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                         viewBox="0 0 24 24">
+                        <path d="M12 2a1 1 0 011 1v18a1 1 0 11-2 0V3a1 1 0 011-1z"/>
+                        <path d="M2 12a1 1 0 011-1h18a1 1 0 110 2H3a1 1 0 01-1-1z"/>
+                    </svg>
+                </i>
+                <span class="item-name">إضافة حركة مالية</span>
+            </a>
+        </li>
+
+    </ul>
+</li> 
+
 <li class="nav-item">
     <a class="nav-link"
        data-bs-toggle="collapse"

@@ -3,6 +3,7 @@ const areaService = require('../services/companyAdmin/areas');
 const collectorService = require('../services/companyAdmin/collectors');
 const subscriberService = require('../services/companyAdmin/subscribers');
 const fundService = require('../services/companyAdmin/funds');
+const transactionService = require('../services/companyAdmin/transaction');
 exports.showCreateAreaForm = (req, res) => {
   res.render("dashboard/companyAdmin/areas/add-area", {
   });
@@ -404,5 +405,46 @@ exports.showFundDetails = async (req, res, next) => {
     });
   } catch (error) {
     next(error);
+  }
+};
+
+exports.showCreateTransactionForm = async (req, res, next) => {
+  try {
+    const companyId = req.user.company;
+    const funds = await fundService.getFundsByCompany(companyId);
+    return res.render('dashboard/companyAdmin/transactions/add-transaction', {
+      title: 'إضافة حركة مالية',
+      funds
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.createTransaction = async (req, res, next) => {
+  try {
+    const companyId = req.user.company;
+    const performedBy = req.user._id;
+
+    const { type, direction, sourceFund, destinationFund, amount, description } = req.body;
+
+    const transaction = await transactionService.createTransaction({
+      companyId,
+      type,
+      direction,
+      sourceFund: sourceFund || null,
+      destinationFund: destinationFund || null,
+      amount,
+      description,
+      performedBy
+    });
+
+    return res.status(201).json(transaction);
+  } catch (err) {
+    console.error(err);
+    if (err.statusCode) {
+      return res.status(err.statusCode).json({ errors: { [err.field]: err.message } });
+    }
+    next(err);
   }
 };

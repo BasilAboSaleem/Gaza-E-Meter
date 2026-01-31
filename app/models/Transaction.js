@@ -69,13 +69,23 @@ const transactionSchema = new mongoose.Schema(
     timestamps: true
   }
 );
+// تحقق من صحة البيانات قبل الحفظ
+transactionSchema.pre('validate', function (next) {
+  if (this.direction === 'IN' && !this.destinationFund) {
+    return next(new Error('IN transaction requires destinationFund'));
+  }
+
+  if (this.direction === 'OUT' && !this.sourceFund) {
+    return next(new Error('OUT transaction requires sourceFund'));
+  }
+
+});
 
 // منع التعديل بعد الإنشاء (Audit-safe)
 transactionSchema.pre('save', function (next) {
   if (!this.isNew) {
     throw new Error('Transactions are immutable');
   }
-  next();
 });
 
 module.exports = mongoose.model('Transaction', transactionSchema);

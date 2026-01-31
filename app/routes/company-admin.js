@@ -49,4 +49,6 @@ router.get("/funds", authMiddleware, authorizMiddleware("COMPANY_ADMIN"), compan
 router.get("/funds/create", authMiddleware, authorizMiddleware("COMPANY_ADMIN"), companyAdminController.showCreateFundForm);
 router.post("/funds/create", authMiddleware, authorizMiddleware("COMPANY_ADMIN"), companyAdminController.createFund);
 router.get("/funds/:id", authMiddleware, authorizMiddleware("COMPANY_ADMIN"), companyAdminController.showFundDetails);
+router.get("/transactions/create", authMiddleware, authorizMiddleware("COMPANY_ADMIN"), companyAdminController.showCreateTransactionForm);
+router.post("/transactions/create", authMiddleware, authorizMiddleware("COMPANY_ADMIN"), companyAdminController.createTransaction);
 module.exports = router; 

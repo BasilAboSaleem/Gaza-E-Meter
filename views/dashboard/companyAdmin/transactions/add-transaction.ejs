@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en" dir="rtl">
+  <%- include('../../../partials/head.ejs') %>
+  <body class="">
+    <!-- loader Start -->
+    <div id="loading">
+      <div class="loader simple-loader">
+        <div class="loader-body"></div>
+      </div>
+    </div>
+    <!-- loader END -->
+
+    <%- include('../../../partials/sidebar.ejs') %>
+
+    <main class="main-content">
+      <div class="position-relative iq-banner">
+        <%- include('../../../partials/navbar.ejs') %>
+      </div>
+
+      <div class="container-fluid content-inner mt-n5 py-0">
+        <div class="row">
+          <div class="col-lg-6 mx-auto">
+            <div class="card">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <div>
+                  <h4 class="card-title mb-0">إضافة حركة مالية</h4>
+                  <p class="text-muted mb-0 mt-1">أدخل بيانات الحركة المالية الجديدة</p>
+                </div>
+              </div>
+
+              <div class="card-body">
+                <form id="transactionForm">
+                  <div class="row">
+
+                    <!-- نوع الحركة -->
+                    <div class="col-12 mb-3">
+                      <label class="form-label">نوع الحركة</label>
+                      <select id="transactionType" class="form-select" required>
+                        <option value="">اختر النوع</option>
+                        <option value="COLLECTION">قبض</option>
+                        <option value="EXPENSE">صرف</option>
+                        <option value="TRANSFER">تحويل بين الصناديق</option>
+                        <option value="ADJUSTMENT">رصيد افتتاحي / تعديل</option>
+                      </select>
+                      <div class="text-danger small mt-1 error-type"></div>
+                    </div>
+
+                    <!-- الصندوق المصدر -->
+                    <div class="col-12 mb-3" id="sourceFundContainer">
+                      <label class="form-label">الصندوق المصدر</label>
+                      <select id="sourceFund" class="form-select">
+                        <option value="">اختر الصندوق (اختياري)</option>
+                        <% funds.forEach(f => { %>
+                          <option value="<%= f._id %>"><%= f.name %></option>
+                        <% }) %>
+                      </select>
+                      <div class="text-danger small mt-1 error-sourceFund"></div>
+                    </div>
+
+                    <!-- الصندوق الوجهة -->
+                    <div class="col-12 mb-3" id="destinationFundContainer">
+                      <label class="form-label">الصندوق الوجهة</label>
+                      <select id="destinationFund" class="form-select">
+                        <option value="">اختر الصندوق</option>
+                        <% funds.forEach(f => { %>
+                          <option value="<%= f._id %>"><%= f.name %></option>
+                        <% }) %>
+                      </select>
+                      <div class="text-danger small mt-1 error-destinationFund"></div>
+                    </div>
+
+                    <!-- المبلغ -->
+                    <div class="col-12 mb-3">
+                      <label class="form-label">المبلغ</label>
+                      <input type="number" id="amount" class="form-control" min="0.01" step="0.01" required>
+                      <div class="text-danger small mt-1 error-amount"></div>
+                    </div>
+
+                    <!-- الوصف -->
+                    <div class="col-12 mb-3">
+                      <label class="form-label">الوصف</label>
+                      <textarea id="description" class="form-control" rows="3" required></textarea>
+                      <div class="text-danger small mt-1 error-description"></div>
+                    </div>
+
+                  </div>
+
+                  <!-- أزرار -->
+                  <div class="d-flex justify-content-end gap-2">
+                    <button type="reset" class="btn btn-light">إفراغ الحقول</button>
+                    <button type="submit" class="btn btn-primary">إضافة الحركة المالية</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <%- include('../../../partials/footer.ejs') %>
+    </main>
+
+    <%- include('../../../partials/offcanvas.ejs') %>
+    <%- include('../../../partials/scripts.ejs') %>
+
+<script>
+const transactionForm = document.getElementById('transactionForm');
+const typeSelect = document.getElementById('transactionType');
+const sourceContainer = document.getElementById('sourceFundContainer');
+const destinationContainer = document.getElementById('destinationFundContainer');
+
+function clearErrors() {
+  document.querySelectorAll('[class^="error-"]').forEach(el => el.innerText = '');
+}
+
+function showErrors(errors) {
+  Object.keys(errors).forEach(key => {
+    const el = document.querySelector('.error-' + key);
+    if (el) el.innerText = errors[key];
+  });
+}
+
+function updateFieldVisibility() {
+  const type = typeSelect.value;
+
+  // لكل نوع حركة، نحدد أي صندوق يظهر
+  sourceContainer.style.display = (type === 'EXPENSE' || type === 'TRANSFER') ? 'block' : 'none';
+  destinationContainer.style.display = (type === 'COLLECTION' || type === 'TRANSFER' || type === 'ADJUSTMENT') ? 'block' : 'none';
+}
+
+typeSelect.addEventListener('change', updateFieldVisibility);
+updateFieldVisibility(); // عند التحميل
+
+transactionForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  clearErrors();
+
+  const data = {
+    type: typeSelect.value,
+    sourceFund: document.getElementById('sourceFund').value || null,
+    destinationFund: document.getElementById('destinationFund').value || null,
+    amount: parseFloat(document.getElementById('amount').value),
+    description: document.getElementById('description').value.trim()
+  };
+
+  // **حساب direction تلقائي حسب نوع الحركة**
+  switch (data.type) {
+    case 'COLLECTION':
+    case 'ADJUSTMENT':
+      data.direction = 'IN';
+      break;
+    case 'EXPENSE':
+      data.direction = 'OUT';
+      break;
+    case 'TRANSFER':
+      if (data.sourceFund && data.destinationFund) {
+        data.direction = 'OUT'; // direction للحركة من المصدر، السيرفر سيضيف IN للصندوق الوجهة
+      } else if (data.sourceFund) {
+        data.direction = 'OUT';
+      } else if (data.destinationFund) {
+        data.direction = 'IN';
+      }
+      break;
+    default:
+      data.direction = 'IN';
+  }
+
+  try {
+    const res = await fetch('/company-admin/transactions/create', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+
+    const result = await res.json();
+
+    if (res.ok) {
+      window.location.href = '/company-admin/transactions';
+      return;
+    }
+
+    if (result.errors) {
+      showErrors(result.errors);
+    } else {
+      alert(result.message || 'حدث خطأ أثناء إضافة الحركة المالية');
+    }
+  } catch (err) {
+    console.error(err);
+    alert('خطأ في الاتصال بالخادم');
+  }
+});
+</script>
+
+  </body>
+</html>
