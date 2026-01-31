@@ -64,3 +64,7 @@ exports.createFund = async ({
   return fund;
 };
 
+exports.getFundById = async (fundId) => {
+    return await fundRepo.findById(fundId);
+};
+

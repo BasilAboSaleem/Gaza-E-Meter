@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <%- include('../../../partials/head.ejs') %>
+  <body>
+
+    <!-- loader -->
+    <div id="loading">
+      <div class="loader simple-loader">
+        <div class="loader-body"></div>
+      </div>
+    </div>
+
+    <%- include('../../../partials/sidebar.ejs') %>
+
+    <main class="main-content">
+      <div class="position-relative iq-banner">
+        <%- include('../../../partials/navbar.ejs') %>
+      </div>
+
+      <div class="container-fluid content-inner mt-n5 py-0">
+        <div class="row">
+          <div class="col-12">
+
+            <% if (fund) { %>
+
+              <!-- 🟦 بطاقة تفاصيل الصندوق -->
+              <div class="card mb-3">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                  <h4 class="card-title mb-0"><%= fund.name %></h4>
+<%
+  const FUND_TYPE_LABELS = {
+    COMPANY: 'صندوق الشركة',
+    COLLECTOR: 'صندوق محصّل',
+    BANK: 'بنك',
+    EXPENSES: 'مصروفات',
+    OTHER: 'أخرى'
+  };
+%>
+                 <span class="badge bg-info">
+  <%= FUND_TYPE_LABELS[fund.type] || fund.type %>
+</span>
+
+                </div>
+
+                <div class="card-body">
+                  <div class="row">
+
+                    <div class="col-md-4 mb-2">
+                      <strong>الرصيد الحالي:</strong><br>
+                      <span class="fw-bold text-success fs-5">
+                        <%= fund.balance %> <%= fund.currency %>
+                      </span>
+                    </div>
+
+                    <div class="col-md-4 mb-2">
+                      <strong>الحالة:</strong><br>
+                      <% if (fund.isActive) { %>
+                        <span class="badge bg-success">مفعّل</span>
+                      <% } else { %>
+                        <span class="badge bg-danger">غير مفعّل</span>
+                      <% } %>
+                    </div>
+
+                    <div class="col-md-4 mb-2">
+                      <strong>تاريخ الإنشاء:</strong><br>
+                      <%= new Date(fund.createdAt).toLocaleDateString('ar-EG') %>
+                    </div>
+
+                    <div class="col-12 mt-3">
+                      <strong>ملاحظات:</strong>
+                      <p class="mb-0 text-muted">
+                        <%= fund.notes || 'لا توجد ملاحظات' %>
+                      </p>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+              <!-- 🟩 جدول الحركات المالية -->
+              <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                  <h4 class="card-title mb-0">الحركات المالية</h4>
+
+                  <a href="/company-admin/funds/<%= fund._id %>/transactions/new"
+                     class="btn btn-primary btn-sm">
+                    إضافة حركة
+                  </a>
+                </div>
+
+                <div class="card-body">
+                  <% if (transactions && transactions.length > 0) { %>
+                    <div class="table-responsive">
+                      <table class="table table-striped table-hover">
+                        <thead>
+                          <tr>
+                            <th>التاريخ</th>
+                            <th>النوع</th>
+                            <th>الاتجاه</th>
+                            <th>المبلغ</th>
+                            <th>الوصف</th>
+                            <th>بواسطة</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <% transactions.forEach(tx => { %>
+                            <tr>
+                              <td>
+                                <%= new Date(tx.createdAt).toLocaleDateString('ar-EG') %>
+                              </td>
+
+                              <td>
+                                <span class="badge bg-secondary">
+                                  <%= tx.type %>
+                                </span>
+                              </td>
+
+                              <td>
+                                <% if (tx.direction === 'IN') { %>
+                                  <span class="badge bg-success">دخول</span>
+                                <% } else { %>
+                                  <span class="badge bg-danger">خروج</span>
+                                <% } %>
+                              </td>
+
+                              <td>
+                                <%= tx.amount %> <%= fund.currency %>
+                              </td>
+
+                              <td>
+                                <%= tx.description %>
+                              </td>
+
+                              <td>
+                                <%= tx.performedBy?.fullName || '—' %>
+                              </td>
+                            </tr>
+                          <% }) %>
+                        </tbody>
+                      </table>
+                    </div>
+                  <% } else { %>
+                    <p class="text-muted mb-0">لا توجد حركات مالية لهذا الصندوق.</p>
+                  <% } %>
+                </div>
+              </div>
+
+            <% } else { %>
+              <div class="alert alert-danger">
+                الصندوق غير موجود
+              </div>
+            <% } %>
+
+          </div>
+        </div>
+      </div>
+
+      <%- include('../../../partials/footer.ejs') %>
+    </main>
+
+    <%- include('../../../partials/offcanvas.ejs') %>
+    <%- include('../../../partials/scripts.ejs') %>
+
+  </body>
+</html>

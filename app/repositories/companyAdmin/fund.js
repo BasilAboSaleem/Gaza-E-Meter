@@ -26,3 +26,4 @@ exports.findByCompany = async (companyId) => {
 exports.findOne = async (query) => {
   return await Fund.findOne(query);
 };
+

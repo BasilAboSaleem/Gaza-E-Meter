@@ -384,3 +384,25 @@ exports.createFund = async (req, res, next) => {
     next(err);
   }
 };
+
+exports.showFundDetails = async (req, res, next) => {
+  try {
+    const fundId = req.params.id;
+    const companyId = req.user.company;
+    const fund = await fundService.getFundById(fundId);
+    let transactions = [];
+
+    if (!fund) {
+      return res.status(404).render('errors/404', {
+        message: 'الصندوق غير موجود'
+      });
+    }
+    return res.render('dashboard/companyAdmin/funds/show-fund', {
+      title: 'تفاصيل الصندوق',
+      fund,
+      transactions
+    });
+  } catch (error) {
+    next(error);
+  }
+};
