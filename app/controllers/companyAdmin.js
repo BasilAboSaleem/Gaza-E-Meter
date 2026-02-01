@@ -390,14 +390,19 @@ exports.showFundDetails = async (req, res, next) => {
   try {
     const fundId = req.params.id;
     const companyId = req.user.company;
+
+    // جلب تفاصيل الصندوق
     const fund = await fundService.getFundById(fundId);
-    let transactions = [];
 
     if (!fund) {
       return res.status(404).render('errors/404', {
         message: 'الصندوق غير موجود'
       });
     }
+
+    // جلب الحركات الخاصة بالصندوق
+    const transactions = await fundService.getFundTransactions(fundId);
+
     return res.render('dashboard/companyAdmin/funds/show-fund', {
       title: 'تفاصيل الصندوق',
       fund,
@@ -426,12 +431,11 @@ exports.createTransaction = async (req, res, next) => {
     const companyId = req.user.company;
     const performedBy = req.user._id;
 
-    const { type, direction, sourceFund, destinationFund, amount, description } = req.body;
+    const { type, sourceFund, destinationFund, amount, description } = req.body;
 
-    const transaction = await transactionService.createTransaction({
+    const transactions = await transactionService.createTransaction({
       companyId,
       type,
-      direction,
       sourceFund: sourceFund || null,
       destinationFund: destinationFund || null,
       amount,
@@ -439,15 +443,18 @@ exports.createTransaction = async (req, res, next) => {
       performedBy
     });
 
-    return res.status(201).json(transaction);
+    return res.status(201).json({ transactions });
   } catch (err) {
     console.error(err);
     if (err.statusCode) {
-      return res.status(err.statusCode).json({ errors: { [err.field]: err.message } });
+      return res
+        .status(err.statusCode)
+        .json({ errors: { [err.field]: err.message } });
     }
     next(err);
   }
 };
+
 
 exports.listTransactions = async (req, res, next) => {
   try {

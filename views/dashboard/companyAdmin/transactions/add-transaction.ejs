@@ -123,9 +123,14 @@ function showErrors(errors) {
 function updateFieldVisibility() {
   const type = typeSelect.value;
 
-  // لكل نوع حركة، نحدد أي صندوق يظهر
-  sourceContainer.style.display = (type === 'EXPENSE' || type === 'TRANSFER') ? 'block' : 'none';
-  destinationContainer.style.display = (type === 'COLLECTION' || type === 'TRANSFER' || type === 'ADJUSTMENT') ? 'block' : 'none';
+  // إظهار / إخفاء الصناديق حسب نوع الحركة (UI فقط)
+  sourceContainer.style.display =
+    (type === 'EXPENSE' || type === 'TRANSFER') ? 'block' : 'none';
+
+  destinationContainer.style.display =
+    (type === 'COLLECTION' || type === 'TRANSFER' || type === 'ADJUSTMENT')
+      ? 'block'
+      : 'none';
 }
 
 typeSelect.addEventListener('change', updateFieldVisibility);
@@ -142,28 +147,6 @@ transactionForm.addEventListener('submit', async (e) => {
     amount: parseFloat(document.getElementById('amount').value),
     description: document.getElementById('description').value.trim()
   };
-
-  // **حساب direction تلقائي حسب نوع الحركة**
-  switch (data.type) {
-    case 'COLLECTION':
-    case 'ADJUSTMENT':
-      data.direction = 'IN';
-      break;
-    case 'EXPENSE':
-      data.direction = 'OUT';
-      break;
-    case 'TRANSFER':
-      if (data.sourceFund && data.destinationFund) {
-        data.direction = 'OUT'; // direction للحركة من المصدر، السيرفر سيضيف IN للصندوق الوجهة
-      } else if (data.sourceFund) {
-        data.direction = 'OUT';
-      } else if (data.destinationFund) {
-        data.direction = 'IN';
-      }
-      break;
-    default:
-      data.direction = 'IN';
-  }
 
   try {
     const res = await fetch('/company-admin/transactions/create', {
@@ -190,6 +173,7 @@ transactionForm.addEventListener('submit', async (e) => {
   }
 });
 </script>
+
 
   </body>
 </html>

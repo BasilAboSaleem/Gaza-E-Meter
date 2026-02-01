@@ -27,19 +27,20 @@
               <div class="card mb-3">
                 <div class="card-header d-flex justify-content-between align-items-center">
                   <h4 class="card-title mb-0"><%= fund.name %></h4>
-<%
-  const FUND_TYPE_LABELS = {
-    COMPANY: 'صندوق الشركة',
-    COLLECTOR: 'صندوق محصّل',
-    BANK: 'بنك',
-    EXPENSES: 'مصروفات',
-    OTHER: 'أخرى'
-  };
-%>
-                 <span class="badge bg-info">
-  <%= FUND_TYPE_LABELS[fund.type] || fund.type %>
-</span>
 
+                  <%
+                    const FUND_TYPE_LABELS = {
+                      COMPANY: 'صندوق الشركة',
+                      COLLECTOR: 'صندوق محصّل',
+                      BANK: 'بنك',
+                      EXPENSES: 'مصروفات',
+                      OTHER: 'أخرى'
+                    };
+                  %>
+
+                  <span class="badge bg-info">
+                    <%= FUND_TYPE_LABELS[fund.type] || fund.type %>
+                  </span>
                 </div>
 
                 <div class="card-body">
@@ -82,49 +83,100 @@
                 <div class="card-header d-flex justify-content-between align-items-center">
                   <h4 class="card-title mb-0">الحركات المالية</h4>
 
-                  <a href="/company-admin/funds/<%= fund._id %>/transactions/new"
+                  <a href="/company-admin/transactions/create"
                      class="btn btn-primary btn-sm">
-                    إضافة حركة
+                    ➕ إضافة حركة
                   </a>
                 </div>
 
                 <div class="card-body">
+
+                  <!-- Filters -->
+                  <div class="row mb-3">
+                    <div class="col-md-4 mb-2">
+                      <select id="typeFilter" class="form-select">
+                        <option value="">كل الأنواع</option>
+                        <option value="COLLECTION">قبض</option>
+                        <option value="EXPENSE">صرف</option>
+                        <option value="TRANSFER">تحويل</option>
+                        <option value="ADJUSTMENT">رصيد افتتاحي / تعديل</option>
+                      </select>
+                    </div>
+
+                    <div class="col-md-4 mb-2">
+                      <select id="directionFilter" class="form-select">
+                        <option value="">وارد + صادر</option>
+                        <option value="IN">وارد</option>
+                        <option value="OUT">صادر</option>
+                      </select>
+                    </div>
+                  </div>
+
                   <% if (transactions && transactions.length > 0) { %>
+                    <% let runningBalance = 0; %>
+
                     <div class="table-responsive">
-                      <table class="table table-striped table-hover">
-                        <thead>
+                      <table class="table table-striped table-hover align-middle">
+                        <thead class="table-light">
                           <tr>
                             <th>التاريخ</th>
                             <th>النوع</th>
                             <th>الاتجاه</th>
                             <th>المبلغ</th>
+                            <th>الرصيد التراكمي</th>
                             <th>الوصف</th>
                             <th>بواسطة</th>
                           </tr>
                         </thead>
                         <tbody>
                           <% transactions.forEach(tx => { %>
-                            <tr>
+
+                            <% 
+                              if (tx.direction === 'IN') {
+                                runningBalance += tx.amount;
+                              } else {
+                                runningBalance -= tx.amount;
+                              }
+                            %>
+
+                            <tr
+                              class="tx-row"
+                              data-type="<%= tx.type %>"
+                              data-direction="<%= tx.direction %>"
+                              data-description="<%= tx.description.toLowerCase() %>"
+                            >
                               <td>
                                 <%= new Date(tx.createdAt).toLocaleDateString('ar-EG') %>
                               </td>
 
                               <td>
-                                <span class="badge bg-secondary">
-                                  <%= tx.type %>
-                                </span>
-                              </td>
-
-                              <td>
-                                <% if (tx.direction === 'IN') { %>
-                                  <span class="badge bg-success">دخول</span>
+                                <% if (tx.type === 'COLLECTION') { %>
+                                  قبض
+                                <% } else if (tx.type === 'EXPENSE') { %>
+                                  صرف
+                                <% } else if (tx.type === 'TRANSFER') { %>
+                                  تحويل
                                 <% } else { %>
-                                  <span class="badge bg-danger">خروج</span>
+                                  رصيد افتتاحي / تعديل
                                 <% } %>
                               </td>
 
                               <td>
-                                <%= tx.amount %> <%= fund.currency %>
+                                <% if (tx.direction === 'IN') { %>
+                                  <span class="badge bg-success">وارد</span>
+                                <% } else { %>
+                                  <span class="badge bg-danger">صادر</span>
+                                <% } %>
+                              </td>
+
+                              <td class="<%= tx.direction === 'IN' ? 'text-success' : 'text-danger' %> fw-bold">
+                                <%= tx.amount.toLocaleString('ar-EG') %> <%= fund.currency %>
+                              </td>
+
+                              <td>
+                                <span class="<%= runningBalance >= 0 ? 'text-success' : 'text-danger' %> fw-bold">
+                                  <%= runningBalance.toLocaleString('ar-EG') %>
+                                </span> <%= fund.currency %>
                               </td>
 
                               <td>
@@ -160,6 +212,28 @@
 
     <%- include('../../../partials/offcanvas.ejs') %>
     <%- include('../../../partials/scripts.ejs') %>
+
+    <!-- Filters Script -->
+    <script>
+      const typeFilter = document.getElementById('typeFilter');
+      const directionFilter = document.getElementById('directionFilter');
+      const rows = document.querySelectorAll('.tx-row');
+
+      function filterTransactions() {
+        const type = typeFilter.value;
+        const direction = directionFilter.value;
+
+        rows.forEach(row => {
+          const matchType = !type || row.dataset.type === type;
+          const matchDirection = !direction || row.dataset.direction === direction;
+
+          row.style.display = matchType && matchDirection ? '' : 'none';
+        });
+      }
+
+      typeFilter.addEventListener('change', filterTransactions);
+      directionFilter.addEventListener('change', filterTransactions);
+    </script>
 
   </body>
 </html>

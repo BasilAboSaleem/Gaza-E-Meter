@@ -13,3 +13,16 @@ exports.findByCompany = async (companyId) => {
     })
     .sort({ createdAt: -1 });
 };
+
+exports.findByFund = async (fundId) => {
+  return Transaction.find({
+    $or: [
+      { sourceFund: fundId },
+      { destinationFund: fundId }
+    ]
+  })
+    .populate('sourceFund', 'name')
+    .populate('destinationFund', 'name')
+    .populate('performedBy', 'fullName')
+    .sort({ createdAt: 1 });
+};

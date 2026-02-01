@@ -1,4 +1,5 @@
 const fundRepo = require('../../repositories/companyAdmin/fund');
+const transactionRepo = require('../../repositories/companyAdmin/transaction');
 
 exports.getFundsByCompany = async (companyId) => {
     return await fundRepo.findByCompany(companyId);
@@ -67,6 +68,11 @@ exports.createFund = async ({
 exports.getFundById = async (fundId) => {
     return await fundRepo.findById(fundId);
 };
+
+exports.getFundTransactions = async (fundId) => {
+  return await transactionRepo.findByFund(fundId);
+};
+
 
 exports.getFundsByCompany = async (companyId) => {
     return await fundRepo.findByCompany(companyId);
