@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<%- include('../../partials/head') %>
+
+<body class="rtl">
+
+<div id="loading">
+    <div class="loader simple-loader">
+        <div class="loader-body"></div>
+    </div>
+</div>
+
+<%- include('../../partials/sidebar') %>
+
+<main class="main-content">
+
+<div class="position-relative iq-banner">
+
+    <%- include('../../partials/navbar') %>
+
+    <!-- ===== Page Header ===== -->
+    <div class="iq-navbar-header" style="height:220px;">
+        <div class="container-fluid iq-container">
+            <div class="row">
+                <div class="col-md-12">
+
+                    <div class="card bg-primary bg-gradient shadow-none rounded-4 mb-0">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center flex-wrap">
+
+                                <div>
+                                    <h2 class="fw-bold text-white mb-2">
+                                        سجل القراءات
+                                    </h2>
+                                    <p class="mb-0 text-white-75">
+                                        جميع قراءات العداد المسجلة
+                                    </p>
+                                </div>
+
+                                <div class="mt-3 mt-md-0">
+                                    <span class="badge bg-white text-primary rounded-pill px-3 py-2">
+                                        <%= readings.length %> قراءة
+                                    </span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ===== Content ===== -->
+<div class="container-fluid content-inner mt-n5 py-0">
+    <div class="row">
+
+        <div class="col-12">
+            <div class="card rounded-4 shadow-sm">
+
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fw-bold text-primary">
+                        قائمة القراءات
+                    </h5>
+                </div>
+
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table align-middle table-striped mb-0" id="readingsTable">
+                            <thead class="bg-soft-light text-primary">
+                                <tr>
+                                    <th>تاريخ القراءة</th>
+                                    <th>القراءة الحالية</th>
+                                    <th>القراءة السابقة</th>
+                                    <th>الاستهلاك</th>
+                                    <th>الحالة</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <% readings.forEach(reading=> { %>
+                                    <tr>
+                                        <td class="fw-bold">
+                                            <%= new Date(reading.readingDate).toLocaleDateString('ar-EG') %>
+                                        </td>
+
+                                        <td class="fw-bold text-primary">
+                                            <%= reading.readingValue %>
+                                        </td>
+
+                                        <td class="text-muted">
+                                            <%= reading.previousReading %>
+                                        </td>
+
+                                        <td class="fw-bold text-warning">
+                                            <%= reading.consumption %> KW
+                                        </td>
+
+                                        <td>
+                                            <% if (reading.status==='NEW') { %>
+                                                <span class="badge bg-soft-info text-info rounded-pill">
+                                                    جديدة
+                                                </span>
+                                            <% } else if (reading.status==='INVOICED') { %>
+                                                <span class="badge bg-soft-success text-success rounded-pill">
+                                                    مفوترة
+                                                </span>
+                                            <% } else { %>
+                                                <span class="badge bg-soft-secondary text-secondary rounded-pill">
+                                                    <%= reading.status %>
+                                                </span>
+                                            <% } %>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+
+                                <% if (readings.length===0) { %>
+                                    <tr>
+                                        <td colspan="5" class="text-center py-5 text-muted">
+                                            لا توجد قراءات مسجلة
+                                        </td>
+                                    </tr>
+                                <% } %>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<%- include('../../partials/footer') %>
+
+</main>
+
+<%- include('../../partials/scripts') %>
+
+</body>
+</html>

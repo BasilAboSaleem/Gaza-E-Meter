@@ -1,29 +1,56 @@
- <head>
-    <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-      <title>Hope UI | Responsive Bootstrap 5 Admin Dashboard Template</title>
-      
-      <!-- Favicon -->
-      <link rel="shortcut icon" href="/assets/images/favicon.ico" />
-      
-      <!-- Library / Plugin Css Build -->
-      <link rel="stylesheet" href="/assets/css/core/libs.min.css" />
-      
-      
-      <!-- Hope Ui Design System Css -->
-      <link rel="stylesheet" href="/assets/css/hope-ui.min.css?v=2.0.0" />
-      
-      <!-- Custom Css -->
-      <link rel="stylesheet" href="/assets/css/custom.min.css?v=2.0.0" />
-      
-      <!-- Dark Css -->
-      <link rel="stylesheet" href="/assets/css/dark.min.css"/>
-      
-      <!-- Customizer Css -->
-      <link rel="stylesheet" href="/assets/css/customizer.min.css" />
-      
-      <!-- RTL Css -->
-      <link rel="stylesheet" href="/assets/css/rtl.min.css"/>
-      
-      
-  </head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="theme-color" content="#3a57e8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="إشراق">
+<link rel="manifest" href="/manifest.json">
+<title>إشراق - نظام إدارة المولدات</title>
+
+<!-- Favicon -->
+<link rel="shortcut icon" href="/assets/images/favicon.ico" />
+
+<!-- Library / Plugin Css Build -->
+<link rel="stylesheet" href="/assets/css/core/libs.min.css" />
+
+
+<!-- Hope Ui Design System Css -->
+<link rel="stylesheet" href="/assets/css/hope-ui.min.css?v=2.0.0" />
+
+<!-- Custom Css -->
+<link rel="stylesheet" href="/assets/css/custom.min.css?v=2.0.0" />
+
+<!-- Dark Css -->
+<link rel="stylesheet" href="/assets/css/dark.min.css" />
+
+<!-- Customizer Css -->
+<link rel="stylesheet" href="/assets/css/customizer.min.css" />
+
+<!-- RTL Css -->
+<link rel="stylesheet" href="/assets/css/rtl.min.css" />
+
+<!-- Font Arabic -->
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  body {
+    font-family: 'Cairo', sans-serif !important;
+  }
+
+  /* Ensure sidebar on right for RTL */
+  [dir="rtl"] .sidebar {
+    left: auto !important;
+    right: 0 !important;
+  }
+
+  [dir="rtl"] .main-content {
+    margin-right: 17.5rem !important;
+    margin-left: 0 !important;
+  }
+
+  @media (max-width: 1199px) {
+    [dir="rtl"] .main-content {
+      margin-right: 0 !important;
+    }
+  }
+</style>
+</head>

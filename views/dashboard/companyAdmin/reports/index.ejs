@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="en" dir="rtl">
+<%- include('../../../partials/head.ejs') %>
+
+    <body class="rtl">
+        <!-- loader Start -->
+        <div id="loading">
+            <div class="loader simple-loader">
+                <div class="loader-body"></div>
+            </div>
+        </div>
+        <!-- loader END -->
+
+        <%- include('../../../partials/sidebar.ejs') %>
+
+            <main class="main-content">
+                <div class="position-relative iq-banner">
+                    <%- include('../../../partials/navbar.ejs') %>
+                        <!-- Nav Header Component Start -->
+                        <div class="iq-navbar-header" style="height: 215px;">
+                            <div class="container-fluid iq-container">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="d-flex justify-content-between align-items-center flex-wrap">
+                                            <div>
+                                                <h1 class="mb-3 fw-bold">التقارير والإحصائيات</h1>
+                                                <p class="mb-0 text-white-50">نظرة شاملة ومفصلة على الأداء المالي والفني
+                                                    للشركة.</p>
+                                            </div>
+                                            <div class="mt-3 mt-md-0">
+                                                <a href="/company-admin/reports/export/excel?startDate=<%= filters.startDate %>&endDate=<%= filters.endDate %>"
+                                                    class="btn btn-success rounded-pill px-4 me-2 shadow-sm d-inline-flex align-items-center gap-2">
+                                                    <svg width="20" viewBox="0 0 24 24" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z"
+                                                            stroke="currentColor" stroke-width="1.5"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                        <path d="M14 2V8H20" stroke="currentColor" stroke-width="1.5"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                        <path d="M8 13H16" stroke="currentColor" stroke-width="1.5"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                        <path d="M8 17H16" stroke="currentColor" stroke-width="1.5"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                        <path d="M10 9H9H8" stroke="currentColor" stroke-width="1.5"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                    </svg>
+                                                    تصدير Excel
+                                                </a>
+                                                <a href="/company-admin/reports/export/pdf?startDate=<%= filters.startDate %>&endDate=<%= filters.endDate %>"
+                                                    class="btn btn-danger rounded-pill px-4 shadow-sm d-inline-flex align-items-center gap-2">
+                                                    <svg width="20" viewBox="0 0 24 24" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M13 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V9L13 2Z"
+                                                            stroke="currentColor" stroke-width="1.5"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                        <path d="M13 2V9H20" stroke="currentColor" stroke-width="1.5"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                    </svg>
+                                                    تصدير PDF
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="iq-header-img">
+                                <img src="/assets/images/dashboard/top-header.png" alt="header"
+                                    class="theme-color-default-img img-fluid w-100 h-100 animated-scaleX">
+                            </div>
+                        </div>
+                        <!-- Nav Header Component End -->
+                </div>
+
+                <div class="conatiner-fluid content-inner mt-n5 py-0">
+                    <!-- Filter Section -->
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="card shadow-sm border-0 rounded-4 mb-4">
+                                <div class="card-body p-4">
+                                    <form action="/company-admin/reports" method="GET" class="row align-items-end g-3">
+                                        <div class="col-md-4">
+                                            <label class="form-label fw-bold text-primary">من تاريخ</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-soft-primary border-0"><svg width="20"
+                                                        viewBox="0 0 24 24" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M8 2V5M16 2V5M3.5 9.09H20.5M21 8.5V17C21 20 19.5 22 16 22H8C4.5 22 3 20 3 17V8.5C3 5.5 4.5 3.5 8 3.5H16C19.5 3.5 21 5.5 21 8.5Z"
+                                                            stroke="currentColor" stroke-width="1.5"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                    </svg></span>
+                                                <input type="date" name="startDate"
+                                                    class="form-control bg-soft-light border-0"
+                                                    value="<%= filters.startDate %>">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label fw-bold text-primary">إلى تاريخ</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-soft-primary border-0"><svg width="20"
+                                                        viewBox="0 0 24 24" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M8 2V5M16 2V5M3.5 9.09H20.5M21 8.5V17C21 20 19.5 22 16 22H8C4.5 22 3 20 3 17V8.5C3 5.5 4.5 3.5 8 3.5H16C19.5 3.5 21 5.5 21 8.5Z"
+                                                            stroke="currentColor" stroke-width="1.5"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                    </svg></span>
+                                                <input type="date" name="endDate"
+                                                    class="form-control bg-soft-light border-0"
+                                                    value="<%= filters.endDate %>">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <button type="submit"
+                                                class="btn btn-primary w-100 rounded-pill py-2 fw-bold shadow-sm">
+                                                تحديث البيانات
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Summary Cards -->
+                    <div class="row">
+                        <div class="col-lg-3 col-md-6">
+                            <div class="card bg-soft-secondary border-0 rounded-4 mb-4">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="bg-white text-secondary rounded-circle p-3 shadow-sm d-flex align-items-center justify-content-center"
+                                            style="width: 60px; height: 60px;">
+                                            <svg width="32" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M16 11V7C16 4.23858 13.7614 2 11 2C8.23858 2 6 4.23858 6 7V11M4 11H18C19.1046 11 20 11.8954 20 13V20C20 21.1046 19.1046 22 18 22H4C2.89543 22 2 21.1046 2 20V13C2 11.8954 2.89543 11 4 11Z"
+                                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
+                                            </svg>
+                                        </div>
+                                        <div class="text-end">
+                                            <h3 class="mb-0 fw-bold text-dark">
+                                                <%= financial.totalInvoiced.toLocaleString() %>
+                                            </h3>
+                                            <span class="text-secondary fw-semibold">إجمالي الفواتير (شيكل)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <div class="card bg-soft-success border-0 rounded-4 mb-4">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="bg-white text-success rounded-circle p-3 shadow-sm d-flex align-items-center justify-content-center"
+                                            style="width: 60px; height: 60px;">
+                                            <svg width="32" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
+                                                <path d="M9 12L11 14L15 10" stroke="currentColor" stroke-width="1.5"
+                                                    stroke-linecap="round" stroke-linejoin="round" />
+                                            </svg>
+                                        </div>
+                                        <div class="text-end">
+                                            <h3 class="mb-0 fw-bold text-success">
+                                                <%= financial.totalPaid.toLocaleString() %>
+                                            </h3>
+                                            <span class="text-success fw-semibold">إجمالي التحصيل (شيكل)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <div class="card bg-soft-danger border-0 rounded-4 mb-4">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="bg-white text-danger rounded-circle p-3 shadow-sm d-flex align-items-center justify-content-center"
+                                            style="width: 60px; height: 60px;">
+                                            <svg width="32" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
+                                                <path d="M12 8V13" stroke="currentColor" stroke-width="1.5"
+                                                    stroke-linecap="round" stroke-linejoin="round" />
+                                                <path d="M11.9941 16H12.0031" stroke="currentColor" stroke-width="2"
+                                                    stroke-linecap="round" stroke-linejoin="round" />
+                                            </svg>
+                                        </div>
+                                        <div class="text-end">
+                                            <h3 class="mb-0 fw-bold text-danger">
+                                                <%= financial.totalRemaining.toLocaleString() %>
+                                            </h3>
+                                            <span class="text-danger fw-semibold">الديون المتبقية (شيكل)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <div class="card bg-soft-warning border-0 rounded-4 mb-4">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="bg-white text-warning rounded-circle p-3 shadow-sm d-flex align-items-center justify-content-center"
+                                            style="width: 60px; height: 60px;">
+                                            <svg width="32" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" stroke="currentColor"
+                                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                            </svg>
+                                        </div>
+                                        <div class="text-end">
+                                            <h3 class="mb-0 fw-bold text-warning">
+                                                <%= consumption.totalConsumption.toLocaleString() %>
+                                            </h3>
+                                            <span class="text-warning fw-semibold">إجمالي الاستهلاك (KW)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <!-- Financial Progress -->
+                        <div class="col-lg-8">
+                            <div class="card shadow-sm border-0 rounded-4 mb-4 h-100">
+                                <div
+                                    class="card-header border-0 bg-white py-3 d-flex justify-content-between align-items-center">
+                                    <h4 class="card-title fw-bold text-primary mb-0">معدل التحصيل</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="fw-bold text-dark">نسبة التحصيل الحالية</span>
+                                        <span class="fw-bold text-success">
+                                            <%= financial.collectionRate %>%
+                                        </span>
+                                    </div>
+                                    <div class="progress mb-4 rounded-pill bg-soft-light" style="height: 25px;">
+                                        <div class="progress-bar bg-gradient-success" role="progressbar"
+                                            style="width: <%= financial.collectionRate %>%;"
+                                            aria-valuenow="<%= financial.collectionRate %>" aria-valuemin="0"
+                                            aria-valuemax="100">
+                                        </div>
+                                    </div>
+
+                                    <div class="row text-center mt-5">
+                                        <div class="col-4 border-end">
+                                            <div class="mb-2">
+                                                <span class="badge bg-soft-primary rounded-pill p-2">
+                                                    <svg width="20" viewBox="0 0 24 24" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                                                            stroke="currentColor" stroke-width="1.5"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                        <path d="M9 12L11 14L15 10" stroke="currentColor"
+                                                            stroke-width="1.5" stroke-linecap="round"
+                                                            stroke-linejoin="round" />
+                                                    </svg>
+                                                </span>
+                                            </div>
+                                            <h4 class="fw-bold mb-1">
+                                                <%= financial.collectionRate %>%
+                                            </h4>
+                                            <span class="text-secondary small">نسبة التحصيل</span>
+                                        </div>
+                                        <div class="col-4 border-end">
+                                            <div class="mb-2">
+                                                <span class="badge bg-soft-info rounded-pill p-2">
+                                                    <svg width="20" viewBox="0 0 24 24" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M9 11V17H15V11H9Z" stroke="currentColor"
+                                                            stroke-width="1.5" stroke-linecap="round"
+                                                            stroke-linejoin="round" />
+                                                        <path d="M9 7V17M15 7V17" stroke="currentColor"
+                                                            stroke-width="1.5" stroke-linecap="round"
+                                                            stroke-linejoin="round" />
+                                                        <path d="M21 21H3" stroke="currentColor" stroke-width="1.5"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                        <path d="M3 21L5 3H19L21 21" stroke="currentColor"
+                                                            stroke-width="1.5" stroke-linecap="round"
+                                                            stroke-linejoin="round" />
+                                                    </svg>
+                                                </span>
+                                            </div>
+                                            <h4 class="fw-bold mb-1">
+                                                <%= financial.count %>
+                                            </h4>
+                                            <span class="text-secondary small">عدد الفواتير</span>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="mb-2">
+                                                <span class="badge bg-soft-warning rounded-pill p-2">
+                                                    <svg width="20" viewBox="0 0 24 24" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z"
+                                                            stroke="currentColor" stroke-width="1.5"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                    </svg>
+                                                </span>
+                                            </div>
+                                            <h4 class="fw-bold mb-1">
+                                                <%= consumption.avgConsumption.toFixed(1) %> <small
+                                                        class="fs-6">KW</small>
+                                            </h4>
+                                            <span class="text-secondary small">متوسط الاستهلاك</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Area Stats -->
+                        <div class="col-lg-4">
+                            <div class="card shadow-sm border-0 rounded-4 mb-4 h-100">
+                                <div
+                                    class="card-header border-0 bg-white py-3 d-flex justify-content-between align-items-center">
+                                    <h4 class="card-title fw-bold text-primary mb-0">استهلاك المناطق</h4>
+                                    <a href="/company-admin/reports/area-consumption"
+                                        class="btn btn-sm btn-soft-primary rounded-pill">عرض
+                                        الكل</a>
+                                </div>
+                                <div class="card-body p-0">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover align-middle mb-0">
+                                            <thead class="bg-soft-light text-primary">
+                                                <tr>
+                                                    <th class="ps-4">المنطقة</th>
+                                                    <th class="text-center">المشتركين</th>
+                                                    <th class="pe-4 text-end">الاستهلاك</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% areas.forEach(area=> { %>
+                                                    <tr>
+                                                        <td class="ps-4 fw-bold text-dark">
+                                                            <%= area.areaName %>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <span class="badge bg-soft-info rounded-pill px-3">
+                                                                <%= area.subscribers %>
+                                                            </span>
+                                                        </td>
+                                                        <td class="pe-4 text-end fw-bold text-primary">
+                                                            <%= area.consumption.toLocaleString() %> <small>KW</small>
+                                                        </td>
+                                                    </tr>
+                                                    <% }) %>
+                                                        <% if (areas.length===0) { %>
+                                                            <tr>
+                                                                <td colspan="3" class="text-center py-4 text-muted">
+                                                                    <div class="d-flex flex-column align-items-center">
+                                                                        <svg width="40" class="mb-2 text-muted"
+                                                                            viewBox="0 0 24 24" fill="none"
+                                                                            xmlns="http://www.w3.org/2000/svg">
+                                                                            <path
+                                                                                d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                                                                                stroke="currentColor"
+                                                                                stroke-width="1.5" />
+                                                                            <path d="M12 8V16" stroke="currentColor"
+                                                                                stroke-width="1.5"
+                                                                                stroke-linecap="round" />
+                                                                            <path d="M12 16H12.01" stroke="currentColor"
+                                                                                stroke-width="2"
+                                                                                stroke-linecap="round" />
+                                                                        </svg>
+                                                                        لا توجد بيانات مناطق
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            <% } %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <!-- Collector Performance -->
+                        <div class="col-md-12">
+                            <div class="card shadow-sm border-0 rounded-4 mb-4">
+                                <div
+                                    class="card-header border-0 bg-white py-3 d-flex justify-content-between align-items-center">
+                                    <h4 class="card-title fw-bold text-primary mb-0">أداء المحصلين</h4>
+                                    <a href="/company-admin/collectors"
+                                        class="btn btn-sm btn-soft-primary rounded-pill">إدارة المحصلين</a>
+                                </div>
+                                <div class="card-body p-0">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover align-middle mb-0">
+                                            <thead class="bg-soft-light text-primary">
+                                                <tr>
+                                                    <th class="ps-4">المحصل</th>
+                                                    <th>عدد القراءات</th>
+                                                    <th>إجمالي الاستهلاك الموثق</th>
+                                                    <th class="pe-4">مؤشر الأداء</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% collectors.forEach(collector=> { %>
+                                                    <tr>
+                                                        <td class="ps-4">
+                                                            <div class="d-flex align-items-center gap-3">
+                                                                <div class="bg-soft-primary rounded-circle p-2 d-flex align-items-center justify-content-center"
+                                                                    style="width: 40px; height: 40px;">
+                                                                    <span class="fw-bold">
+                                                                        <%= collector.collectorName.charAt(0) %>
+                                                                    </span>
+                                                                </div>
+                                                                <div>
+                                                                    <h6 class="mb-0 fw-bold">
+                                                                        <%= collector.collectorName %>
+                                                                    </h6>
+                                                                    <small class="text-muted">محصل</small>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <span class="badge bg-soft-dark rounded-pill px-3">
+                                                                <%= collector.readingsCount %> قراءة
+                                                            </span>
+                                                        </td>
+                                                        <td class="fw-bold text-success">
+                                                            <%= collector.totalConsumption.toLocaleString() %> KW
+                                                        </td>
+                                                        <td class="pe-4" style="width: 30%;">
+                                                            <% const maxReadings=Math.max(...collectors.map(c=>
+                                                                c.readingsCount), 1);
+                                                                const percent = (collector.readingsCount / maxReadings)
+                                                                * 100;
+                                                                %>
+                                                                <div class="d-flex align-items-center gap-2">
+                                                                    <div class="progress flex-grow-1 rounded-pill bg-soft-light"
+                                                                        style="height: 8px;">
+                                                                        <div class="progress-bar bg-primary rounded-pill"
+                                                                            role="progressbar"
+                                                                            style="width: <%= percent %>%"></div>
+                                                                    </div>
+                                                                    <span class="small fw-bold text-primary">
+                                                                        <%= Math.round(percent) %>%
+                                                                    </span>
+                                                                </div>
+                                                        </td>
+                                                    </tr>
+                                                    <% }) %>
+                                                        <% if (collectors.length===0) { %>
+                                                            <tr>
+                                                                <td colspan="4" class="text-center py-5 text-muted">
+                                                                    <div class="d-flex flex-column align-items-center">
+                                                                        <svg width="48"
+                                                                            class="mb-2 text-muted opacity-50"
+                                                                            viewBox="0 0 24 24" fill="none"
+                                                                            xmlns="http://www.w3.org/2000/svg">
+                                                                            <path
+                                                                                d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                                                                                stroke="currentColor"
+                                                                                stroke-width="1.5" />
+                                                                            <path d="M15 9L9 15" stroke="currentColor"
+                                                                                stroke-width="1.5"
+                                                                                stroke-linecap="round" />
+                                                                            <path d="M9 9L15 15" stroke="currentColor"
+                                                                                stroke-width="1.5"
+                                                                                stroke-linecap="round" />
+                                                                        </svg>
+                                                                        <p class="mb-0">لا توجد سجلات أداء متاحة حالياً
+                                                                        </p>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            <% } %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <%- include('../../../partials/footer.ejs') %>
+            </main>
+
+            <%- include('../../../partials/scripts.ejs') %>
+    </body>
+
+</html>

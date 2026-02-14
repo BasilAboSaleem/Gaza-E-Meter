@@ -1,567 +1,355 @@
 <div class="row">
-   <div class="col-md-12 col-lg-12">
-      <div class="row row-cols-1">
-         <div class="d-slider1 overflow-hidden ">
-            <ul  class="swiper-wrapper list-inline m-0 p-0 mb-2">
-               <li class="swiper-slide card card-slide">
+   <!-- ملخص إحصاءات اليوم لمدير الشركة -->
+   <% if (user.role==='COMPANY_ADMIN' && typeof stats !=='undefined' && stats) { %>
+      <div class="col-md-12 col-lg-12">
+         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4">
+            <!-- المشتركين -->
+            <div class="col">
+               <div class="card card-slide mb-4 shadow-sm border-0">
                   <div class="card-body">
-                     <div class="progress-widget">
-                        <div id="circle-progress-01" class="circle-progress-01 circle-progress circle-progress-primary text-center" data-min-value="0" data-max-value="100" data-value="90" data-type="percent">
-                           <svg class="card-slie-arrow icon-24" width="24"  viewBox="0 0 24 24">
-                              <path fill="currentColor" d="M5,17.59L15.59,7H9V5H19V15H17V8.41L6.41,19L5,17.59Z" />
+                     <div class="progress-widget d-flex align-items-center">
+                        <div class="iq-icon-box bg-soft-primary rounded-pill p-3 me-3">
+                           <svg width="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path fill-rule="evenodd" clip-rule="evenodd"
+                                 d="M11.9849 15.3462C8.11731 15.3462 4.81445 15.931 4.81445 18.2735C4.81445 20.616 8.11731 21.2008 11.9849 21.2008C15.8525 21.2008 19.1554 20.616 19.1554 18.2735C19.1554 15.931 15.8525 15.3462 11.9849 15.3462Z"
+                                 stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                 stroke-linejoin="round"></path>
+                              <path fill-rule="evenodd" clip-rule="evenodd"
+                                 d="M11.9849 12.0059C14.523 12.0059 16.5801 9.94779 16.5801 7.40976C16.5801 4.87173 14.523 2.81454 11.9849 2.81454C9.44688 2.81454 7.38974 4.87173 7.38974 7.40976C7.38974 9.94779 9.44688 12.0059 11.9849 12.0059Z"
+                                 stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                 stroke-linejoin="round"></path>
                            </svg>
                         </div>
                         <div class="progress-detail">
-                           <p  class="mb-2">Total Sales</p>
-                           <h4 class="counter">$560K</h4>
+                           <p class="mb-1 text-secondary small">إجمالي المشتركين</p>
+                           <h4 class="counter fw-bold text-primary mb-0">
+                              <%= stats.totalSubscribers %>
+                           </h4>
                         </div>
                      </div>
                   </div>
-               </li>
-               <li class="swiper-slide card card-slide">
+               </div>
+            </div>
+            <!-- المناطق -->
+            <div class="col">
+               <div class="card card-slide mb-4 shadow-sm border-0">
                   <div class="card-body">
-                     <div class="progress-widget">
-                        <div id="circle-progress-02" class="circle-progress-01 circle-progress circle-progress-info text-center" data-min-value="0" data-max-value="100" data-value="80" data-type="percent">
-                           <svg class="card-slie-arrow icon-24 " width="24"  viewBox="0 0 24 24">
-                              <path fill="currentColor" d="M19,6.41L17.59,5L7,15.59V9H5V19H15V17H8.41L19,6.41Z" />
+                     <div class="progress-widget d-flex align-items-center">
+                        <div class="iq-icon-box bg-soft-info rounded-pill p-3 me-3">
+                           <svg width="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path fill-rule="evenodd" clip-rule="evenodd"
+                                 d="M12.0001 22.0002C12.0001 22.0002 4.5 15.5002 4.5 10.0002C4.5 5.85807 7.85786 2.50024 12.0001 2.50024C16.1422 2.50024 19.5001 5.85807 19.5001 10.0002C19.5001 15.5002 12.0001 22.0002 12.0001 22.0002Z"
+                                 stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                 stroke-linejoin="round"></path>
+                              <circle cx="12.0001" cy="10.0001" r="2.5" stroke="currentColor" stroke-width="1.5"
+                                 stroke-linecap="round" stroke-linejoin="round"></circle>
                            </svg>
                         </div>
                         <div class="progress-detail">
-                           <p  class="mb-2">Total Profit</p>
-                           <h4 class="counter">$185K</h4>
+                           <p class="mb-1 text-secondary small">المناطق المغطاة</p>
+                           <h4 class="counter fw-bold text-info mb-0">
+                              <%= stats.totalAreas %>
+                           </h4>
                         </div>
                      </div>
                   </div>
-               </li>
-               <li class="swiper-slide card card-slide">
+               </div>
+            </div>
+            <!-- المحصلين -->
+            <div class="col">
+               <div class="card card-slide mb-4 shadow-sm border-0">
                   <div class="card-body">
-                     <div class="progress-widget">
-                        <div id="circle-progress-03" class="circle-progress-01 circle-progress circle-progress-primary text-center" data-min-value="0" data-max-value="100" data-value="70" data-type="percent">
-                           <svg class="card-slie-arrow icon-24" width="24" viewBox="0 0 24 24">
-                              <path fill="currentColor" d="M19,6.41L17.59,5L7,15.59V9H5V19H15V17H8.41L19,6.41Z" />
+                     <div class="progress-widget d-flex align-items-center">
+                        <div class="iq-icon-box bg-soft-success rounded-pill p-3 me-3">
+                           <svg width="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path
+                                 d="M17.8427 15.8734C17.3427 15.4214 16.3127 15.0004 15.0007 15.0004C13.6887 15.0004 12.6587 15.4214 12.1587 15.8734C11.7487 16.2434 11.5157 16.7534 11.5157 17.2944V19.0004H18.4847V17.2944C18.4847 16.7534 18.2527 16.2434 17.8427 15.8734Z"
+                                 stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                 stroke-linejoin="round"></path>
+                              <path
+                                 d="M15.0002 12.5001C16.1048 12.5001 17.0002 11.6047 17.0002 10.5001C17.0002 9.39553 16.1048 8.50012 15.0002 8.50012C13.8956 8.50012 13.0002 9.39553 13.0002 10.5001C13.0002 11.6047 13.8956 12.5001 15.0002 12.5001Z"
+                                 stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                 stroke-linejoin="round"></path>
+                              <path
+                                 d="M9.5155 19.0004H5.5155V17.2944C5.5155 16.7534 5.7485 16.2434 6.1585 15.8734C6.6585 15.4214 7.6885 15.0004 9.0005 15.0004"
+                                 stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                 stroke-linejoin="round"></path>
+                              <path
+                                 d="M9.0005 12.5001C10.1051 12.5001 11.0005 11.6047 11.0005 10.5001C11.0005 9.39553 10.1051 8.50012 9.0005 8.50012C7.89593 8.50012 7.00052 9.39553 7.00052 10.5001C7.00052 11.6047 7.89593 12.5001 9.0005 12.5001Z"
+                                 stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                 stroke-linejoin="round"></path>
+                              <path
+                                 d="M12.0002 21.2008C17.0815 21.2008 21.2002 17.0821 21.2002 12.0008C21.2002 6.91953 17.0815 2.80078 12.0002 2.80078C6.91896 2.80078 2.80023 6.91953 2.80023 12.0008C2.80023 17.0821 6.91896 21.2008 12.0002 21.2008Z"
+                                 stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                 stroke-linejoin="round"></path>
                            </svg>
                         </div>
                         <div class="progress-detail">
-                           <p  class="mb-2">Total Cost</p>
-                           <h4 class="counter">$375K</h4>
+                           <p class="mb-1 text-secondary small">عدد المحصلين</p>
+                           <h4 class="counter fw-bold text-success mb-0">
+                              <%= stats.totalCollectors %>
+                           </h4>
                         </div>
                      </div>
                   </div>
-               </li>
-               <li class="swiper-slide card card-slide">
+               </div>
+            </div>
+            <!-- الاستهلاك -->
+            <div class="col">
+               <div class="card card-slide mb-4 shadow-sm border-0">
                   <div class="card-body">
-                     <div class="progress-widget">
-                        <div id="circle-progress-04" class="circle-progress-01 circle-progress circle-progress-info text-center" data-min-value="0" data-max-value="100" data-value="60" data-type="percent">
-                           <svg class="card-slie-arrow icon-24" width="24px"  viewBox="0 0 24 24">
-                              <path fill="currentColor" d="M5,17.59L15.59,7H9V5H19V15H17V8.41L6.41,19L5,17.59Z" />
+                     <div class="progress-widget d-flex align-items-center">
+                        <div class="iq-icon-box bg-soft-warning rounded-pill p-3 me-3">
+                           <svg width="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path fill-rule="evenodd" clip-rule="evenodd"
+                                 d="M12 21.0002L13.784 12.3332H18.667L12 3.00024L10.216 11.6672H5.33398L12 21.0002Z"
+                                 stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                 stroke-linejoin="round"></path>
                            </svg>
                         </div>
                         <div class="progress-detail">
-                           <p  class="mb-2">Revenue</p>
-                           <h4 class="counter">$742K</h4>
+                           <p class="mb-1 text-secondary small">استهلاك اليوم</p>
+                           <h4 class="counter fw-bold text-warning mb-0">
+                              <%= stats.totalConsumptionToday %> <small>KW</small>
+                           </h4>
                         </div>
                      </div>
                   </div>
-               </li>
-               <li class="swiper-slide card card-slide">
-                  <div class="card-body">
-                     <div class="progress-widget">
-                        <div id="circle-progress-05" class="circle-progress-01 circle-progress circle-progress-primary text-center" data-min-value="0" data-max-value="100" data-value="50" data-type="percent">
-                           <svg class="card-slie-arrow icon-24" width="24px"  viewBox="0 0 24 24">
-                              <path fill="currentColor" d="M5,17.59L15.59,7H9V5H19V15H17V8.41L6.41,19L5,17.59Z" />
-                           </svg>
-                        </div>
-                        <div class="progress-detail">
-                           <p  class="mb-2">Net Income</p>
-                           <h4 class="counter">$150K</h4>
-                        </div>
-                     </div>
-                  </div>
-               </li>
-               <li class="swiper-slide card card-slide">
-                  <div class="card-body">
-                     <div class="progress-widget">
-                        <div id="circle-progress-06" class="circle-progress-01 circle-progress circle-progress-info text-center" data-min-value="0" data-max-value="100" data-value="40" data-type="percent">
-                           <svg class="card-slie-arrow icon-24" width="24" viewBox="0 0 24 24">
-                              <path fill="currentColor" d="M19,6.41L17.59,5L7,15.59V9H5V19H15V17H8.41L19,6.41Z" />
-                           </svg>
-                        </div>
-                        <div class="progress-detail">
-                           <p  class="mb-2">Today</p>
-                           <h4 class="counter">$4600</h4>
-                        </div>
-                     </div>
-                  </div>
-               </li>
-               <li class="swiper-slide card card-slide">
-                  <div class="card-body">
-                     <div class="progress-widget">
-                        <div id="circle-progress-07" class="circle-progress-01 circle-progress circle-progress-primary text-center" data-min-value="0" data-max-value="100" data-value="30" data-type="percent">
-                           <svg class="card-slie-arrow icon-24" width="24" viewBox="0 0 24 24">
-                              <path fill="currentColor" d="M19,6.41L17.59,5L7,15.59V9H5V19H15V17H8.41L19,6.41Z" />
-                           </svg>
-                        </div>
-                        <div class="progress-detail">
-                           <p  class="mb-2">Members</p>
-                           <h4 class="counter">11.2M</h4>
-                        </div>
-                     </div>
-                  </div>
-               </li>
-            </ul>
-            <div class="swiper-button swiper-button-next"></div>
-            <div class="swiper-button swiper-button-prev"></div>
+               </div>
+            </div>
          </div>
       </div>
-   </div>
-   <div class="col-md-12 col-lg-8">
-      <div class="row">
+
+      <!-- إحصائيات مالية -->
+      <div class="col-md-12 col-lg-8">
+         <div class="card shadow-sm border-0">
+            <div class="card-header border-0 pb-0 d-flex justify-content-between">
+               <div class="header-title">
+                  <h4 class="card-title fw-bold">إحصاءات النشاط اليومي</h4>
+                  <p class="mb-0 text-muted">رؤية شاملة للقراءات والتحصيل المالي لهذا اليوم</p>
+               </div>
+            </div>
+            <div class="card-body">
+               <div class="row text-center mt-2">
+                  <div class="col-md-4">
+                     <div class="p-4 border-0 rounded bg-soft-primary mb-3">
+                        <div class="mb-2">
+                           <svg width="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                              class="text-primary">
+                              <path d="M12 11V16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                 stroke-linejoin="round"></path>
+                              <path d="M12 8.00195V8.01195" stroke="currentColor" stroke-width="1.5"
+                                 stroke-linecap="round" stroke-linejoin="round"></path>
+                              <path fill-rule="evenodd" clip-rule="evenodd"
+                                 d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z"
+                                 stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                 stroke-linejoin="round"></path>
+                           </svg>
+                        </div>
+                        <h6 class="text-secondary fw-bold">قراءات اليوم</h6>
+                        <h2 class="text-primary mt-1 fw-black">
+                           <%= stats.readingsToday %>
+                        </h2>
+                     </div>
+                  </div>
+                  <div class="col-md-4">
+                     <div class="p-4 border-0 rounded bg-soft-info mb-3">
+                        <div class="mb-2">
+                           <svg width="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                              class="text-info">
+                              <path d="M9 11H12V14H9V11Z" stroke="currentColor" stroke-width="1.5"
+                                 stroke-linecap="round" stroke-linejoin="round"></path>
+                              <path
+                                 d="M12 18H7.8C6.69543 18 5.8 17.1046 5.8 16V4C5.8 2.89543 6.69543 2 7.8 2H13.2C13.5183 2 13.8235 2.12643 14.0485 2.35147L17.8485 6.15147C18.0736 6.37652 18.2 6.68174 18.2 7V16C18.2 17.1046 17.3046 18 16.2 18H15"
+                                 stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                 stroke-linejoin="round"></path>
+                              <path d="M14 2V5.4C14 6.28366 14.7163 7 15.6 7H19" stroke="currentColor"
+                                 stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                           </svg>
+                        </div>
+                        <h6 class="text-secondary fw-bold">فواتير اليوم</h6>
+                        <h2 class="text-info mt-1 fw-black">
+                           <%= stats.invoicesToday %>
+                        </h2>
+                     </div>
+                  </div>
+                  <div class="col-md-4">
+                     <div class="p-4 border-0 rounded bg-soft-success mb-3">
+                        <div class="mb-2">
+                           <svg width="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                              class="text-success">
+                              <path d="M8 12L11 15L16 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                 stroke-linejoin="round"></path>
+                              <path fill-rule="evenodd" clip-rule="evenodd"
+                                 d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z"
+                                 stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                 stroke-linejoin="round"></path>
+                           </svg>
+                        </div>
+                        <h6 class="text-secondary fw-bold">نسبة التحصيل</h6>
+                        <h2 class="text-success mt-1 fw-black">
+                           <%= stats.collectionRatio %>%
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <div class="mt-4 px-2">
+                  <div class="progress" style="height: 12px; border-radius: 10px;">
+                     <div class="progress-bar bg-success" role="progressbar"
+                        style="width: <%= stats.collectionRatio %>%" aria-valuenow="<%= stats.collectionRatio %>"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                  <p class="mt-3 text-center text-muted fw-bold">إجمالي المبالغ المفوترة: <span class="text-dark">
+                        <%= stats.totalInvoicedAmount.toLocaleString() %> شيكل
+                     </span></p>
+               </div>
+            </div>
+         </div>
+      </div>
+
+      <div class="col-md-12 col-lg-4">
+         <div class="card shadow-sm border-0 h-100">
+            <div class="card-header border-0 pb-0">
+               <h4 class="card-title fw-bold">روابط سريعة</h4>
+            </div>
+            <div class="card-body">
+               <div class="d-grid gap-3">
+                  <a href="/company-admin/invoices"
+                     class="btn btn-primary-soft-gradient py-3 d-flex align-items-center justify-content-center">
+                     <svg width="20" class="me-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                           d="M13 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V9L13 2Z"
+                           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                        <path d="M13 2V9H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                           stroke-linejoin="round"></path>
+                     </svg>
+                     إدارة الفواتير
+                  </a>
+                  <a href="/company-admin/collectors"
+                     class="btn btn-info-soft-gradient py-3 d-flex align-items-center justify-content-center">
+                     <svg width="20" class="me-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                           d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21"
+                           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                        <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                           stroke-linejoin="round"></circle>
+                        <path
+                           d="M23 21V19C22.9993 18.1137 22.7044 17.2524 22.1614 16.5523C21.6184 15.8522 20.8581 15.3516 20 15.13"
+                           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                        <path
+                           d="M16 3.13C16.8604 3.35031 17.623 3.85071 18.1676 4.55232C18.7122 5.25392 19.0078 6.11774 19.0078 7.005C19.0078 7.89226 18.7122 8.75608 18.1676 9.45768C17.623 10.1593 16.8604 10.6597 16 10.88"
+                           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                     </svg>
+                     أداء المحصلين
+                  </a>
+                  <a href="/company-admin/reports"
+                     class="btn btn-success-soft-gradient py-3 d-flex align-items-center justify-content-center">
+                     <svg width="20" class="me-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                           d="M16 21V19C16 17.9391 15.5786 16.9217 14.8284 16.1716C14.0783 15.4214 13.0609 15 12 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21"
+                           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                        <circle cx="8.5" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                           stroke-linejoin="round"></circle>
+                        <polyline points="17 11 19 13 23 9" stroke="currentColor" stroke-width="2"
+                           stroke-linecap="round" stroke-linejoin="round"></polyline>
+                     </svg>
+                     التقارير التفصيلية
+                  </a>
+               </div>
+            </div>
+         </div>
+      </div>
+
+      <style>
+         .bg-soft-primary {
+            background-color: rgba(58, 138, 255, 0.1);
+            color: #3a8aff;
+         }
+
+         .bg-soft-info {
+            background-color: rgba(1, 173, 221, 0.1);
+            color: #01addd;
+         }
+
+         .bg-soft-success {
+            background-color: rgba(5, 193, 133, 0.1);
+            color: #05c185;
+         }
+
+         .bg-soft-warning {
+            background-color: rgba(243, 156, 18, 0.1);
+            color: #f39c12;
+         }
+
+         .fw-black {
+            font-weight: 900;
+         }
+
+         .btn-primary-soft-gradient {
+            border: 1px solid #3a8aff;
+            color: #3a8aff;
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            font-weight: 600;
+         }
+
+         .btn-primary-soft-gradient:hover {
+            background: #3a8aff;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(58, 138, 255, 0.2);
+         }
+
+         .btn-info-soft-gradient {
+            border: 1px solid #01addd;
+            color: #01addd;
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            font-weight: 600;
+         }
+
+         .btn-info-soft-gradient:hover {
+            background: #01addd;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(1, 173, 221, 0.2);
+         }
+
+         .btn-success-soft-gradient {
+            border: 1px solid #05c185;
+            color: #05c185;
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            font-weight: 600;
+         }
+
+         .btn-success-soft-gradient:hover {
+            background: #05c185;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(5, 193, 133, 0.2);
+         }
+      </style>
+
+      <% } else { %>
+         <!-- Default/Placeholder view for other roles or missing stats -->
          <div class="col-md-12">
-            <div class="card">
-               <div class="card-header d-flex justify-content-between flex-wrap">
-                  <div class="header-title">
-                     <h4 class="card-title">$855.8K</h4>
-                     <p class="mb-0">Gross Sales</p>          
-                  </div>
-                  <div class="d-flex align-items-center align-self-center">
-                     <div class="d-flex align-items-center text-primary">
-                        <svg class="icon-12" xmlns="http://www.w3.org/2000/svg" width="12" viewBox="0 0 24 24" fill="currentColor">
-                           <g>
-                              <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
-                           </g>
-                        </svg>
-                        <div class="ms-2">
-                           <span class="text-gray">Sales</span>
-                        </div>
-                     </div>
-                     <div class="d-flex align-items-center ms-3 text-info">
-                        <svg class="icon-12" xmlns="http://www.w3.org/2000/svg" width="12" viewBox="0 0 24 24" fill="currentColor">
-                           <g>
-                              <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
-                           </g>
-                        </svg>
-                        <div class="ms-2">
-                           <span class="text-gray">Cost</span>
-                        </div>
-                     </div>
-                  </div>
-                  <div class="dropdown">
-                     <a href="#" class="text-gray dropdown-toggle" id="dropdownMenuButton22" data-bs-toggle="dropdown" aria-expanded="false">
-                     This Week
-                     </a>
-                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton22">
-                        <li><a class="dropdown-item" href="#">This Week</a></li>
-                        <li><a class="dropdown-item" href="#">This Month</a></li>
-                        <li><a class="dropdown-item" href="#">This Year</a></li>
-                     </ul>
-                  </div>
-               </div>
-               <div class="card-body">
-                  <div id="d-main" class="d-main"></div>
-               </div>
-            </div>
-         </div>
-         <div class="col-md-12 col-xl-6">
-            <div class="card">
-               <div class="card-header d-flex justify-content-between flex-wrap">
-                  <div class="header-title">
-                     <h4 class="card-title">Earnings</h4>            
-                  </div>   
-                  <div class="dropdown">
-                     <a href="#" class="text-gray dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                        This Week
-                     </a>
-                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
-                        <li><a class="dropdown-item" href="#">This Week</a></li>
-                        <li><a class="dropdown-item" href="#">This Month</a></li>
-                        <li><a class="dropdown-item" href="#">This Year</a></li>
-                     </ul>
-                  </div>
-               </div>
-               <div class="card-body">
-                  <div class="d-flex flex-wrap align-items-center justify-content-between">
-                     <div id="myChart" class="col-md-8 col-lg-8 myChart"></div>
-                     <div class="d-grid gap col-md-4 col-lg-4">
-                        <div class="d-flex align-items-start">
-                           <svg class="mt-2 icon-14" xmlns="http://www.w3.org/2000/svg" width="14" viewBox="0 0 24 24" fill="#3a57e8">
-                              <g>
-                                 <circle cx="12" cy="12" r="8" fill="#3a57e8"></circle>
-                              </g>
-                           </svg>
-                           <div class="ms-3">
-                              <span class="text-gray">Fashion</span>
-                              <h6>251K</h6>
-                           </div>
-                        </div>
-                        <div class="d-flex align-items-start">
-                           <svg class="mt-2 icon-14" xmlns="http://www.w3.org/2000/svg" width="14" viewBox="0 0 24 24" fill="#4bc7d2">
-                              <g>
-                                 <circle cx="12" cy="12" r="8" fill="#4bc7d2"></circle>
-                              </g>
-                           </svg>
-                           <div class="ms-3">
-                              <span class="text-gray">Accessories</span>
-                              <h6>176K</h6>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-            </div>
-         </div>
-         <div class="col-md-12 col-xl-6">
-            <div class="card">
-               <div class="card-header d-flex justify-content-between flex-wrap">
-                  <div class="header-title">
-                     <h4 class="card-title">Conversions</h4>            
-                  </div>
-                  <div class="dropdown">
-                     <a href="#" class="text-gray dropdown-toggle" id="dropdownMenuButton3" data-bs-toggle="dropdown" aria-expanded="false">
-                        This Week
-                     </a>
-                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton3">
-                        <li><a class="dropdown-item" href="#">This Week</a></li>
-                        <li><a class="dropdown-item" href="#">This Month</a></li>
-                        <li><a class="dropdown-item" href="#">This Year</a></li>
-                     </ul>
-                  </div>
-               </div>
-               <div class="card-body">
-                  <div id="d-activity" class="d-activity"></div>
-               </div>
-            </div>
-         </div>         
-         <div class="col-md-12 col-lg-12">
-            <div class="card overflow-hidden">
-               <div class="card-header d-flex justify-content-between flex-wrap">
-                  <div class="header-title">
-                     <h4 class="card-title mb-2">Enterprise Clients</h4>
-                     <p class="mb-0">
-                        <svg class ="me-2 icon-24" width="24"  viewBox="0 0 24 24">
-                           <path fill="#3a57e8" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z" />
-                        </svg>
-                        15 new acquired this month
-                     </p>            
-                  </div>
-                  <div class="dropdown">
-                     <span class="dropdown-toggle" id="dropdownMenuButton7" data-bs-toggle="dropdown" aria-expanded="false" role="button">
-                     </span>
-                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton7">
-                        <a class="dropdown-item " href="javascript:void(0);">Action</a>
-                        <a class="dropdown-item " href="javascript:void(0);">Another action</a>
-                        <a class="dropdown-item " href="javascript:void(0);">Something else here</a>
-                     </div>
-                  </div>
-               </div>
-               <div class="card-body p-0">
-                  <div class="table-responsive mt-4">
-                     <table id="basic-table" class="table table-striped mb-0" role="grid">
-                        <thead>
-                           <tr>
-                              <th>COMPANIES</th>
-                              <th>CONTACTS</th>
-                              <th>ORDER</th>
-                              <th>COMPLETION</th>
-                           </tr>
-                        </thead>
-                        <tbody>
-                           <tr>
-                              <td>
-                                 <div class="d-flex align-items-center">
-                                    <img class="bg-soft-primary rounded img-fluid avatar-40 me-3" src="../../assets/images/shapes/01.png" alt="profile">
-                                    <h6>Addidis Sportwear</h6>
-                                 </div>
-                              </td>
-                              <td>
-                                 <div class="iq-media-group iq-media-group-1">
-                                    <a href="#" class="iq-media-1">
-                                       <div class="icon iq-icon-box-3 rounded-pill">SP</div>
-                                    </a>
-                                    <a href="#" class="iq-media-1">
-                                       <div class="icon iq-icon-box-3 rounded-pill">PP</div>
-                                    </a>
-                                    <a href="#" class="iq-media-1">
-                                       <div class="icon iq-icon-box-3 rounded-pill">MM</div>
-                                    </a>
-                                 </div>
-                              </td>
-                              <td>$14,000</td>
-                              <td>
-                                 <div class="d-flex align-items-center mb-2">
-                                    <h6>60%</h6>
-                                 </div>
-                                 <div class="progress bg-soft-primary shadow-none w-100" style="height: 4px">
-                                    <div class="progress-bar bg-primary" data-toggle="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
-                                 </div>
-                              </td>
-                           </tr>
-                           <tr>
-                              <td>
-                                 <div class="d-flex align-items-center">
-                                    <img class="bg-soft-primary rounded img-fluid avatar-40 me-3" src="../../assets/images/shapes/05.png" alt="profile">
-                                    <h6>Netflixer Platforms</h6>
-                                 </div>
-                              </td>
-                              <td>
-                                 <div class="iq-media-group iq-media-group-1">
-                                    <a href="#" class="iq-media-1">
-                                       <div class="icon iq-icon-box-3 rounded-pill">SP</div>
-                                    </a>
-                                    <a href="#" class="iq-media-1">
-                                       <div class="icon iq-icon-box-3 rounded-pill">PP</div>
-                                    </a>
-                                 </div>
-                              </td>
-                              <td>$30,000</td>
-                              <td>
-                                 <div class="d-flex align-items-center mb-2">
-                                    <h6>25%</h6>
-                                 </div>
-                                 <div class="progress bg-soft-primary shadow-none w-100" style="height: 4px">
-                                    <div class="progress-bar bg-primary" data-toggle="progress-bar" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                 </div>
-                              </td>
-                           </tr>
-                           <tr>
-                              <td>
-                                 <div class="d-flex align-items-center">
-                                    <img class="bg-soft-primary rounded img-fluid avatar-40 me-3" src="../../assets/images/shapes/02.png" alt="profile">
-                                    <h6>Shopifi Stores</h6>
-                                 </div>
-                              </td>
-                              <td>                                 
-                                 <div class="iq-media-group iq-media-group-1">
-                                    <a href="#" class="iq-media-1">
-                                       <div class="icon iq-icon-box-3 rounded-pill">PP</div>
-                                    </a>
-                                    <a href="#" class="iq-media-1">
-                                       <div class="icon iq-icon-box-3 rounded-pill">TP</div>
-                                    </a>
-                                 </div>
-                              </td>
-                              <td>$8,500</td>
-                              <td>
-                                 <div class="d-flex align-items-center mb-2">
-                                    <h6>100%</h6>
-                                 </div>
-                                 <div class="progress bg-soft-success shadow-none w-100" style="height: 4px">
-                                    <div class="progress-bar bg-success" data-toggle="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                                 </div>
-                              </td>
-                           </tr>
-                           <tr>
-                              <td>
-                                 <div class="d-flex align-items-center">
-                                    <img class="bg-soft-primary rounded img-fluid avatar-40 me-3" src="../../assets/images/shapes/03.png" alt="profile">
-                                    <h6>Bootstrap Technologies</h6>
-                                 </div>
-                              </td>
-                              <td>
-                                 <div class="iq-media-group iq-media-group-1">
-                                    <a href="#" class="iq-media-1">
-                                       <div class="icon iq-icon-box-3 rounded-pill">SP</div>
-                                    </a>
-                                    <a href="#" class="iq-media-1">
-                                       <div class="icon iq-icon-box-3 rounded-pill">PP</div>
-                                    </a>
-                                    <a href="#" class="iq-media-1">
-                                       <div class="icon iq-icon-box-3 rounded-pill">MM</div>
-                                    </a>
-                                    <a href="#" class="iq-media-1">
-                                       <div class="icon iq-icon-box-3 rounded-pill">TP</div>
-                                    </a>
-                                 </div>
-                              </td>
-                              <td>$20,500</td>
-                              <td>
-                                 <div class="d-flex align-items-center mb-2">
-                                    <h6>100%</h6>
-                                 </div>
-                                 <div class="progress bg-soft-success shadow-none w-100" style="height: 4px">
-                                    <div class="progress-bar bg-success" data-toggle="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                                 </div>
-                              </td>
-                           </tr>
-                           <tr>
-                              <td>
-                                 <div class="d-flex align-items-center">
-                                    <img class="bg-soft-primary rounded img-fluid avatar-40 me-3" src="../../assets/images/shapes/04.png" alt="profile">
-                                    <h6>Community First</h6>
-                                 </div>
-                              </td>
-                              <td>
-                                 <div class="iq-media-group iq-media-group-1">
-                                    <a href="#" class="iq-media-1">
-                                       <div class="icon iq-icon-box-3 rounded-pill">MM</div>
-                                    </a>
-                                 </div>
-                              </td>
-                              <td>$9,800</td>
-                              <td>
-                                 <div class="d-flex align-items-center mb-2">
-                                    <h6>75%</h6>
-                                 </div>
-                                 <div class="progress bg-soft-primary shadow-none w-100" style="height: 4px">
-                                    <div class="progress-bar bg-primary" data-toggle="progress-bar" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-                                 </div>
-                              </td>
-                           </tr>
-                        </tbody>
-                     </table>
-                  </div>
-               </div>
-            </div>
-         </div>
-      </div>
-   </div>
-   <div class="col-md-12 col-lg-4">
-      <div class="row">
-         <div class="col-md-12 col-lg-12">
-            <div class="card credit-card-widget">
-               <div class="card-header pb-4 border-0">
-                  <div class="p-4 primary-gradient-card rounded border border-white">
-                     <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                           <h5 class="font-weight-bold">VISA </h5>
-                           <P class="mb-0">PREMIUM ACCOUNT</P>  
-                        </div>
-                        <div class="master-card-content">
-                           <svg class="master-card-1 icon-60" width="60"  viewBox="0 0 24 24">
-                              <path fill="#ffffff" d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" />
-                           </svg>
-                           <svg class="master-card-2 icon-60" width="60"  viewBox="0 0 24 24">
-                              <path fill="#ffffff" d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" />
-                           </svg>
-                        </div>
-                     </div>
-                     <div class="my-4">
-                        <div class="card-number">
-                           <span class="fs-5 me-2">5789</span>
-                           <span class="fs-5 me-2">****</span>
-                           <span class="fs-5 me-2">****</span>
-                           <span class="fs-5">2847</span>
-                        </div>
-                     </div>
-                     <div class="d-flex align-items-center mb-2 justify-content-between">
-                        <p class="mb-0">Card holder</p>
-                        <p class="mb-0">Expire Date</p>
-                     </div>
-                     <div class="d-flex align-items-center justify-content-between">
-                        <h6>Mike Smith</h6>
-                        <h6 class="ms-5">06/11</h6>
-                     </div>
-                  </div>
-               </div>
-               <div class="card-body">
-                  <div class="d-flex align-itmes-center flex-wrap  mb-4">
-                     <div class="d-flex align-itmes-center me-0 me-md-4">
-                        <div>
-                           <div class="p-3 mb-2 rounded bg-soft-primary">
-                              <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                              <path fill-rule="evenodd" clip-rule="evenodd" d="M16.9303 7C16.9621 6.92913 16.977 6.85189 16.9739 6.77432H17C16.8882 4.10591 14.6849 2 12.0049 2C9.325 2 7.12172 4.10591 7.00989 6.77432C6.9967 6.84898 6.9967 6.92535 7.00989 7H6.93171C5.65022 7 4.28034 7.84597 3.88264 10.1201L3.1049 16.3147C2.46858 20.8629 4.81062 22 7.86853 22H16.1585C19.2075 22 21.4789 20.3535 20.9133 16.3147L20.1444 10.1201C19.676 7.90964 18.3503 7 17.0865 7H16.9303ZM15.4932 7C15.4654 6.92794 15.4506 6.85153 15.4497 6.77432C15.4497 4.85682 13.8899 3.30238 11.9657 3.30238C10.0416 3.30238 8.48184 4.85682 8.48184 6.77432C8.49502 6.84898 8.49502 6.92535 8.48184 7H15.4932ZM9.097 12.1486C8.60889 12.1486 8.21321 11.7413 8.21321 11.2389C8.21321 10.7366 8.60889 10.3293 9.097 10.3293C9.5851 10.3293 9.98079 10.7366 9.98079 11.2389C9.98079 11.7413 9.5851 12.1486 9.097 12.1486ZM14.002 11.2389C14.002 11.7413 14.3977 12.1486 14.8858 12.1486C15.3739 12.1486 15.7696 11.7413 15.7696 11.2389C15.7696 10.7366 15.3739 10.3293 14.8858 10.3293C14.3977 10.3293 14.002 10.7366 14.002 11.2389Z" fill="currentColor"></path>                                            
-                              </svg>
-                           </div>
-                        </div>
-                        <div class="ms-3">
-                           <h5>1153</h5>
-                           <small class="mb-0">Products</small>
-                        </div>
-                     </div>
-                     <div class="d-flex align-itmes-center">
-                        <div>
-                           <div class="p-3 mb-2 rounded bg-soft-info">
-                              <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                 <path fill-rule="evenodd" clip-rule="evenodd" d="M14.1213 11.2331H16.8891C17.3088 11.2331 17.6386 10.8861 17.6386 10.4677C17.6386 10.0391 17.3088 9.70236 16.8891 9.70236H14.1213C13.7016 9.70236 13.3719 10.0391 13.3719 10.4677C13.3719 10.8861 13.7016 11.2331 14.1213 11.2331ZM20.1766 5.92749C20.7861 5.92749 21.1858 6.1418 21.5855 6.61123C21.9852 7.08067 22.0551 7.7542 21.9652 8.36549L21.0159 15.06C20.8361 16.3469 19.7569 17.2949 18.4879 17.2949H7.58639C6.25742 17.2949 5.15828 16.255 5.04837 14.908L4.12908 3.7834L2.62026 3.51807C2.22057 3.44664 1.94079 3.04864 2.01073 2.64043C2.08068 2.22305 2.47038 1.94649 2.88006 2.00874L5.2632 2.3751C5.60293 2.43735 5.85274 2.72207 5.88272 3.06905L6.07257 5.35499C6.10254 5.68257 6.36234 5.92749 6.68209 5.92749H20.1766ZM7.42631 18.9079C6.58697 18.9079 5.9075 19.6018 5.9075 20.459C5.9075 21.3061 6.58697 22 7.42631 22C8.25567 22 8.93514 21.3061 8.93514 20.459C8.93514 19.6018 8.25567 18.9079 7.42631 18.9079ZM18.6676 18.9079C17.8282 18.9079 17.1487 19.6018 17.1487 20.459C17.1487 21.3061 17.8282 22 18.6676 22C19.4969 22 20.1764 21.3061 20.1764 20.459C20.1764 19.6018 19.4969 18.9079 18.6676 18.9079Z" fill="currentColor"></path>                                            
-                              </svg>                                        
-                           </div>
-                        </div>
-                        <div class="ms-3">
-                           <h5>81K</h5>
-                           <small class="mb-0">Order Served</small>
-                        </div>
-                     </div>
-                  </div>
+            <div class="card shadow-sm border-0">
+               <div class="card-body text-center py-5">
                   <div class="mb-4">
-                     <div class="d-flex justify-content-between flex-wrap">
-                        <h2 class="mb-2">$405,012,300</h2>
-                        <div>
-                           <span class="badge bg-success rounded-pill">YoY 24%</span>
-                        </div>
-                     </div>
-                     <p class="text-info">Life time sales</p>
+                     <svg width="80" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="50" cy="50" r="40" stroke="#004e92" stroke-width="2" stroke-dasharray="10 5" />
+                        <path
+                           d="M50 20V30M50 70V80M20 50H30M70 50H80M28.8 28.8L35.9 35.9M64.1 64.1L71.2 71.2M28.8 71.2L35.9 64.1M64.1 28.8L71.2 35.9"
+                           stroke="#f39c12" stroke-width="4" stroke-linecap="round" />
+                        <circle cx="50" cy="50" r="15" fill="#f39c12" />
+                     </svg>
                   </div>
-                  <div class="d-grid grid-cols-2 gap">
-                     <button class="btn btn-primary text-uppercase">SUMMARY</button>
-                     <button class="btn btn-info text-uppercase">ANALYTICS</button>
-                  </div>
-               </div>
-            </div>
-            <div class="card">
-               <div class="card-body d-flex justify-content-around text-center">
-                  <div>
-                     <h2 class="mb-2">750<small>K</small></h2>
-                     <p class="mb-0 text-gray">Website Visitors</p>
-                  </div>
-                  <hr class="hr-vertial">
-                  <div>
-                     <h2 class="mb-2">7,500</h2>
-                     <p class="mb-0 text-gray">New Customers</p>
-                  </div>
-               </div>
-            </div> 
-         </div>
-         <div class="col-md-12 col-lg-12">
-            <div class="card">
-               <div class="card-header d-flex justify-content-between flex-wrap">
-                  <div class="header-title">
-                     <h4 class="card-title mb-2">Activity overview</h4>
-                     <p class="mb-0">
-                        <svg class ="me-2 icon-24" width="24" viewBox="0 0 24 24">
-                           <path fill="#17904b" d="M13,20H11V8L5.5,13.5L4.08,12.08L12,4.16L19.92,12.08L18.5,13.5L13,8V20Z" />
-                        </svg>
-                        16% this month
-                     </p>
-                  </div>
-               </div>
-               <div class="card-body">
-                  <div class=" d-flex profile-media align-items-top mb-2">
-                     <div class="profile-dots-pills border-primary mt-1"></div>
-                     <div class="ms-4">
-                        <h6 class=" mb-1">$2400, Purchase</h6>
-                        <span class="mb-0">11 JUL 8:10 PM</span>
-                     </div>
-                  </div>
-                  <div class=" d-flex profile-media align-items-top mb-2">
-                     <div class="profile-dots-pills border-primary mt-1"></div>
-                     <div class="ms-4">
-                        <h6 class=" mb-1">New order #8744152</h6>
-                        <span class="mb-0">11 JUL 11 PM</span>
-                     </div>
-                  </div>
-                  <div class=" d-flex profile-media align-items-top mb-2">
-                     <div class="profile-dots-pills border-primary mt-1"></div>
-                     <div class="ms-4">
-                        <h6 class=" mb-1">Affiliate Payout</h6>
-                        <span class="mb-0">11 JUL 7:64 PM</span>
-                     </div>
-                  </div>
-                  <div class=" d-flex profile-media align-items-top mb-2">
-                     <div class="profile-dots-pills border-primary mt-1"></div>
-                     <div class="ms-4">
-                        <h6 class=" mb-1">New user added</h6>
-                        <span class="mb-0">11 JUL 1:21 AM</span>
-                     </div>
-                  </div>
-                  <div class=" d-flex profile-media align-items-top mb-1">
-                     <div class="profile-dots-pills border-primary mt-1"></div>
-                     <div class="ms-4">
-                        <h6 class=" mb-1">Product added</h6>
-                        <span class="mb-0">11 JUL 4:50 AM</span>
-                     </div>
-                  </div>
+                  <h3 class="fw-bold text-primary">أهلاً بك في نظام إشراق</h3>
+                  <p class="text-secondary lead">يرجى الاختيار من القائمة الجانبية للبدء بالعمل وإدارة نظامك بنور وأمان.
+                  </p>
                </div>
             </div>
          </div>
-      </div>
-   </div> 
+         <% } %>
 </div>

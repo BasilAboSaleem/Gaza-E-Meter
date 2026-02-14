@@ -2,16 +2,25 @@ const mongoose = require('mongoose');
 
 const invoiceSchema = new mongoose.Schema({
   subscriberId: { type: mongoose.Schema.Types.ObjectId, ref: 'Subscriber', required: true },
-  readingId: { type: mongoose.Schema.Types.ObjectId, ref: 'Reading', required: true },
+  readingId: { type: mongoose.Schema.Types.ObjectId, ref: 'MeterReading', required: true },
+  company: { type: mongoose.Schema.Types.ObjectId, ref: 'Company', required: true },
+  
+  invoiceNumber: { type: String, required: true, unique: true },
   issueDate: { type: Date, default: Date.now },
   dueDate: { type: Date, required: true },
 
   consumption: { type: Number, required: true },
   unitPrice: { type: Number, required: true },
-  totalAmount: { type: Number, required: true },   // يحسب تلقائيًا عند الإنشاء
+  
+  fixedFees: { type: Number, default: 0 },
+  taxes: { type: Number, default: 0 },
+  arrears: { type: Number, default: 0 }, // ديون سابقة
+  previousBalance: { type: Number, default: 0 },
 
+  totalAmount: { type: Number, required: true },
   paidAmount: { type: Number, default: 0 },
   remainingAmount: { type: Number, default: function() { return this.totalAmount } },
+  
   paymentMethod: { type: String, enum: ['CASH', 'BANK', 'MIXED'], default: 'CASH' },
   paymentProof: { type: String },
 
@@ -19,12 +28,12 @@ const invoiceSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 // عند الإنشاء: تحديث totalAmount تلقائيًا بناءً على الاستهلاك
-invoiceSchema.pre('validate', function(next) {
+invoiceSchema.pre('validate', async function() {
   if(this.consumption != null && this.unitPrice != null) {
-    this.totalAmount = this.consumption * this.unitPrice;
+    const consumptionValue = this.consumption * this.unitPrice;
+    this.totalAmount = consumptionValue + (this.fixedFees || 0) + (this.taxes || 0) + (this.arrears || 0);
     this.remainingAmount = this.totalAmount - (this.paidAmount || 0);
   }
-  next();
 });
 
 

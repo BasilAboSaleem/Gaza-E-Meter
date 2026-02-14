@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>مشتركي المحصل (أوفلاين)</title>
+  <link rel="stylesheet" href="/assets/css/rtl.css">
+  <link rel="stylesheet" href="/assets/css/hope-ui.min.css">
+  <script src="/assets/js/dexie.min.js"></script>
+  <script src="/assets/js/db.js"></script>
+  <link rel="icon" href="data:,">
+</head>
+<body>
+  <header>
+    <h3>📴 وضع أوفلاين – مشتركي المحصل</h3>
+  </header>
+
+  <main class="main-content">
+    <div class="container-fluid content-inner mt-n5 py-0">
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h4 class="card-title mb-0">قائمة المشتركين</h4>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                  <thead>
+                    <tr>
+                      <th>الاسم</th>
+                      <th>الهاتف</th>
+                      <th>آخر قراءة</th>
+                    </tr>
+                  </thead>
+                  <tbody id="subscribers-list">
+                    <tr><td colspan="3">جاري تحميل البيانات...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // عرض المشتركين أوفلاين من Dexie
+    (async () => {
+      if (!window.collectorDB) {
+        console.error('collectorDB not loaded!');
+        return;
+      }
+
+      const listEl = document.getElementById('subscribers-list');
+      const subs = await collectorDB.getSubscribersOffline();
+
+      if (!subs.length) {
+        listEl.innerHTML = '<tr><td colspan="3">لا توجد بيانات محفوظة أوفلاين</td></tr>';
+        return;
+      }
+
+      listEl.innerHTML = '';
+      subs.forEach(sub => {
+        listEl.innerHTML += `
+          <tr>
+            <td>${sub.fullName}</td>
+            <td>${sub.phone}</td>
+            <td>${sub.lastReading || 0}</td>
+          </tr>
+        `;
+      });
+    })();
+  </script>
+
+  <script>
+    // تسجيل SW للأوفلاين
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/assets/js/sw.js')
+        .then(() => console.log('SW registered ✅'))
+        .catch(err => console.error('SW failed ❌', err));
+    }
+  </script>
+</body>
+</html>

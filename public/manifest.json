@@ -1,0 +1,19 @@
+{
+    "name": "إشراق - نظام المحصلين",
+    "short_name": "إشراق",
+    "description": "نظام تسجيل قراءات العدادات - غزة",
+    "scope": "/",
+    "start_url": "/collector/my-subscribers",
+    "display": "standalone",
+    "orientation": "portrait",
+    "background_color": "#ffffff",
+    "theme_color": "#3a57e8",
+    "icons": [
+        {
+            "src": "/assets/images/favicon.ico",
+            "sizes": "192x192",
+            "type": "image/x-icon",
+            "purpose": "any maskable"
+        }
+    ]
+}

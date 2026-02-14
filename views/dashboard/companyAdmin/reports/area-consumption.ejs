@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en" dir="rtl">
+<%- include('../../../partials/head.ejs') %>
+
+    <body class="rtl">
+        <!-- loader Start -->
+        <div id="loading">
+            <div class="loader simple-loader">
+                <div class="loader-body"></div>
+            </div>
+        </div>
+        <!-- loader END -->
+        <main class="main-content">
+            <%- include('../../../partials/sidebar.ejs') %>
+                <div class="position-relative iq-banner">
+                    <%- include('../../../partials/navbar.ejs') %>
+
+                        <!-- Main Content -->
+                        <div class="iq-navbar-header" style="height: 215px;">
+                            <div class="iq-header-img">
+                                <img src="/assets/images/dashboard/top-header.png" alt="header"
+                                    class="theme-color-default-img img-fluid w-100 h-100 animated-scaleX">
+                            </div>
+                        </div>
+
+                        <div class="conatiner-fluid content-inner mt-n5 py-0">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="card shadow-sm border-0 rounded-4 mb-4">
+                                        <div class="card-body p-4">
+                                            <div
+                                                class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+                                                <div>
+                                                    <h3 class="fw-bold text-primary mb-1">
+                                                        <svg width="28" class="me-2" viewBox="0 0 24 24" fill="none"
+                                                            xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M3 3V21H21" stroke="currentColor"
+                                                                stroke-width="1.5" stroke-linecap="round"
+                                                                stroke-linejoin="round" />
+                                                            <path d="M7 16V12" stroke="currentColor" stroke-width="1.5"
+                                                                stroke-linecap="round" stroke-linejoin="round" />
+                                                            <path d="M11 16V8" stroke="currentColor" stroke-width="1.5"
+                                                                stroke-linecap="round" stroke-linejoin="round" />
+                                                            <path d="M15 16V4" stroke="currentColor" stroke-width="1.5"
+                                                                stroke-linecap="round" stroke-linejoin="round" />
+                                                            <path d="M19 16V9" stroke="currentColor" stroke-width="1.5"
+                                                                stroke-linecap="round" stroke-linejoin="round" />
+                                                        </svg>
+                                                        تقرير استهلاك المناطق
+                                                    </h3>
+                                                    <p class="text-muted mb-0">تحليل تفصيلي للاستهلاك والإيرادات حسب
+                                                        المنطقة
+                                                        الجغرافية</p>
+                                                </div>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <form method="GET" action="/company-admin/reports/area-consumption"
+                                                        class="d-flex gap-2">
+                                                        <div class="input-group input-group-sm">
+                                                            <span class="input-group-text bg-white border-end-0"><i
+                                                                    class="bi bi-calendar3"></i></span>
+                                                            <input type="date" name="startDate"
+                                                                class="form-control border-start-0"
+                                                                value="<%= filters.startDate %>" placeholder="من">
+                                                        </div>
+                                                        <div class="input-group input-group-sm">
+                                                            <span class="input-group-text bg-white border-end-0"><i
+                                                                    class="bi bi-calendar3"></i></span>
+                                                            <input type="date" name="endDate"
+                                                                class="form-control border-start-0"
+                                                                value="<%= filters.endDate %>" placeholder="إلى">
+                                                        </div>
+                                                        <button type="submit"
+                                                            class="btn btn-primary btn-sm rounded-pill px-3">
+                                                            <i class="bi bi-filter"></i> تصفية
+                                                        </button>
+                                                        <% if (filters.startDate || filters.endDate) { %>
+                                                            <a href="/company-admin/reports/area-consumption"
+                                                                class="btn btn-soft-secondary btn-sm rounded-pill"
+                                                                data-bs-toggle="tooltip" title="إلغاء الفلتر">
+                                                                <i class="bi bi-x-lg"></i>
+                                                            </a>
+                                                            <% } %>
+                                                    </form>
+                                                    <div class="dropdown">
+                                                        <button
+                                                            class="btn btn-soft-primary btn-sm rounded-pill dropdown-toggle"
+                                                            type="button" id="exportDropdown" data-bs-toggle="dropdown"
+                                                            aria-expanded="false">
+                                                            <i class="bi bi-download me-1"></i> تصدير
+                                                        </button>
+                                                        <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm rounded-3"
+                                                            aria-labelledby="exportDropdown">
+                                                            <li>
+                                                                <a class="dropdown-item py-2"
+                                                                    href="/company-admin/reports/export/excel?<%= new URLSearchParams(filters) %>">
+                                                                    <i
+                                                                        class="bi bi-file-earmark-excel text-success me-2"></i>
+                                                                    Excel
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a class="dropdown-item py-2"
+                                                                    href="/company-admin/reports/export/pdf?<%= new URLSearchParams(filters) %>">
+                                                                    <i
+                                                                        class="bi bi-file-earmark-pdf text-danger me-2"></i>
+                                                                    PDF
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Summary Cards -->
+                                    <div class="row">
+                                        <!-- Total Areas -->
+                                        <div class="col-md-4">
+                                            <div class="card shadow-sm border-0 rounded-4 mb-4">
+                                                <div class="card-body">
+                                                    <div class="d-flex align-items-center mb-3">
+                                                        <div class="bg-soft-primary rounded-3 p-3">
+                                                            <svg width="24" viewBox="0 0 24 24" fill="none"
+                                                                xmlns="http://www.w3.org/2000/svg">
+                                                                <path
+                                                                    d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                                                                    stroke="currentColor" stroke-width="1.5"
+                                                                    stroke-linecap="round" stroke-linejoin="round" />
+                                                                <path d="M8 12H16" stroke="currentColor"
+                                                                    stroke-width="1.5" stroke-linecap="round"
+                                                                    stroke-linejoin="round" />
+                                                                <path d="M12 8V16" stroke="currentColor"
+                                                                    stroke-width="1.5" stroke-linecap="round"
+                                                                    stroke-linejoin="round" />
+                                                            </svg>
+                                                        </div>
+                                                        <div class="ms-3">
+                                                            <h2 class="mb-0 fw-bold counter">
+                                                                <%= summary.totalAreas %>
+                                                            </h2>
+                                                            <p class="text-secondary mb-0">إجمالي المناطق</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Total Consumption -->
+                                        <div class="col-md-4">
+                                            <div class="card shadow-sm border-0 rounded-4 mb-4">
+                                                <div class="card-body">
+                                                    <div class="d-flex align-items-center mb-3">
+                                                        <div class="bg-soft-warning rounded-3 p-3">
+                                                            <svg width="24" viewBox="0 0 24 24" fill="none"
+                                                                xmlns="http://www.w3.org/2000/svg">
+                                                                <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z"
+                                                                    stroke="currentColor" stroke-width="1.5"
+                                                                    stroke-linecap="round" stroke-linejoin="round" />
+                                                            </svg>
+                                                        </div>
+                                                        <div class="ms-3">
+                                                            <h2 class="mb-0 fw-bold">
+                                                                <%= summary.totalConsumption.toLocaleString() %> <small
+                                                                        class="fs-6 text-muted">KW</small>
+                                                            </h2>
+                                                            <p class="text-secondary mb-0">إجمالي الاستهلاك</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Highest Consumption Area -->
+                                        <div class="col-md-4">
+                                            <div class="card shadow-sm border-0 rounded-4 mb-4">
+                                                <div class="card-body">
+                                                    <div class="d-flex align-items-center mb-3">
+                                                        <div class="bg-soft-success rounded-3 p-3">
+                                                            <svg width="24" viewBox="0 0 24 24" fill="none"
+                                                                xmlns="http://www.w3.org/2000/svg">
+                                                                <path
+                                                                    d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                                                                    stroke="currentColor" stroke-width="1.5"
+                                                                    stroke-linecap="round" stroke-linejoin="round" />
+                                                                <path d="M12 8L12 16" stroke="currentColor"
+                                                                    stroke-width="1.5" stroke-linecap="round"
+                                                                    stroke-linejoin="round" />
+                                                                <path d="M8 12L12 8L16 12" stroke="currentColor"
+                                                                    stroke-width="1.5" stroke-linecap="round"
+                                                                    stroke-linejoin="round" />
+                                                            </svg>
+                                                        </div>
+                                                        <div class="ms-3">
+                                                            <h5 class="mb-1 fw-bold text-truncate"
+                                                                style="max-width: 150px;">
+                                                                <%= summary.maxConsumptionArea ?
+                                                                    summary.maxConsumptionArea.areaName : '...' %>
+                                                            </h5>
+                                                            <p class="text-secondary mb-0 small">الأعلى استهلاكاً (<%=
+                                                                    summary.maxConsumptionArea ?
+                                                                    summary.maxConsumptionArea.consumption.toLocaleString()
+                                                                    : 0 %>
+                                                                    KW)</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Detailed Table -->
+                                    <div class="card shadow-sm border-0 rounded-4">
+                                        <div class="card-header border-0 bg-white py-3">
+                                            <h4 class="card-title fw-bold text-primary mb-0">تفاصيل المناطق</h4>
+                                        </div>
+                                        <div class="card-body p-0">
+                                            <div class="table-responsive">
+                                                <table class="table table-hover align-middle mb-0" id="areasTable">
+                                                    <thead class="bg-soft-light text-primary">
+                                                        <tr>
+                                                            <th class="ps-4">المنطقة</th>
+                                                            <th class="text-center">عدد المشتركين</th>
+                                                            <th>إجمالي الاستهلاك</th>
+                                                            <th>الإيرادات (مفوتر)</th>
+                                                            <th>التحصيل (مدفوع)</th>
+                                                            <th class="pe-4">نسبة التحصيل</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <% areas.forEach(area=> { %>
+                                                            <tr>
+                                                                <td class="ps-4">
+                                                                    <div class="d-flex align-items-center">
+                                                                        <div class="bg-soft-info rounded-circle p-2 me-3 d-flex align-items-center justify-content-center"
+                                                                            style="width: 35px; height: 35px;">
+                                                                            <i class="bi bi-geo-alt-fill"></i>
+                                                                        </div>
+                                                                        <h6 class="mb-0 fw-bold">
+                                                                            <%= area.areaName %>
+                                                                        </h6>
+                                                                    </div>
+                                                                </td>
+                                                                <td class="text-center">
+                                                                    <span class="badge bg-soft-dark rounded-pill px-3">
+                                                                        <%= area.subscribers %> مشترك
+                                                                    </span>
+                                                                </td>
+                                                                <td class="fw-bold text-warning">
+                                                                    <%= area.consumption.toLocaleString() %>
+                                                                        <small>KW</small>
+                                                                </td>
+                                                                <td class="fw-bold">
+                                                                    <%= area.revenue.toLocaleString() %> <small
+                                                                            class="text-muted">شيكل</small>
+                                                                </td>
+                                                                <td class="fw-bold text-success">
+                                                                    <%= area.collection.toLocaleString() %> <small
+                                                                            class="text-muted">شيكل</small>
+                                                                </td>
+                                                                <td class="pe-4">
+                                                                    <% const percentage=area.revenue> 0 ?
+                                                                        (area.collection /
+                                                                        area.revenue) * 100 : 0;
+                                                                        let badgeClass = 'bg-soft-danger text-danger';
+                                                                        if(percentage >= 80) badgeClass =
+                                                                        'bg-soft-success text-success';
+                                                                        else if(percentage >= 50) badgeClass =
+                                                                        'bg-soft-warning text-warning';
+                                                                        %>
+                                                                        <span
+                                                                            class="badge <%= badgeClass %> rounded-pill">
+                                                                            <%= percentage.toFixed(1) %>%
+                                                                        </span>
+                                                                </td>
+                                                            </tr>
+                                                            <% }) %>
+                                                                <% if (areas.length===0) { %>
+                                                                    <tr>
+                                                                        <td colspan="6"
+                                                                            class="text-center py-5 text-muted">
+                                                                            <div
+                                                                                class="d-flex flex-column align-items-center">
+                                                                                <svg width="48"
+                                                                                    class="mb-2 text-muted opacity-50"
+                                                                                    viewBox="0 0 24 24" fill="none"
+                                                                                    xmlns="http://www.w3.org/2000/svg">
+                                                                                    <path
+                                                                                        d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                                                                                        stroke="currentColor"
+                                                                                        stroke-width="1.5" />
+                                                                                    <path d="M12 8V16"
+                                                                                        stroke="currentColor"
+                                                                                        stroke-width="1.5"
+                                                                                        stroke-linecap="round" />
+                                                                                    <path d="M12 16H12.01"
+                                                                                        stroke="currentColor"
+                                                                                        stroke-width="2"
+                                                                                        stroke-linecap="round" />
+                                                                                </svg>
+                                                                                <p class="mb-0">لا توجد بيانات متاحة
+                                                                                    لهذا النطاق
+                                                                                    الزمني</p>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <% } %>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+        </main>
+        <%- include('../../../partials/footer.ejs') %>
+            <%- include('../../../partials/scripts.ejs') %>
+    </body>
+
+</html>

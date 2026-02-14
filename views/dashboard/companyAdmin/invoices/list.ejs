@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en" dir="rtl">
+<%- include('../../../partials/head.ejs') %>
+
+    <body class="  ">
+        <!-- loader Start -->
+        <div id="loading">
+            <div class="loader simple-loader">
+                <div class="loader-body"></div>
+            </div>
+        </div>
+        <!-- loader END -->
+
+        <%- include('../../../partials/sidebar.ejs') %>
+
+            <main class="main-content">
+                <div class="position-relative iq-banner">
+                    <!--Nav Start-->
+                    <%- include('../../../partials/navbar.ejs') %>
+                        <!--Nav End-->
+                </div>
+
+                <div class="conatiner-fluid content-inner mt-n5 py-0">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="card">
+                                <div class="card-header d-flex justify-content-between">
+                                    <div class="header-title">
+                                        <h4 class="card-title">إدارة الفواتير</h4>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <!-- Filters -->
+                                    <form method="GET" action="/company-admin/invoices"
+                                        class="row mb-4 align-items-end">
+                                        <div class="col-md-3">
+                                            <label class="form-label">اسم المشترك</label>
+                                            <input type="text" name="subscriberName" class="form-control"
+                                                placeholder="بحث بالاسم..." value="<%= filters.subscriberName %>">
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="form-label">الحالة</label>
+                                            <select name="status" class="form-select">
+                                                <option value="">كل الحالات</option>
+                                                <option value="UNPAID" <%=filters.status=='UNPAID' ? 'selected' : '' %>
+                                                    >غير مدفوعة</option>
+                                                <option value="PARTIAL" <%=filters.status=='PARTIAL' ? 'selected' : ''
+                                                    %>>مدفوعة جزئياً</option>
+                                                <option value="PAID" <%=filters.status=='PAID' ? 'selected' : '' %>
+                                                    >مدفوعة</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="form-label">من تاريخ</label>
+                                            <input type="date" name="startDate" class="form-control"
+                                                value="<%= filters.startDate %>">
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="form-label">إلى تاريخ</label>
+                                            <input type="date" name="endDate" class="form-control"
+                                                value="<%= filters.endDate %>">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <button type="submit" class="btn btn-primary w-100">فلترة</button>
+                                        </div>
+                                    </form>
+
+                                    <div class="table-responsive">
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>رقم الفاتورة</th>
+                                                    <th>المشترك</th>
+                                                    <th>التاريخ</th>
+                                                    <th>الاستهلاك</th>
+                                                    <th>الإجمالي</th>
+                                                    <th>المدفوع</th>
+                                                    <th>المتبقي</th>
+                                                    <th>الحالة</th>
+                                                    <th>الإجراءات</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% if (invoices.length===0) { %>
+                                                    <tr>
+                                                        <td colspan="9" class="text-center">لا توجد فواتير مطابقة للبحث
+                                                        </td>
+                                                    </tr>
+                                                    <% } else { %>
+                                                        <% invoices.forEach(invoice=> { %>
+                                                            <tr>
+                                                                <td>
+                                                                    <strong>
+                                                                        <%= invoice.invoiceNumber %>
+                                                                    </strong>
+                                                                </td>
+                                                                <td>
+                                                                    <%= invoice.subscriberId ?
+                                                                        invoice.subscriberId.fullName : 'غير معروف' %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= new
+                                                                        Date(invoice.issueDate).toLocaleDateString('ar-EG')
+                                                                        %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= invoice.consumption %> كيلو
+                                                                </td>
+                                                                <td class="fw-bold text-dark">
+                                                                    <%= invoice.totalAmount.toFixed(2) %>
+                                                                </td>
+                                                                <td class="text-success">
+                                                                    <%= invoice.paidAmount.toFixed(2) %>
+                                                                </td>
+                                                                <td class="text-danger">
+                                                                    <%= invoice.remainingAmount.toFixed(2) %>
+                                                                </td>
+                                                                <td>
+                                                                    <% if(invoice.status==='UNPAID' ) { %>
+                                                                        <span
+                                                                            class="badge bg-soft-danger text-danger">غير
+                                                                            مدفوعة</span>
+                                                                        <% } else if(invoice.status==='PARTIAL' ) { %>
+                                                                            <span
+                                                                                class="badge bg-soft-warning text-warning">جزئية</span>
+                                                                            <% } else if(invoice.status==='PAID' ) { %>
+                                                                                <span
+                                                                                    class="badge bg-soft-success text-success">مدفوعة</span>
+                                                                                <% } %>
+                                                                </td>
+                                                                <td>
+                                                                    <% if(invoice.status !=='PAID' ) { %>
+                                                                        <button class="btn btn-success btn-sm pay-btn"
+                                                                            data-id="<%= invoice._id %>"
+                                                                            data-num="<%= invoice.invoiceNumber %>"
+                                                                            data-rem="<%= invoice.remainingAmount %>"
+                                                                            data-sub="<%= invoice.subscriberId ? invoice.subscriberId.fullName : '' %>">
+                                                                            تسديد دفعة
+                                                                        </button>
+                                                                        <% } else { %>
+                                                                            <span class="text-muted"><i
+                                                                                    class="text-success">✓</i>
+                                                                                مكتملة</span>
+                                                                            <% } %>
+                                                                </td>
+                                                            </tr>
+                                                            <% }) %>
+                                                                <% } %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Modal -->
+                <div class="modal fade" id="paymentModal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">تسديد دفعة للفاتورة</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label class="form-label">رقم الفاتورة:</label>
+                                    <div id="modalInvNum" class="fw-bold"></div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">المشترك:</label>
+                                    <div id="modalInvSub" class="text-muted"></div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label text-danger">المبلغ المتبقي:</label>
+                                    <div id="modalInvRem" class="h4 text-danger"></div>
+                                </div>
+                                <hr>
+                                <div class="mb-3">
+                                    <label class="form-label">المبلغ المدفوع</label>
+                                    <input type="number" id="payAmount" class="form-control" step="0.01">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">طريقة الدفع</label>
+                                    <select id="payMethod" class="form-select">
+                                        <option value="CASH">كاش</option>
+                                        <option value="BANK">بنك / تحويل</option>
+                                        <option value="MIXED">مكس</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">ملاحظات / رقم السند</label>
+                                    <textarea id="payProof" class="form-control" rows="2"></textarea>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                                <button type="button" class="btn btn-success" id="confirmPayBtn">تأكيد الدفع</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <%- include('../../../partials/footer.ejs') %>
+            </main>
+
+            <%- include('../../../partials/offcanvas.ejs') %>
+                <%- include('../../../partials/scripts.ejs') %>
+
+                    <script>
+                        const paymentModal = new bootstrap.Modal(document.getElementById('paymentModal'));
+                        let currentInvoiceId = null;
+
+                        document.querySelectorAll('.pay-btn').forEach(btn => {
+                            btn.addEventListener('click', () => {
+                                currentInvoiceId = btn.dataset.id;
+                                document.getElementById('modalInvNum').textContent = btn.dataset.num;
+                                document.getElementById('modalInvSub').textContent = btn.dataset.sub;
+                                document.getElementById('modalInvRem').textContent = btn.dataset.rem + ' شيكيل';
+                                document.getElementById('payAmount').value = btn.dataset.rem;
+                                paymentModal.show();
+                            });
+                        });
+
+                        document.getElementById('confirmPayBtn').addEventListener('click', async () => {
+                            const amount = document.getElementById('payAmount').value;
+                            const method = document.getElementById('payMethod').value;
+                            const proof = document.getElementById('payProof').value;
+
+                            if (!amount || amount <= 0) {
+                                alert('يرجى إدخال مبلغ صحيح');
+                                return;
+                            }
+
+                            try {
+                                const res = await fetch(`/company-admin/invoices/${currentInvoiceId}/pay`, {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ amount, method, proof })
+                                });
+
+                                const result = await res.json();
+                                if (res.ok) {
+                                    Swal.fire('تم الدفع', result.message, 'success').then(() => location.reload());
+                                } else {
+                                    Swal.fire('خطأ', result.message, 'error');
+                                }
+                            } catch (err) {
+                                Swal.fire('خطأ', 'فشل الاتصال بالسيرفر', 'error');
+                            }
+                        });
+                    </script>
+    </body>
+
+</html>

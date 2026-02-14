@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en" dir="rtl">
+<%- include('../../../partials/head.ejs') %>
+
+    <body class="  ">
+        <!-- loader Start -->
+        <div id="loading">
+            <div class="loader simple-loader">
+                <div class="loader-body"></div>
+            </div>
+        </div>
+        <!-- loader END -->
+
+        <%- include('../../../partials/sidebar.ejs') %>
+
+            <main class="main-content">
+                <div class="position-relative iq-banner">
+                    <!--Nav Start-->
+                    <%- include('../../../partials/navbar.ejs') %>
+                        <!--Nav End-->
+                </div>
+
+                <div class="conatiner-fluid content-inner mt-n5 py-0">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="card">
+                                <div class="card-header d-flex justify-content-between">
+                                    <div class="header-title">
+                                        <h4 class="card-title">قراءات المحصلين</h4>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <!-- Filters -->
+                                    <form method="GET" action="/company-admin/readings"
+                                        class="row mb-4 align-items-end">
+                                        <div class="col-md-3">
+                                            <label class="form-label">المحصل</label>
+                                            <select name="collector" class="form-select">
+                                                <option value="">كل المحصلين</option>
+                                                <% collectors.forEach(c=> { %>
+                                                    <option value="<%= c._id %>" <%=filters.collector==c._id
+                                                        ? 'selected' : '' %>><%= c.fullName %>
+                                                    </option>
+                                                    <% }) %>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="form-label">الحالة</label>
+                                            <select name="status" class="form-select">
+                                                <option value="">كل الحالات</option>
+                                                <option value="NEW" <%=filters.status=='NEW' ? 'selected' : '' %>>جديدة
+                                                </option>
+                                                <option value="REVIEW" <%=filters.status=='REVIEW' ? 'selected' : '' %>
+                                                    >قيد المراجعة</option>
+                                                <option value="REJECTED" <%=filters.status=='REJECTED' ? 'selected' : ''
+                                                    %>>مرفوضة</option>
+                                                <option value="INVOICED" <%=filters.status=='INVOICED' ? 'selected' : ''
+                                                    %>>تمت الفوترة</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="form-label">من تاريخ</label>
+                                            <input type="date" name="startDate" class="form-control"
+                                                value="<%= filters.startDate %>">
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="form-label">إلى تاريخ</label>
+                                            <input type="date" name="endDate" class="form-control"
+                                                value="<%= filters.endDate %>">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <button type="submit" class="btn btn-primary w-100">فلترة</button>
+                                        </div>
+                                    </form>
+
+                                    <div class="table-responsive">
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>المشترك</th>
+                                                    <th>المحصل</th>
+                                                    <th>القراءة السابقة</th>
+                                                    <th>الحالية</th>
+                                                    <th>الاستهلاك</th>
+                                                    <th>التاريخ</th>
+                                                    <th>الحالة</th>
+                                                    <th>الإجراءات</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% if (readings.length===0) { %>
+                                                    <tr>
+                                                        <td colspan="8" class="text-center">لا توجد قراءات مطابقة للبحث
+                                                        </td>
+                                                    </tr>
+                                                    <% } else { %>
+                                                        <% readings.forEach(reading=> { %>
+                                                            <tr>
+                                                                <td>
+                                                                    <strong>
+                                                                        <%= reading.subscriber ?
+                                                                            reading.subscriber.fullName : 'غير معروف' %>
+                                                                    </strong><br>
+                                                                    <small class="text-muted">
+                                                                        <%= reading.subscriber ?
+                                                                            reading.subscriber.nationalId : '' %>
+                                                                    </small>
+                                                                </td>
+                                                                <td>
+                                                                    <%= reading.collector ? reading.collector.fullName
+                                                                        : '-' %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= reading.previousReading %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= reading.readingValue %>
+                                                                </td>
+                                                                <td>
+                                                                    <span
+                                                                        class="badge <%= reading.consumption > (reading.previousReadingsAvg * 1.5) && reading.previousReadingsAvg > 0 ? 'bg-soft-warning text-warning' : 'bg-soft-primary text-primary' %>">
+                                                                        <%= reading.consumption %> كيلو
+                                                                    </span>
+                                                                </td>
+                                                                <td>
+                                                                    <%= new
+                                                                        Date(reading.readingDate).toLocaleDateString('ar-EG')
+                                                                        %>
+                                                                </td>
+                                                                <td>
+                                                                    <% if(reading.status==='NEW' ) { %>
+                                                                        <span
+                                                                            class="badge bg-soft-info text-info">جديدة</span>
+                                                                        <% } else if(reading.status==='REVIEW' ) { %>
+                                                                            <span
+                                                                                class="badge bg-soft-warning text-warning">مراجعة</span>
+                                                                            <% } else if(reading.status==='REJECTED' ) {
+                                                                                %>
+                                                                                <span
+                                                                                    class="badge bg-soft-danger text-danger">مرفوضة</span>
+                                                                                <% } else if(reading.status==='INVOICED'
+                                                                                    ) { %>
+                                                                                    <span
+                                                                                        class="badge bg-soft-success text-success">مفوترة</span>
+                                                                                    <% } %>
+                                                                </td>
+                                                                <td>
+                                                                    <% if(reading.status==='NEW' ||
+                                                                        reading.status==='REJECTED' ) { %>
+                                                                        <button
+                                                                            class="btn btn-primary btn-sm review-btn"
+                                                                            data-id="<%= reading._id %>"
+                                                                            data-sub="<%= reading.subscriber ? reading.subscriber.fullName : '' %>"
+                                                                            data-prev="<%= reading.previousReading %>"
+                                                                            data-curr="<%= reading.readingValue %>"
+                                                                            data-cons="<%= reading.consumption %>"
+                                                                            data-avg="<%= reading.previousReadingsAvg %>">
+                                                                            مراجعة
+                                                                        </button>
+                                                                        <% } else { %>
+                                                                            <button
+                                                                                class="btn btn-outline-secondary btn-sm"
+                                                                                disabled>نم الاعتماد</button>
+                                                                            <% } %>
+                                                                </td>
+                                                            </tr>
+                                                            <% }) %>
+                                                                <% } %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review Modal -->
+                <div class="modal fade" id="reviewModal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">مراجعة القراءة</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label class="form-label">المشترك:</label>
+                                    <div id="modalSub" class="fw-bold"></div>
+                                </div>
+                                <div class="row text-center mb-4">
+                                    <div class="col-4 border-end">
+                                        <small class="text-muted d-block">السابقة</small>
+                                        <h4 id="modalPrev">0</h4>
+                                    </div>
+                                    <div class="col-4 border-end">
+                                        <small class="text-muted d-block">الحالية</small>
+                                        <h4 id="modalCurr">0</h4>
+                                    </div>
+                                    <div class="col-4">
+                                        <small class="text-muted d-block">الاستهلاك</small>
+                                        <h4 id="modalCons" class="text-primary">0</h4>
+                                    </div>
+                                </div>
+
+                                <div id="avgAlert" class="alert alert-warning d-none">
+                                    <i class="me-2">⚠️</i>
+                                    استهلاك هذا الشهر أعلى بنسبة كبيرة من متوسط المشرك (<span id="modalAvg"></span>
+                                    كيلو)
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">سبب الرفض (في حال الرفض)</label>
+                                    <textarea id="rejectionReason" class="form-control" rows="2"></textarea>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" id="rejectBtn">رفض القراءة</button>
+                                <button type="button" class="btn btn-success" id="approveBtn">اعتاد وإصدار
+                                    فاتورة</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <%- include('../../../partials/footer.ejs') %>
+            </main>
+
+            <%- include('../../../partials/offcanvas.ejs') %>
+                <%- include('../../../partials/scripts.ejs') %>
+
+                    <script>
+                        const reviewModal = new bootstrap.Modal(document.getElementById('reviewModal'));
+                        let currentReadingId = null;
+
+                        document.querySelectorAll('.review-btn').forEach(btn => {
+                            btn.addEventListener('click', () => {
+                                currentReadingId = btn.dataset.id;
+                                document.getElementById('modalSub').textContent = btn.dataset.sub;
+                                document.getElementById('modalPrev').textContent = btn.dataset.prev;
+                                document.getElementById('modalCurr').textContent = btn.dataset.curr;
+                                document.getElementById('modalCons').textContent = btn.dataset.cons;
+
+                                const avg = parseFloat(btn.dataset.avg);
+                                const cons = parseFloat(btn.dataset.cons);
+
+                                if (avg > 0 && cons > avg * 1.5) {
+                                    document.getElementById('avgAlert').classList.remove('d-none');
+                                    document.getElementById('modalAvg').textContent = avg.toFixed(1);
+                                } else {
+                                    document.getElementById('avgAlert').classList.add('d-none');
+                                }
+
+                                reviewModal.show();
+                            });
+                        });
+
+                        document.getElementById('approveBtn').addEventListener('click', async () => {
+                            if (!confirm('هل أنت متأكد من اعتماد هذه القراءة؟ سيتم إصدار فاتورة فوراً.')) return;
+
+                            try {
+                                const res = await fetch(`/company-admin/readings/${currentReadingId}/approve`, {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' }
+                                });
+
+                                const result = await res.json();
+                                if (res.ok) {
+                                    Swal.fire('تم الاعتماد', result.message, 'success').then(() => location.reload());
+                                } else {
+                                    Swal.fire('خطأ', result.message, 'error');
+                                }
+                            } catch (err) {
+                                Swal.fire('خطأ', 'فشل الاتصال بالسيرفر', 'error');
+                            }
+                        });
+
+                        document.getElementById('rejectBtn').addEventListener('click', async () => {
+                            const reason = document.getElementById('rejectionReason').value;
+                            if (!reason) {
+                                alert('يرجى ذكر سبب الرفض');
+                                return;
+                            }
+
+                            try {
+                                const res = await fetch(`/company-admin/readings/${currentReadingId}/reject`, {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ reason })
+                                });
+
+                                const result = await res.json();
+                                if (res.ok) {
+                                    Swal.fire('تم الرفض', result.message, 'info').then(() => location.reload());
+                                } else {
+                                    Swal.fire('خطأ', result.message, 'error');
+                                }
+                            } catch (err) {
+                                Swal.fire('خطأ', 'فشل الاتصال بالسيرفر', 'error');
+                            }
+                        });
+                    </script>
+    </body>
+
+</html>

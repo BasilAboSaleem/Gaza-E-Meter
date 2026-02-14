@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en" dir="rtl">
+<%- include('../../../partials/head.ejs') %>
+
+    <body>
+        <!-- loader Start -->
+        <div id="loading">
+            <div class="loader simple-loader">
+                <div class="loader-body"></div>
+            </div>
+        </div>
+        <!-- loader END -->
+
+        <%- include('../../../partials/sidebar.ejs') %>
+
+            <main class="main-content">
+                <div class="position-relative iq-banner">
+                    <!--Nav Start-->
+                    <%- include('../../../partials/navbar.ejs') %>
+                        <!--Nav End-->
+                </div>
+
+                <div class="conatiner-fluid content-inner mt-n5 py-0">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header d-flex justify-content-between">
+                                    <div class="header-title">
+                                        <h4 class="card-title">إعدادات الشركة</h4>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <a href="/company-admin/settings/electricity-rate"
+                                                class="card text-center shadow-none border">
+                                                <div class="card-body">
+                                                    <div class="p-3 mb-3 mx-auto rounded-circle bg-soft-primary"
+                                                        style="width: 60px; height: 60px;">
+                                                        <svg class="icon-32" width="32" viewBox="0 0 24 24" fill="none"
+                                                            xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z"
+                                                                fill="currentColor" />
+                                                        </svg>
+                                                    </div>
+                                                    <h5>سعر الكيلو واط</h5>
+                                                    <p class="text-muted small mb-0">تعديل وعرض تاريخ أسعار الكهرباء</p>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <!-- Can add more settings here in the future -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <%- include('../../../partials/footer.ejs') %>
+            </main>
+
+            <%- include('../../../partials/offcanvas.ejs') %>
+                <%- include('../../../partials/scripts.ejs') %>
+    </body>
+
+</html>

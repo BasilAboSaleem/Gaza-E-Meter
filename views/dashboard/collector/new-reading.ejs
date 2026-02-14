@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en" dir="rtl">
+<%- include('../../partials/head.ejs') %>
+
+    <body dir="rtl">
+        <%- include('../../partials/sidebar.ejs') %>
+            <main class="main-content">
+                <div class="position-relative iq-banner">
+                    <!--Nav Start-->
+                    <%- include('../../partials/navbar.ejs') %>
+                        <!--Nav End-->
+                </div>
+                <div class="container-fluid content-inner mt-n5 py-0">
+                    <div class="row justify-content-center">
+                        <div class="col-sm-12 col-lg-8">
+                            <div class="card shadow-sm border-0">
+                                <div
+                                    class="card-header border-bottom d-flex align-items-center justify-content-between py-3">
+                                    <div class="header-title">
+                                        <h4 class="card-title mb-0 text-primary">
+                                            <i class="bi bi-speedometer2 me-2"></i>تسجيل قراءة العداد
+                                        </h4>
+                                    </div>
+                                    <div id="connection-status-badge"
+                                        class="badge rounded-pill bg-light text-dark p-2 px-3">
+                                        <span class="status-dot me-1"></span> جارٍ التحقق...
+                                    </div>
+                                </div>
+                                <div class="card-body p-4">
+                                    <form id="reading-form" class="needs-validation" novalidate>
+                                        <div class="row g-4">
+                                            <div class="col-md-6">
+                                                <div class="form-group mb-0">
+                                                    <label class="form-label fw-bold" for="subscriber">اختيار
+                                                        المشترك</label>
+                                                    <select class="form-select form-select-lg" id="subscriber" required>
+                                                        <option value="">جارٍ التحميل...</option>
+                                                    </select>
+                                                    <div class="invalid-feedback">يرجى اختيار المشترك</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group mb-0">
+                                                    <label class="form-label fw-bold" for="readingValue">قراءة العداد
+                                                        الواصلة</label>
+                                                    <div class="input-group input-group-lg">
+                                                        <input type="number" class="form-control" id="readingValue"
+                                                            required min="0" placeholder="00000">
+                                                        <span class="input-group-text bg-light text-muted">kWh</span>
+                                                    </div>
+                                                    <div class="invalid-feedback">يرجى إدخال قيمة القراءة</div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-12" id="historical-info" style="display: none;">
+                                                <div
+                                                    class="alert alert-soft-info d-flex align-items-center mb-0 border-0 shadow-none">
+                                                    <div class="me-4 text-center">
+                                                        <small class="text-muted d-block">القراءة السابقة</small>
+                                                        <span class="fw-bold h5 mb-0" id="last-reading-display">0</span>
+                                                        <small>kWh</small>
+                                                    </div>
+                                                    <div class="ms-4 border-start ps-4 text-center">
+                                                        <small class="text-muted d-block">معدل الاستهلاك</small>
+                                                        <span class="fw-bold h5 mb-0"
+                                                            id="avg-consumption-display">0</span> <small>kWh</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-group mb-0">
+                                                    <label class="form-label fw-bold" for="readingImage">تصوير العداد
+                                                        (اختياري)</label>
+                                                    <div
+                                                        class="upload-container border rounded-3 p-4 text-center bg-light position-relative">
+                                                        <input type="file"
+                                                            class="form-control position-absolute top-0 start-0 opacity-0 w-100 h-100 cursor-pointer"
+                                                            id="readingImage" accept="image/*">
+                                                        <div id="preview-placeholder">
+                                                            <i class="bi bi-camera h1 text-muted d-block mb-2"></i>
+                                                            <span class="text-muted">اضغط هنا لالتقاط أو اختيار صورة
+                                                                العداد</span>
+                                                        </div>
+                                                        <img id="image-preview" src="#" alt="Preview"
+                                                            class="img-fluid rounded d-none" style="max-height: 250px;">
+
+                                                        <div id="ocr-controls" class="mt-2 d-none">
+                                                            <button type="button" id="btn-scan-ocr"
+                                                                class="btn btn-sm btn-info text-white">
+                                                                <i class="bi bi-upc-scan me-1"></i> استخراج القراءة
+                                                                تلقائياً
+                                                            </button>
+                                                            <div id="ocr-status" class="small text-muted mt-1"></div>
+                                                        </div>
+
+                                                        <button type="button" id="remove-image"
+                                                            class="btn btn-sm btn-danger position-absolute top-0 end-0 m-2 d-none">
+                                                            <i class="bi bi-x"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 text-end mt-4">
+                                                <hr>
+                                                <a href="/collector/my-subscribers" class="btn btn-light px-4">إلغاء</a>
+                                                <button type="submit" class="btn btn-primary px-5">
+                                                    <i class="bi bi-check2-circle me-1"></i> حفظ القراءة الآن
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <%- include('../../partials/footer.ejs') %>
+            </main>
+
+            <%- include('../../partials/scripts.ejs') %>
+                <script src="https://unpkg.com/dexie@3/dist/dexie.js"></script>
+                <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+                <script src="/assets/js/db.js"></script>
+                <script>
+                    document.addEventListener('DOMContentLoaded', async () => {
+                        const subscriberSelect = document.getElementById('subscriber');
+                        const statusBadge = document.getElementById('connection-status-badge');
+                        const form = document.getElementById('reading-form');
+                        const imageInput = document.getElementById('readingImage');
+                        const imagePreview = document.getElementById('image-preview');
+                        const previewPlaceholder = document.getElementById('preview-placeholder');
+                        const removeImageBtn = document.getElementById('remove-image');
+                        const scanBtn = document.getElementById('btn-scan-ocr');
+                        const ocrStatus = document.getElementById('ocr-status');
+                        const ocrControls = document.getElementById('ocr-controls');
+                        const readingInput = document.getElementById('readingValue');
+
+                        let capturedBase64 = null;
+
+                        // Get subscriberId from URL
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const preSelectedSubId = urlParams.get('subscriberId');
+
+                        const DB = window.collectorDB;
+
+                        // Connection Status UI
+                        function updateStatus() {
+                            if (navigator.onLine) {
+                                statusBadge.innerHTML = '<span class="text-success">●</span> متصل';
+                                statusBadge.className = 'badge rounded-pill bg-soft-success text-success p-2 px-3';
+                            } else {
+                                statusBadge.innerHTML = '<span class="text-warning">●</span> غير متصل';
+                                statusBadge.className = 'badge rounded-pill bg-soft-warning text-warning p-2 px-3';
+                            }
+                        }
+                        window.addEventListener('online', updateStatus);
+                        window.addEventListener('offline', updateStatus);
+                        updateStatus();
+
+                        // Image Preview & Base64
+                        imageInput.addEventListener('change', function (e) {
+                            const file = e.target.files[0];
+                            if (file) {
+                                const reader = new FileReader();
+                                reader.onload = function (event) {
+                                    capturedBase64 = event.target.result;
+                                    imagePreview.src = capturedBase64;
+                                    imagePreview.classList.remove('d-none');
+                                    previewPlaceholder.classList.add('d-none');
+                                    removeImageBtn.classList.remove('d-none');
+                                    ocrControls.classList.remove('d-none'); // Show OCR button
+                                    ocrStatus.textContent = '';
+                                };
+                                reader.readAsDataURL(file);
+                            }
+                        });
+
+                        removeImageBtn.addEventListener('click', () => {
+                            imageInput.value = '';
+                            capturedBase64 = null;
+                            imagePreview.src = '#';
+                            imagePreview.classList.add('d-none');
+                            previewPlaceholder.classList.remove('d-none');
+                            removeImageBtn.classList.add('d-none');
+                            ocrControls.classList.add('d-none');
+                            ocrStatus.textContent = '';
+                        });
+
+                        // OCR Logic
+                        scanBtn.addEventListener('click', async () => {
+                            if (!capturedBase64) return;
+
+                            const originalText = scanBtn.innerHTML;
+                            scanBtn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> جاري التحليل...';
+                            scanBtn.disabled = true;
+                            ocrStatus.textContent = 'جاري معالجة الصورة لاستخراج الأرقام...';
+
+                            try {
+                                const worker = await Tesseract.createWorker('eng'); // Numbers are usually English digits
+                                const ret = await worker.recognize(capturedBase64);
+                                await worker.terminate();
+
+                                const text = ret.data.text;
+                                console.log('OCR Result:', text);
+
+                                // Extract first sequence of digits
+                                const numbers = text.match(/\d+/);
+
+                                if (numbers) {
+                                    readingInput.value = numbers[0];
+                                    ocrStatus.innerHTML = '<span class="text-success">✅ تم استخراج الرقم بنجاح</span>';
+                                    readingInput.classList.add('is-valid');
+                                    setTimeout(() => readingInput.classList.remove('is-valid'), 3000);
+                                } else {
+                                    ocrStatus.innerHTML = '<span class="text-danger">❌ لم يتم العثور على أرقام واضحة</span>';
+                                }
+                            } catch (err) {
+                                console.error(err);
+                                ocrStatus.innerHTML = '<span class="text-danger">⚠️ حدث خطأ أثناء المعالجة</span>';
+                            } finally {
+                                scanBtn.innerHTML = originalText;
+                                scanBtn.disabled = false;
+                            }
+                        });
+
+                        const historicalInfo = document.getElementById('historical-info');
+                        const lastReadingDisplay = document.getElementById('last-reading-display');
+                        const avgConsumptionDisplay = document.getElementById('avg-consumption-display');
+
+                        let selectedSubData = null;
+
+                        // Populate subscribers logic
+                        async function loadSubscribers() {
+                            try {
+                                // 1. Load from cache first for instant UI
+                                const cachedSubs = await DB.db.subscribers.toArray();
+                                renderSubscribers(cachedSubs);
+
+                                // 2. If online, fetch updates in background
+                                if (navigator.onLine) {
+                                    DB.fetchAndLoadSubscribers().then(async () => {
+                                        const updatedSubs = await DB.db.subscribers.toArray();
+                                        renderSubscribers(updatedSubs);
+                                    }).catch(console.error);
+                                }
+                            } catch (err) {
+                                console.error('Error loading subscribers:', err);
+                            }
+                        }
+
+                        function renderSubscribers(subs) {
+                            const currentVal = subscriberSelect.value;
+                            subscriberSelect.innerHTML = '<option value="">اختر مشترك من القائمة...</option>';
+
+                            subs.forEach(s => {
+                                const option = document.createElement('option');
+                                option.value = s.id;
+                                option.textContent = `${s.fullName} (${s.meterSerialNumber || 'بدون عداد'})`;
+                                option.dataset.lastReading = s.lastReadingValue || 0;
+                                option.dataset.avg = s.avgConsumption || 0;
+                                if (s.id === (currentVal || preSelectedSubId)) option.selected = true;
+                                subscriberSelect.appendChild(option);
+                            });
+
+                            if (subscriberSelect.value) subscriberSelect.dispatchEvent(new Event('change'));
+                        }
+
+                        subscriberSelect.addEventListener('change', () => {
+                            const option = subscriberSelect.options[subscriberSelect.selectedIndex];
+                            if (option && option.value) {
+                                const last = parseFloat(option.dataset.lastReading);
+                                const avg = parseFloat(option.dataset.avg);
+
+                                lastReadingDisplay.textContent = last;
+                                avgConsumptionDisplay.textContent = Math.round(avg);
+                                historicalInfo.style.display = 'block';
+                                selectedSubData = { last, avg };
+                            } else {
+                                historicalInfo.style.display = 'none';
+                                selectedSubData = null;
+                            }
+                        });
+
+                        loadSubscribers();
+
+                        // Handle Form Submit
+                        form.addEventListener('submit', async (e) => {
+                            e.preventDefault();
+
+                            const readingValueStr = document.getElementById('readingValue').value;
+                            const readingValue = Number(readingValueStr);
+
+                            // 1. Check if reading is less than previous
+                            if (selectedSubData && readingValue < selectedSubData.last) {
+                                const confirmLower = await Swal.fire({
+                                    title: 'تنبيه: قراءة منخفضة',
+                                    text: `القراءة المدخلة (${readingValue}) أقل من القراءة السابقة (${selectedSubData.last}). هل أنت متأكد؟`,
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonText: 'نعم، القراءة صحيحة',
+                                    cancelButtonText: 'تعديل القراءة',
+                                    confirmButtonColor: '#3a57e8'
+                                });
+                                if (!confirmLower.isConfirmed) return;
+                            }
+
+                            // 2. Check for unusually high consumption (e.g. > 3x average AND diff > 50)
+                            const consumption = selectedSubData ? (readingValue - selectedSubData.last) : 0;
+                            if (selectedSubData && selectedSubData.avg > 0 && consumption > (selectedSubData.avg * 3) && consumption > 50) {
+                                const confirmHigher = await Swal.fire({
+                                    title: 'استهلاك مرتفع جداً',
+                                    text: `الاستهلاك الحالي (${consumption}) أعلى بكثير من المعدل (${Math.round(selectedSubData.avg)}). هل أنت متأكد من القراءة؟`,
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonText: 'نعم، تابع الحفظ',
+                                    cancelButtonText: 'مراجعة العداد',
+                                    confirmButtonColor: '#fd7e14'
+                                });
+                                if (!confirmHigher.isConfirmed) return;
+                            }
+
+                            const subscriberId = subscriberSelect.value;
+                            const selectedOption = subscriberSelect.options[subscriberSelect.selectedIndex];
+                            const companyId = selectedOption.dataset.company || null;
+
+                            const record = {
+                                subscriberId,
+                                companyId,
+                                readingValue: Number(readingValue),
+                                readingImage: capturedBase64, // Save as base64
+                                readingDate: new Date(),
+                                isSynced: 0 // Using 0 for unsynced, 1 for synced
+                            };
+
+                            try {
+                                const id = await window.collectorDB.db.readings.add(record);
+                                console.log(`Saved reading locally with ID: ${id}`);
+
+                                // Auto-sync if online
+                                if (navigator.onLine) {
+                                    window.collectorDB.syncAllUnsynced().then(res => {
+                                        if (res.status === 'success') {
+                                            Swal.fire({
+                                                icon: 'success',
+                                                title: 'تم الحفظ والمزامنة!',
+                                                text: 'تم تسجيل القراءة ورفعها للسيرفر بنجاح',
+                                                timer: 2000,
+                                                showConfirmButton: false
+                                            }).then(() => window.location.href = '/collector/my-subscribers');
+                                        } else {
+                                            // Sync failed, but saved locally
+                                            Swal.fire({
+                                                icon: 'success',
+                                                title: 'تم الحفظ محلياً',
+                                                text: 'تم حفظ القراءة ولكن فشلت المزامنة. سيتم المحاولة لاحقاً.',
+                                                timer: 2000,
+                                                showConfirmButton: false
+                                            }).then(() => window.location.href = '/collector/my-subscribers');
+                                        }
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'تم الحفظ (أوفلاين)',
+                                        text: 'تم حفظ القراءة محلياً وسيتم مزامنتها عند توفر الإنترنت',
+                                        timer: 2000,
+                                        showConfirmButton: false
+                                    }).then(() => window.location.href = '/collector/my-subscribers');
+                                }
+                            } catch (err) {
+                                console.error('Failed to save reading:', err);
+                                Swal.fire('خطأ', 'فشل حفظ القراءة: ' + err.message, 'error');
+                            }
+                        });
+                    });
+                </script>
+    </body>
+
+</html>

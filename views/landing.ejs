@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= title %>
+    </title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/core/libs.min.css" />
+    <link rel="stylesheet" href="/assets/css/hope-ui.min.css?v=2.0.0" />
+    <style>
+        :root {
+            --primary-color: #f39c12;
+            --secondary-color: #004e92;
+            --accent-color: #00b4db;
+            --bg-gradient: linear-gradient(135deg, #002147, #004e92, #00b4db, #f39c12);
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            background: #002147;
+        }
+
+        .hero-section {
+            height: 100vh;
+            background: var(--bg-gradient);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            position: relative;
+            text-align: center;
+        }
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .hero-content {
+            z-index: 2;
+            max-width: 800px;
+            padding: 20px;
+        }
+
+        .hero-content h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-content p {
+            font-size: 1.5rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        .btn-ishraq {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 40px;
+            font-size: 1.25rem;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-weight: 700;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-ishraq:hover {
+            background-color: var(--accent-color);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            color: white;
+        }
+
+        .logo-container svg {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.2));
+        }
+
+        .footer-landing {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        .contact-info b {
+            color: var(--primary-color);
+        }
+
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-content p {
+                font-size: 1.1rem;
+            }
+
+            .footer-landing {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="hero-section">
+        <div class="hero-content">
+            <div class="logo-container">
+                <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="40" stroke="#f39c12" stroke-width="2" stroke-dasharray="10 5" />
+                    <path
+                        d="M50 20V30M50 70V80M20 50H30M70 50H80M28.8 28.8L35.9 35.9M64.1 64.1L71.2 71.2M28.8 71.2L35.9 64.1M64.1 28.8L71.2 35.9"
+                        stroke="#f39c12" stroke-width="4" stroke-linecap="round" />
+                    <circle cx="50" cy="50" r="15" fill="#f39c12">
+                        <animate attributeName="r" values="13;17;13" dur="3s" repeatCount="indefinite" />
+                    </circle>
+                    <path d="M50 40C55 40 60 45 60 50C60 55 55 60 50 60C45 60 40 55 40 50C40 45 45 40 50 40Z"
+                        fill="white" opacity="0.3" />
+                </svg>
+            </div>
+            <h1>إشراق</h1>
+            <p>يداً بيد لإعادة النور والكهرباء لغزة .. شريككم الموثوق في رحلة إعمار قطاع غزة</p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="/auth/login" class="btn-ishraq">تسجيل الدخول للنظام</a>
+            </div>
+        </div>
+
+        <div class="footer-landing">
+            <div>
+                ©
+                <script>document.write(new Date().getFullYear())</script> <b>إشراق</b> - مشروع إدارة المولدات والكهرباء
+                في قطاع غزة
+            </div>
+            <div class="contact-info">
+                تطوير: المهندس <b>باسل ابو سليم</b> | هاتف: 0592428779 | بريد: basilsaleem11@gmail.com
+            </div>
+        </div>
+    </div>
+
+    <script src="/assets/js/core/libs.min.js"></script>
+    <script src="/assets/js/hope-ui.js"></script>
+</body>
+
+</html>

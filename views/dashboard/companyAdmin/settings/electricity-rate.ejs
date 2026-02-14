@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en" dir="rtl">
+<%- include('../../../partials/head.ejs') %>
+
+    <body>
+        <!-- loader Start -->
+        <div id="loading">
+            <div class="loader simple-loader">
+                <div class="loader-body"></div>
+            </div>
+        </div>
+        <!-- loader END -->
+
+        <%- include('../../../partials/sidebar.ejs') %>
+
+            <main class="main-content">
+                <div class="position-relative iq-banner">
+                    <!--Nav Start-->
+                    <%- include('../../../partials/navbar.ejs') %>
+                        <!--Nav End-->
+                </div>
+
+                <div class="conatiner-fluid content-inner mt-n5 py-0">
+                    <div class="row">
+                        <!-- Current Rate & Update Form -->
+                        <div class="col-lg-4">
+                            <div class="card">
+                                <div class="card-header d-flex justify-content-between">
+                                    <div class="header-title">
+                                        <h4 class="card-title">تحديث سعر الكيلو واط</h4>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="text-center mb-4">
+                                        <div class="p-3 mb-2 mx-auto rounded-circle bg-soft-success"
+                                            style="width: 80px; height: 80px;">
+                                            <h3 class="mb-0 mt-1">
+                                                <%= currentRate ? currentRate.rate : '0' %>
+                                            </h3>
+                                        </div>
+                                        <h6>السعر الحالي</h6>
+                                        <p class="text-muted small">شيكيل / كيلو واط</p>
+                                    </div>
+
+                                    <form id="updateRateForm">
+                                        <div class="form-group mb-3">
+                                            <label class="form-label" for="rate">السعر الجديد</label>
+                                            <input type="number" step="0.01" class="form-control" id="rate" name="rate"
+                                                placeholder="أدخل السعر الجديد" required>
+                                            <div class="invalid-feedback" id="rateError"></div>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary w-100" id="submitBtn">تحديث
+                                            السعر</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- History Table -->
+                        <div class="col-lg-8">
+                            <div class="card">
+                                <div class="card-header d-flex justify-content-between">
+                                    <div class="header-title">
+                                        <h4 class="card-title">سجل الأسعار</h4>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>السعر</th>
+                                                    <th>تاريخ البدء</th>
+                                                    <th>تاريخ الانتهاء</th>
+                                                    <th>الحالة</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% if (history.length===0) { %>
+                                                    <tr>
+                                                        <td colspan="4" class="text-center">لا يوجد سجل أسعار بعد.</td>
+                                                    </tr>
+                                                    <% } else { %>
+                                                        <% history.forEach(item=> { %>
+                                                            <tr>
+                                                                <td>
+                                                                    <%= item.rate %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= new Date(item.startDate).toLocaleString('ar-EG')
+                                                                        %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= item.endDate ? new
+                                                                        Date(item.endDate).toLocaleString('ar-EG') : '-'
+                                                                        %>
+                                                                </td>
+                                                                <td>
+                                                                    <% if (!item.endDate) { %>
+                                                                        <span class="badge bg-success">حالي</span>
+                                                                        <% } else { %>
+                                                                            <span class="badge bg-secondary">سابق</span>
+                                                                            <% } %>
+                                                                </td>
+                                                            </tr>
+                                                            <% }) %>
+                                                                <% } %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <%- include('../../../partials/footer.ejs') %>
+            </main>
+
+            <%- include('../../../partials/offcanvas.ejs') %>
+                <%- include('../../../partials/scripts.ejs') %>
+
+                    <script>
+                        document.getElementById('updateRateForm').addEventListener('submit', async (e) => {
+                            e.preventDefault();
+
+                            const rate = document.getElementById('rate').value;
+                            const submitBtn = document.getElementById('submitBtn');
+                            const rateError = document.getElementById('rateError');
+
+                            // Reset errors
+                            document.getElementById('rate').classList.remove('is-invalid');
+                            rateError.textContent = '';
+
+                            submitBtn.disabled = true;
+                            submitBtn.textContent = 'جاري التحديث...';
+
+                            try {
+                                const response = await fetch('/company-admin/settings/electricity-rate', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({ rate })
+                                });
+
+                                const result = await response.json();
+
+                                if (response.ok) {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'تم التحديث',
+                                        text: result.message,
+                                        confirmButtonText: 'حسناً'
+                                    }).then(() => {
+                                        location.reload();
+                                    });
+                                } else {
+                                    if (result.errors && result.errors.rate) {
+                                        document.getElementById('rate').classList.add('is-invalid');
+                                        rateError.textContent = result.errors.rate;
+                                    } else {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'خطأ',
+                                            text: result.message || 'حدث خطأ غير متوقع',
+                                            confirmButtonText: 'حسناً'
+                                        });
+                                    }
+                                }
+                            } catch (error) {
+                                console.error('Error:', error);
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'خطأ',
+                                    text: 'خطأ في الاتصال بالسيرفر',
+                                    confirmButtonText: 'حسناً'
+                                });
+                            } finally {
+                                submitBtn.disabled = false;
+                                submitBtn.textContent = 'تحديث السعر';
+                            }
+                        });
+                    </script>
+    </body>
+
+</html>

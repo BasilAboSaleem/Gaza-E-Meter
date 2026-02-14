@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تسجيل قراءة</title>
+  <style>
+    body {
+      font-family: system-ui;
+      background: #f7f7f7;
+      margin: 0;
+      padding: 16px;
+    }
+    h1 { font-size: 20px; margin-bottom: 12px; }
+    .status { font-size: 14px; margin-bottom: 16px; }
+    .offline { color: #b00020; }
+    .online { color: #006400; }
+    select, input, button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 12px;
+      font-size: 16px;
+    }
+    button {
+      background: #1976d2;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js')
+    .then(() => console.log('SW ready'))
+    .catch(console.error);
+}
+</script>
+
+<h1>📸 تسجيل قراءة</h1>
+<div id="connection-status" class="status"></div>
+
+<select id="subscriber"></select>
+<input type="number" id="reading" placeholder="ادخل القراءة">
+<button id="save">حفظ القراءة</button>
+
+<script src="/assets/js/dexie.min.js"></script>
+<script src="/assets/js/db.js"></script>
+
+<script>
+  const DB = window.collectorDB;
+
+  const statusEl = document.getElementById('connection-status');
+  const subscriberEl = document.getElementById('subscriber');
+  const readingEl = document.getElementById('reading');
+  const saveBtn = document.getElementById('save');
+
+  const COLLECTOR_ID = 'YOUR_COLLECTOR_ID';
+
+  function updateStatus() {
+    const online = navigator.onLine;
+    statusEl.textContent = online ? '🟢 متصل' : '📴 بدون إنترنت';
+    statusEl.className = online ? 'online' : 'offline';
+  }
+
+  window.addEventListener('online', updateStatus);
+  window.addEventListener('offline', updateStatus);
+  updateStatus();
+
+  async function populateSubscribers() {
+    try {
+      if (navigator.onLine) {
+        await DB.fetchAndLoadSubscribers();
+      }
+
+      const subs = await DB.getSubscribersOffline(COLLECTOR_ID);
+
+      subscriberEl.innerHTML = '<option value="">اختر مشترك</option>';
+      subs.forEach(s => {
+        const opt = document.createElement('option');
+        opt.value = s.id;
+        opt.textContent = `${s.fullName} (${s.meterId})`;
+        subscriberEl.appendChild(opt);
+      });
+    } catch (e) {
+      alert('فشل تحميل المشتركين');
+    }
+  }
+
+  saveBtn.onclick = async () => {
+    const subscriberId = subscriberEl.value;
+    const value = Number(readingEl.value);
+
+    if (!subscriberId || !value) return alert('املأ البيانات');
+
+    const record = {
+      subscriberId,
+      value,
+      date: new Date(),
+      status: navigator.onLine ? 'synced' : 'pending'
+    };
+
+    const id = await DB.db.readings.add(record);
+
+    if (navigator.onLine) {
+      try {
+        await fetch('/api/readings', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(record)
+        });
+      } catch {
+        await DB.db.readings.update(id, { status: 'pending' });
+      }
+    }
+
+    readingEl.value = '';
+    alert('تم الحفظ ✅');
+  };
+
+  async function syncPending() {
+    if (!navigator.onLine) return;
+
+    const pending = await DB.db.readings.where('status').equals('pending').toArray();
+
+    for (const r of pending) {
+      try {
+        await fetch('/api/readings', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(r)
+        });
+        await DB.db.readings.update(r.id, { status: 'synced' });
+      } catch {}
+    }
+  }
+
+  window.addEventListener('online', syncPending);
+  populateSubscribers();
+</script>
+
+
+</body>
+</html>

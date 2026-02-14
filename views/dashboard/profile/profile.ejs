@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en" dir="rtl">
+<%- include('../../partials/head.ejs') %>
+
+    <body class="  ">
+        <!-- loader Start -->
+        <div id="loading">
+            <div class="loader simple-loader">
+                <div class="loader-body"></div>
+            </div>
+        </div>
+        <!-- loader END -->
+
+        <%- include('../../partials/sidebar.ejs') %>
+
+            <main class="main-content">
+                <div class="position-relative iq-banner">
+                    <%- include('../../partials/navbar.ejs') %>
+                </div>
+
+                <div class="container-fluid content-inner mt-n5 py-0">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <div class="d-flex flex-wrap align-items-center justify-content-between">
+                                        <div class="d-flex flex-wrap align-items-center">
+                                            <div
+                                                class="profile-img position-relative me-3 mb-3 mb-lg-0 profile-logo profile-logo1">
+                                                <img src="/assets/images/avatars/01.png" alt="User-Profile"
+                                                    class="theme-color-default-img img-fluid rounded-pill avatar-100">
+                                            </div>
+                                            <div class="d-flex flex-column ms-3">
+                                                <h4 class="me-2 pc-title">
+                                                    <%= user.fullName %>
+                                                </h4>
+                                                <span class="text-secondary">
+                                                    <%= user.role==='COMPANY_ADMIN' ? 'مدير شركة' : user.role %>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex">
+                                            <a href="/profile/settings"
+                                                class="btn btn-primary d-flex align-items-center">
+                                                <i class="icon me-2">⚙️</i>
+                                                إعدادات الحساب
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header d-flex justify-content-between">
+                                    <div class="header-title">
+                                        <h4 class="card-title">البيانات الشخصية</h4>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <%- include('../../partials/messages.ejs') %>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label text-secondary">الاسم كامل</label>
+                                                <p class="h5 border-bottom pb-2">
+                                                    <%= user.fullName %>
+                                                </p>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label text-secondary">البريد الإلكتروني</label>
+                                                <p class="h5 border-bottom pb-2">
+                                                    <%= user.email || 'غير مسجل' %>
+                                                </p>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label text-secondary">رقم الهاتف</label>
+                                                <p class="h5 border-bottom pb-2">
+                                                    <%= user.phone %>
+                                                </p>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label text-secondary">تاريخ الانضمام</label>
+                                                <p class="h5 border-bottom pb-2">
+                                                    <%= new Date(user.createdAt).toLocaleDateString('ar-EG') %>
+                                                </p>
+                                            </div>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <%- include('../../partials/footer.ejs') %>
+            </main>
+
+            <%- include('../../partials/offcanvas.ejs') %>
+                <%- include('../../partials/scripts.ejs') %>
+    </body>
+
+</html>

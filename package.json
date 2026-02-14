@@ -16,15 +16,18 @@
     "bcrypt": "^6.0.0",
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.7",
+    "dexie": "^4.3.0",
     "dotenv": "^17.2.3",
     "ejs": "^3.1.10",
+    "exceljs": "^4.4.0",
     "express": "^5.2.1",
     "express-session": "^1.18.2",
     "jsonwebtoken": "^9.0.3",
     "method-override": "^3.0.0",
     "mongoose": "^9.0.2",
     "morgan": "^1.10.1",
-    "node-cron": "^4.2.1"
+    "node-cron": "^4.2.1",
+    "pdfkit": "^0.16.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.11"

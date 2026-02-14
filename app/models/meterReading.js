@@ -26,8 +26,8 @@ const meterReadingSchema = new mongoose.Schema({
   },
 
   readingImage: {
-    type: String, // path أو S3
-    required: true
+    type: String, // path to saved file
+    required: false
   },
 
   readingDate: {
@@ -46,8 +46,35 @@ const meterReadingSchema = new mongoose.Schema({
   isSynced: {
     type: Boolean,
     default: false
+  },
+
+  status: {
+    type: String,
+    enum: ['NEW', 'REVIEW', 'REJECTED', 'INVOICED'],
+    default: 'NEW'
+  },
+
+  rejectionReason: String,
+
+  previousReading: {
+    type: Number,
+    default: 0
+  },
+
+  consumption: {
+    type: Number,
+    default: 0
+  },
+
+  previousReadingsAvg: {
+    type: Number,
+    default: 0
   }
 
 }, { timestamps: true });
+
+meterReadingSchema.index({ subscriber: 1, readingDate: -1 });
+meterReadingSchema.index({ collector: 1 });
+meterReadingSchema.index({ isSynced: 1 });
 
 module.exports = mongoose.model('MeterReading', meterReadingSchema);

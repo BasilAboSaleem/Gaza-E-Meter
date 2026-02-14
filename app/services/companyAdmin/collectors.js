@@ -1,6 +1,9 @@
 const e = require('connect-flash');
 const collectorRepo = require('../../repositories/companyAdmin/collectors');
 const fundRepo = require('../../repositories/companyAdmin/fund');
+const Subscriber = require('../../models/Subscriber');
+const MeterReading = require('../../models/meterReading');
+const Transaction = require('../../models/Transaction');
 const { name } = require('ejs');
 
 exports.createCollector = async (data, currentUser) => {
@@ -73,6 +76,66 @@ exports.createCollector = async (data, currentUser) => {
 
 exports.getCollectorsByCompany = async (companyId) => {
   return await collectorRepo.findByCompany(companyId);
+};
+
+/**
+ * جلب الملف الكامل للمحصل (عرض الأداء والمدفوعات والمشتركين)
+ */
+exports.getCollectorProfile = async (companyId, collectorId) => {
+  const collector = await collectorRepo.findById(collectorId);
+  if (!collector || collector.company.toString() !== companyId.toString()) {
+    throw new Error('المحصل غير موجود');
+  }
+
+  // 1. الصندوق الخاص به
+  const fund = await fundRepo.findOne({ owner: collectorId, company: companyId });
+
+  // 2. المشتركون التابعون له
+  const subscribers = await Subscriber.find({ assignedCollector: collectorId })
+    .populate('primaryArea')
+    .sort({ fullName: 1 });
+
+  // 3. الأداء (القراءات والتحصيل)
+  const [readingsCount, collectionsSummary, lastTransactions] = await Promise.all([
+    // عدد القراءات التي قام بها
+    MeterReading.countDocuments({ collector: collectorId }),
+    
+    // إجمالي التحصيل
+    Transaction.aggregate([
+      { 
+        $match: { 
+          company: companyId, 
+          type: 'COLLECTION', 
+          performedBy: collector._id 
+        } 
+      },
+      { 
+        $group: { 
+          _id: null, 
+          totalAmount: { $sum: "$amount" },
+          count: { $sum: 1 }
+        } 
+      }
+    ]),
+
+    // آخر 20 حركة في صندوقه
+    Transaction.find({ fund: fund?._id })
+      .populate('performedBy', 'fullName')
+      .sort({ createdAt: -1 })
+      .limit(20)
+  ]);
+
+  return {
+    collector,
+    fund,
+    subscribers,
+    stats: {
+      readingsCount,
+      totalCollected: collectionsSummary[0]?.totalAmount || 0,
+      collectionsCount: collectionsSummary[0]?.count || 0
+    },
+    transactions: lastTransactions
+  };
 };
 
 exports.getCollectorById = async (id) => {

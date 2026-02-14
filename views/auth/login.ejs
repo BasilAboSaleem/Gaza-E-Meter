@@ -1,108 +1,174 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
-  <%- include('../partials/head.ejs') %>
-  <body class="" data-bs-spy="scroll" data-bs-target="#elements-section" data-bs-offset="0" tabindex="0">
-    
-    <!-- loader Start -->
-    <div id="loading">
-      <div class="loader simple-loader">
-        <div class="loader-body"></div>
+<%- include('../partials/head.ejs') %>
+  <style>
+    :root {
+      --primary-color: #f39c12;
+      --secondary-color: #004e92;
+      --accent-color: #00b4db;
+      --bg-gradient: linear-gradient(135deg, #002147, #004e92, #00b4db, #f39c12);
+    }
+
+    body {
+      padding: 0;
+      margin: 0;
+      font-family: 'Cairo', sans-serif !important;
+      overflow: hidden;
+      background: #002147;
+    }
+
+    .login-wrapper {
+      height: 100vh;
+      width: 100vw;
+      background: var(--bg-gradient);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    @keyframes gradientBG {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    .auth-card {
+      background: rgba(255, 255, 255, 0.1) !important;
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+      padding: 30px;
+      width: 100%;
+      max-width: 450px;
+      color: white;
+    }
+
+    .auth-card .form-control {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      border-radius: 10px;
+    }
+
+    .auth-card .form-control::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .auth-card .form-control:focus {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--primary-color);
+      box-shadow: 0 0 10px rgba(243, 156, 18, 0.3);
+    }
+
+    .btn-primary {
+      background-color: var(--primary-color) !important;
+      border: none !important;
+      font-weight: 700;
+      padding: 12px;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--accent-color) !important;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(230, 126, 34, 0.4);
+    }
+
+    .logo-container svg {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 15px;
+    }
+
+    .auth-title {
+      font-weight: 900;
+      letter-spacing: 1px;
+    }
+
+    .form-label {
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 600;
+    }
+
+    a {
+      color: var(--primary-color) !important;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .text-center p {
+      color: rgba(255, 255, 255, 0.7);
+    }
+  </style>
+
+  <body>
+
+    <div class="login-wrapper">
+      <div class="auth-card">
+        <div class="text-center">
+          <div class="logo-container">
+            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="50" cy="50" r="40" stroke="#f39c12" stroke-width="2" stroke-dasharray="8 4" />
+              <path
+                d="M50 15V25M50 75V85M15 50H25M75 50H85M25.5 25.5L32.5 32.5M67.5 67.5L74.5 74.5M25.5 74.5L32.5 67.5M67.5 25.5L74.5 32.5"
+                stroke="#f39c12" stroke-width="3" stroke-linecap="round" />
+              <circle cx="50" cy="50" r="18" fill="#f39c12">
+                <animate attributeName="r" values="16;20;16" dur="3s" repeatCount="indefinite" />
+              </circle>
+              <circle cx="50" cy="50" r="12" fill="white" opacity="0.4" />
+            </svg>
+          </div>
+          <h2 class="auth-title">إشراق</h2>
+          <p class="mb-4">تسجيل الدخول لإدارة نظامك بنور وأمان</p>
+        </div>
+
+        <form id="loginForm" method="POST" action="/auth/login">
+          <div class="form-group mb-3">
+            <label for="identifier" class="form-label">البريد الإلكتروني أو رقم الهاتف</label>
+            <input type="text" class="form-control" id="identifier" name="identifier" placeholder="أدخل بياناتك هنا"
+              required>
+          </div>
+          <div class="form-group mb-3">
+            <label for="password" class="form-label">كلمة المرور</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="أدخل كلمة المرور"
+              required>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" id="rememberMe">
+              <label class="form-check-label text-white-50" for="rememberMe">تذكرني</label>
+            </div>
+            <a href="/auth/recoverpw" style="font-size: 0.85rem;">هل نسيت كلمة المرور؟</a>
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100 mb-3">دخول</button>
+        </form>
+
+        <div class="text-center mt-3">
+          <a href="/" class="text-white-50 small">العودة للرئيسية</a>
+        </div>
       </div>
     </div>
-    <!-- loader END -->
-    
-    <div class="wrapper">
-      <section class="login-content">
-        <div class="row m-0 align-items-center bg-white vh-100">            
-          <div class="col-md-6">
-            <div class="row justify-content-center">
-              <div class="col-md-10">
-                <div class="card card-transparent shadow-none d-flex justify-content-center mb-0 auth-card">
-                  <div class="card-body">
-                    
-                    <a href="/" class="navbar-brand d-flex align-items-center mb-3">
-                      <div class="logo-main">
-                        <div class="logo-normal">
-                          <svg class="text-primary icon-30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect x="-0.757324" y="19.2427" width="28" height="4" rx="2" transform="rotate(-45 -0.757324 19.2427)" fill="currentColor"/>
-                            <rect x="7.72803" y="27.728" width="28" height="4" rx="2" transform="rotate(-45 7.72803 27.728)" fill="currentColor"/>
-                            <rect x="10.5366" y="16.3945" width="16" height="4" rx="2" transform="rotate(45 10.5366 16.3945)" fill="currentColor"/>
-                            <rect x="10.5562" y="-0.556152" width="28" height="4" rx="2" transform="rotate(45 10.5562 -0.556152)" fill="currentColor"/>
-                          </svg>
-                        </div>
-                      </div>
-                      <h4 class="logo-title ms-3">Gaza E Meter</h4>
-                    </a>
-                    
-                    <h2 class="mb-2 text-center">تسجيل الدخول</h2>
-                    <p class="text-center">الرجاء تسجيل الدخول للوصول للنظام</p>
-                    
-                    <form id="loginForm" method="POST" action="/auth/login">
-                      <div class="row">
-                        <div class="col-lg-12">
-                          <div class="form-group">
-                            <label for="identifier" class="form-label">البريد الإلكتروني أو رقم الهاتف</label>
-                            <input type="text" class="form-control" id="identifier" name="identifier" placeholder="أدخل البريد أو الهاتف" required>
-                          </div>
-                        </div>
-                        <div class="col-lg-12">
-                          <div class="form-group">
-                            <label for="password" class="form-label">كلمة المرور</label>
-                            <input type="password" class="form-control" id="password" name="password" placeholder="أدخل كلمة المرور" required>
-                          </div>
-                        </div>
-                      </div>
 
-                      <div class="col-lg-12 d-flex justify-content-between mt-2">
-                        <div class="form-check mb-3">
-                          <input type="checkbox" class="form-check-input" id="rememberMe">
-                          <label class="form-check-label" for="rememberMe">تذكرني</label>
-                        </div>
-                        <a href="/auth/recoverpw">نسيت كلمة المرور؟</a>
-                      </div>
-
-                      <div class="d-flex justify-content-center mt-3">
-                        <button type="submit" class="btn btn-primary w-100">تسجيل الدخول</button>
-                      </div>
-                    </form>
-
-                    <p class="text-center my-3">أو تسجيل الدخول باستخدام</p>
-                    <div class="d-flex justify-content-center">
-                      <ul class="list-group list-group-horizontal list-group-flush">
-                        <li class="list-group-item border-0 pb-0"><a href="#"><img src="/assets/images/brands/fb.svg" alt="fb"></a></li>
-                        <li class="list-group-item border-0 pb-0"><a href="#"><img src="/assets/images/brands/gm.svg" alt="gm"></a></li>
-                        <li class="list-group-item border-0 pb-0"><a href="#"><img src="/assets/images/brands/im.svg" alt="im"></a></li>
-                        <li class="list-group-item border-0 pb-0"><a href="#"><img src="/assets/images/brands/li.svg" alt="li"></a></li>
-                      </ul>
-                    </div>
-
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="sign-bg">
-              <svg width="280" height="230" viewBox="0 0 431 398" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <g opacity="0.05">
-                  <rect x="-157.085" y="193.773" width="543" height="77.5714" rx="38.7857" transform="rotate(-45 -157.085 193.773)" fill="#3B8AFF"/>
-                  <rect x="7.46875" y="358.327" width="543" height="77.5714" rx="38.7857" transform="rotate(-45 7.46875 358.327)" fill="#3B8AFF"/>
-                  <rect x="61.9355" y="138.545" width="310.286" height="77.5714" rx="38.7857" transform="rotate(45 61.9355 138.545)" fill="#3B8AFF"/>
-                  <rect x="62.3154" y="-190.173" width="543" height="77.5714" rx="38.7857" transform="rotate(45 62.3154 -190.173)" fill="#3B8AFF"/>
-                </g>
-              </svg>
-            </div>
-
-          </div>
-
-          <div class="col-md-6 d-md-block d-none bg-primary p-0 mt-n1 vh-100 overflow-hidden">
-            <img src="/assets/images/auth/01.png" class="img-fluid gradient-main animated-scaleX" alt="images">
-          </div>
-
-        </div>
-      </section>
-    </div>
-    
     <%- include('../partials/scripts.ejs') %>
-
   </body>
+
 </html>

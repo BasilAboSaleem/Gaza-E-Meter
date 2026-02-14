@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en" dir="rtl">
+<%- include('../../../partials/head.ejs') %>
+
+    <body class="  ">
+        <!-- loader Start -->
+        <div id="loading">
+            <div class="loader simple-loader">
+                <div class="loader-body"></div>
+            </div>
+        </div>
+        <!-- loader END -->
+
+        <%- include('../../../partials/sidebar.ejs') %>
+
+            <main class="main-content">
+                <div class="position-relative iq-banner">
+                    <!--Nav Start-->
+                    <%- include('../../../partials/navbar.ejs') %>
+                        <!--Nav End-->
+                </div>
+
+                <div class="conatiner-fluid content-inner mt-n5 py-0">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="card">
+                                <div class="card-header d-flex justify-content-between">
+                                    <div class="header-title">
+                                        <h4 class="card-title">سجل الدفعات والمقبوضات</h4>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <!-- Filters -->
+                                    <form method="GET" action="/company-admin/payments"
+                                        class="row mb-4 align-items-end">
+                                        <div class="col-md-3">
+                                            <label class="form-label">بحث</label>
+                                            <input type="text" name="subscriberName" class="form-control"
+                                                placeholder="اسم المشترك أو الوصف..."
+                                                value="<%= filters.subscriberName %>">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">من تاريخ</label>
+                                            <input type="date" name="startDate" class="form-control"
+                                                value="<%= filters.startDate %>">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">إلى تاريخ</label>
+                                            <input type="date" name="endDate" class="form-control"
+                                                value="<%= filters.endDate %>">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <button type="submit" class="btn btn-primary w-100">فلترة</button>
+                                        </div>
+                                    </form>
+
+                                    <div class="table-responsive">
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>التاريخ والوقت</th>
+                                                    <th>الصندوق (المحصل)</th>
+                                                    <th>المبلغ بالدينار</th>
+                                                    <th>الوصف</th>
+                                                    <th>بواسطة</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% if (payments.length===0) { %>
+                                                    <tr>
+                                                        <td colspan="5" class="text-center">لا توجد دفعات مسجلة</td>
+                                                    </tr>
+                                                    <% } else { %>
+                                                        <% payments.forEach(payment=> { %>
+                                                            <tr>
+                                                                <td>
+                                                                    <%= new
+                                                                        Date(payment.createdAt).toLocaleString('ar-EG')
+                                                                        %>
+                                                                </td>
+                                                                <td>
+                                                                    <span class="badge bg-soft-info text-info">
+                                                                        <%= payment.destinationFund ?
+                                                                            payment.destinationFund.name : '-' %>
+                                                                    </span>
+                                                                </td>
+                                                                <td class="fw-bold text-success">
+                                                                    + <%= payment.amount.toFixed(2) %> شيكل
+                                                                </td>
+                                                                <td>
+                                                                    <%= payment.description %>
+                                                                </td>
+                                                                <td>
+                                                                    <small>
+                                                                        <%= payment.performedBy ?
+                                                                            payment.performedBy.fullName : '-' %>
+                                                                    </small>
+                                                                </td>
+                                                            </tr>
+                                                            <% }) %>
+                                                                <% } %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <%- include('../../../partials/footer.ejs') %>
+            </main>
+
+            <%- include('../../../partials/offcanvas.ejs') %>
+                <%- include('../../../partials/scripts.ejs') %>
+    </body>
+
+</html>

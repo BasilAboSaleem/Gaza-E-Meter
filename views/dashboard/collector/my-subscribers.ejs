@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en" dir="rtl">
+<%- include('../../partials/head.ejs') %>
+  <link rel="icon" href="data:,">
+
+  <body dir="rtl">
+    <%- include('../../partials/sidebar.ejs') %>
+      <main class="main-content">
+        <div class="position-relative iq-banner">
+          <!--Nav Start-->
+          <%- include('../../partials/navbar.ejs') %>
+            <!--Nav End-->
+        </div>
+        <div class="container-fluid content-inner mt-n5 py-0">
+          <div class="row">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center flex-wrap">
+                  <div class="header-title">
+                    <h4 class="card-title mb-0">قائمة المشتركين</h4>
+                    <p class="mb-0 text-muted small" id="sub-count">جارٍ تحميل البيانات...</p>
+                  </div>
+                  <div class="d-flex align-items-center mt-2 mt-md-0">
+                    <div class="input-group input-group-sm ms-2" style="max-width: 250px;">
+                      <span class="input-group-text">
+                        <i class="bi bi-search"></i>
+                      </span>
+                      <input type="text" id="search-input" class="form-control" placeholder="بحث بالاسم أو العداد...">
+                    </div>
+                    <button id="refresh-data" class="btn btn-sm btn-outline-primary ms-2">
+                      <i class="bi bi-arrow-clockwise"></i> تحديث
+                    </button>
+                  </div>
+                </div>
+                <div class="card-body p-0">
+                  <div class="table-responsive">
+                    <table class="table table-striped table-hover mb-0">
+                      <thead class="bg-light">
+                        <tr>
+                          <th>المشترك</th>
+                          <th>الهاتف</th>
+                          <th>رقم العداد</th>
+                          <th class="text-end">الإجراءات</th>
+                        </tr>
+                      </thead>
+                      <tbody id="subscribers-list"></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <%- include('../../partials/footer.ejs') %>
+      </main>
+
+      <%- include('../../partials/scripts.ejs') %>
+        <script src="https://unpkg.com/dexie@3/dist/dexie.js"></script>
+        <script src="/assets/js/db.js"></script>
+
+        <script>
+          (async () => {
+            const listEl = document.getElementById('subscribers-list');
+            const searchInput = document.getElementById('search-input');
+            const countEl = document.getElementById('sub-count');
+            const refreshBtn = document.getElementById('refresh-data');
+
+            let allSubscribers = [];
+
+            async function render(subs) {
+              listEl.innerHTML = '';
+              if (subs.length === 0) {
+                listEl.innerHTML = '<tr><td colspan="4" class="text-center py-4 text-muted">لا يوجد مشتركين مطابقين للبحث</td></tr>';
+                countEl.textContent = 'لا يوجد نتائج';
+                return;
+              }
+
+              subs.forEach(sub => {
+                listEl.innerHTML += `
+        <tr>
+          <td>
+            <div>
+              <h6 class="mb-0 text-dark">${sub.fullName}</h6>
+              <small class="text-muted">${sub.phone}</small>
+            </div>
+          </td>
+          <td class="align-middle">
+             <span class="badge bg-soft-secondary text-secondary">${sub.phone}</span>
+          </td>
+          <td class="align-middle">
+            <code class="text-primary fw-bold">${sub.meterSerialNumber || '-'}</code>
+          </td>
+          <td class="align-middle text-end">
+            <a href="/collector/readings/new?subscriberId=${sub.id}" class="btn btn-sm btn-primary shadow-sm px-3">
+              <i class="bi bi-speedometer2 me-1"></i> تسجيل قراءة
+            </a>
+          </td>
+        </tr>
+      `;
+              });
+              countEl.textContent = `إجمالي المشتركين: ${subs.length}`;
+            }
+
+            async function loadData(forceSync = false) {
+              if (navigator.onLine && (forceSync || allSubscribers.length === 0)) {
+                try {
+                  await collectorDB.fetchAndLoadSubscribers();
+                  console.log('🌐 Online mode - Data updated');
+                } catch (e) {
+                  console.error('Failed to update data online', e);
+                }
+              }
+              allSubscribers = await collectorDB.db.subscribers.toArray();
+              render(allSubscribers);
+            }
+
+            // Search logic
+            searchInput.addEventListener('input', (e) => {
+              const term = e.target.value.toLowerCase();
+              const filtered = allSubscribers.filter(s =>
+                s.fullName.toLowerCase().includes(term) ||
+                (s.meterSerialNumber && s.meterSerialNumber.toLowerCase().includes(term)) ||
+                (s.phone && s.phone.includes(term))
+              );
+              render(filtered);
+            });
+
+            // Refresh logic
+            refreshBtn.addEventListener('click', () => {
+              refreshBtn.disabled = true;
+              loadData(true).finally(() => refreshBtn.disabled = false);
+            });
+
+            // Initial load
+            loadData();
+          })();
+        </script>
+
+
+  </body>
+
+</html>

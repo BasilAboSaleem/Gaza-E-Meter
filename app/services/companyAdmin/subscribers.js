@@ -1,6 +1,9 @@
 const Subscriber = require('../../models/Subscriber');
 const Meter = require('../../models/Meter');
 const User = require('../../models/User');
+const Invoice = require('../../models/Invoice');
+const MeterReading = require('../../models/meterReading');
+const Transaction = require('../../models/Transaction');
 const subscriberRepository = require('../../repositories/companyAdmin/subscribers');
 
 exports.createSubscriberWithMeterAndUser = async (companyId, subscriberData, meterData) => {
@@ -82,4 +85,53 @@ exports.createSubscriberWithMeterAndUser = async (companyId, subscriberData, met
 
 exports.getSubscribersByCompany = async (companyId) => {
   return await subscriberRepository.findByCompany(companyId);
+};
+
+/**
+ * جلب تفاصيل المشترك الكاملة (الملف الشخصي، القراءات، الفواتير)
+ */
+exports.getSubscriberDetails = async (companyId, subscriberId) => {
+  const subscriber = await Subscriber.findOne({ _id: subscriberId, company: companyId })
+    .populate('primaryArea')
+    .populate('secondaryArea')
+    .populate('meterId')
+    .populate('assignedCollector');
+
+  if (!subscriber) throw new Error('المشترك غير موجود');
+
+  const [readings, invoices] = await Promise.all([
+    MeterReading.find({ subscriber: subscriberId }).populate('collector').sort({ readingDate: -1 }),
+    Invoice.find({ subscriberId: subscriberId }).sort({ issueDate: -1 })
+  ]);
+
+  const mongoose = require('mongoose');
+  const invoiceIds = invoices.map(inv => inv._id);
+
+  const transactions = await Transaction.find({
+    company: companyId,
+    type: 'COLLECTION',
+    $or: [
+      { 'metadata.subscriberId': new mongoose.Types.ObjectId(subscriberId) },
+      { 'metadata.invoiceId': { $in: invoiceIds } }
+    ]
+  }).populate('performedBy').sort({ createdAt: -1 });
+
+  // حساب الملخص المالي
+  const financialSummary = invoices.reduce((acc, inv) => {
+    acc.totalInvoiced += inv.totalAmount;
+    acc.totalPaid += inv.paidAmount;
+    acc.totalRemaining += inv.remainingAmount;
+    if (inv.status !== 'PAID') acc.unpaidBillsCount += 1;
+    return acc;
+  }, { totalInvoiced: 0, totalPaid: 0, totalRemaining: 0, unpaidBillsCount: 0 });
+
+  return {
+    subscriber,
+    readings,
+    invoices,
+    transactions,
+    financialSummary,
+    lastReading: readings[0] || null,
+    lastInvoice: invoices[0] || null
+  };
 };

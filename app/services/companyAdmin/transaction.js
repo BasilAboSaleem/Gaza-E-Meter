@@ -8,7 +8,9 @@ exports.createTransaction = async ({
   destinationFund,
   amount,
   description,
-  performedBy
+  performedBy,
+  metadata = null,
+  referenceId = null
 }) => {
 
   // 1️⃣ تحقق أساسي
@@ -56,7 +58,9 @@ exports.createTransaction = async ({
       direction: 'OUT',
       amount,
       description,
-      performedBy
+      performedBy,
+      metadata,
+      referenceId
     });
 
     // IN إلى الوجهة
@@ -70,7 +74,8 @@ exports.createTransaction = async ({
       amount,
       description,
       performedBy,
-      referenceId: outTx._id
+      referenceId: referenceId || outTx._id,
+      metadata
     });
 
     // تحديث الأرصدة
@@ -95,7 +100,9 @@ exports.createTransaction = async ({
       direction: 'IN',
       amount,
       description,
-      performedBy
+      performedBy,
+      metadata,
+      referenceId
     });
 
     destination.balance += amount;
@@ -116,7 +123,9 @@ exports.createTransaction = async ({
       direction: 'OUT',
       amount,
       description,
-      performedBy
+      performedBy,
+      metadata,
+      referenceId
     });
 
     source.balance -= amount;
@@ -144,7 +153,9 @@ exports.createTransaction = async ({
       direction,
       amount,
       description,
-      performedBy
+      performedBy,
+      metadata,
+      referenceId
     });
 
     fund.balance += direction === 'IN' ? amount : -amount;

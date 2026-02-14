@@ -1,33 +1,33 @@
-
 <aside class="sidebar sidebar-default sidebar-white sidebar-base navs-rounded-all" data-sidebar="responsive">
     <!-- Sidebar Header -->
     <div class="sidebar-header d-flex align-items-center justify-content-start">
         <a href="/" class="navbar-brand">
             <div class="logo-main">
                 <div class="logo-normal">
-                    <svg class="icon-30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="-0.757324" y="19.2427" width="28" height="4" rx="2" transform="rotate(-45 -0.757324 19.2427)" fill="currentColor"/>
-                        <rect x="7.72803" y="27.728" width="28" height="4" rx="2" transform="rotate(-45 7.72803 27.728)" fill="currentColor"/>
-                        <rect x="10.5366" y="16.3945" width="16" height="4" rx="2" transform="rotate(45 10.5366 16.3945)" fill="currentColor"/>
-                        <rect x="10.5562" y="-0.556152" width="28" height="4" rx="2" transform="rotate(45 10.5562 -0.556152)" fill="currentColor"/>
+                    <svg width="30" height="30" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="50" cy="50" r="40" stroke="currentColor" stroke-width="2" stroke-dasharray="10 5" />
+                        <path
+                            d="M50 20V30M50 70V80M20 50H30M70 50H80M28.8 28.8L35.9 35.9M64.1 64.1L71.2 71.2M28.8 71.2L35.9 64.1M64.1 28.8L71.2 35.9"
+                            stroke="currentColor" stroke-width="4" stroke-linecap="round" />
+                        <circle cx="50" cy="50" r="15" fill="currentColor" />
                     </svg>
                 </div>
                 <div class="logo-mini">
-                    <svg class="icon-30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="-0.757324" y="19.2427" width="28" height="4" rx="2" transform="rotate(-45 -0.757324 19.2427)" fill="currentColor"/>
-                        <rect x="7.72803" y="27.728" width="28" height="4" rx="2" transform="rotate(-45 7.72803 27.728)" fill="currentColor"/>
-                        <rect x="10.5366" y="16.3945" width="16" height="4" rx="2" transform="rotate(45 10.5366 16.3945)" fill="currentColor"/>
-                        <rect x="10.5562" y="-0.556152" width="28" height="4" rx="2" transform="rotate(45 10.5562 -0.556152)" fill="currentColor"/>
+                    <svg width="30" height="30" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="50" cy="50" r="30" fill="currentColor" />
                     </svg>
                 </div>
             </div>
-            <h4 class="logo-title">نظام إدارة المشتركين</h4>
+            <h4 class="logo-title">إشراق</h4>
         </a>
         <div class="sidebar-toggle" data-toggle="sidebar" data-active="true">
             <i class="icon">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M4.25 12.2744L19.25 12.2744" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M10.2998 18.2988L4.2498 12.2748L10.2998 6.24976" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                    style="transform: rotate(180deg);">
+                    <path d="M4.25 12.2744L19.25 12.2744" stroke="currentColor" stroke-width="1.5"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M10.2998 18.2988L4.2498 12.2748L10.2998 6.24976" stroke="currentColor" stroke-width="1.5"
+                        stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
             </i>
         </div>
@@ -41,435 +41,405 @@
                 <li class="nav-item">
                     <a class="nav-link active" href="/">
                         <i class="icon">
-                            <svg width="20" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h16v16H4z"/></svg>
+                            <svg width="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M4 4h16v16H4z" />
+                            </svg>
                         </i>
-                        <span class="item-name">Dashboard</span>
+                        <span class="item-name">الرئيسية</span>
                     </a>
                 </li>
 
-            <!-- SUPER_ADMIN Menu -->
-<% if(user?.role === 'SUPER_ADMIN'){ %>
-    <li class="nav-title">إدارة النظام</li>
+                <!-- SUPER_ADMIN Menu -->
+                <% if(user?.role==='SUPER_ADMIN' ){ %>
+                    <li class="nav-title">إدارة النظام</li>
 
-    <!-- الباقات - مع submenu (collapse) -->
-    <li class="nav-item">
-        <a class="nav-link" 
-           data-bs-toggle="collapse" 
-           href="#plans-submenu" 
-           role="button" 
-           aria-expanded="false" 
-           aria-controls="plans-submenu">
-            <i class="icon">📦</i>
-            <span class="item-name">الباقات</span>
-            <i class="right-icon">
-                <svg class="icon-18" xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                </svg>
-            </i>
-        </a>
-        <ul class="sub-nav collapse" id="plans-submenu" data-bs-parent="#sidebar-menu">
-            <li class="nav-item">
-                <a class="nav-link" href="/super-admin/plans">
-                    <i class="icon">
-                        <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
-                            <circle cx="12" cy="12" r="4" fill="currentColor"/>
-                        </svg>
-                    </i>
-                    <span class="item-name">عرض الباقات</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/super-admin/plans/create">  <!-- أو /plans/new أو أي مسار عندك للإضافة -->
-                    <i class="icon">
-                        <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 2a1 1 0 011 1v18a1 1 0 11-2 0V3a1 1 0 011-1z"/>
-                            <path d="M2 12a1 1 0 011-1h18a1 1 0 110 2H3a1 1 0 01-1-1z"/>
-                        </svg>
-                    </i>
-                    <span class="item-name">إضافة باقة</span>
-                </a>
-            </li>
-        </ul>
-    </li>
-
-   <li class="nav-item">
-        <a class="nav-link" 
-           data-bs-toggle="collapse" 
-           href="#companies-submenu" 
-           role="button" 
-           aria-expanded="false" 
-           aria-controls="companies-submenu">
-            <i class="icon">🏢</i>
-            <span class="item-name">الشركات</span>
-            <i class="right-icon">
-                <svg class="icon-18" xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                </svg>
-            </i>
-        </a>
-        <ul class="sub-nav collapse" id="companies-submenu" data-bs-parent="#sidebar-menu">
-            <li class="nav-item">
-                <a class="nav-link" href="/super-admin/companies">
-                    <i class="icon">
-                        <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
-                            <circle cx="12" cy="12" r="4" fill="currentColor"/>
-                        </svg>
-                    </i>
-                    <span class="item-name">عرض الشركات</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/super-admin/companies/create">  <!-- أو /companies/new أو أي مسار عندك للإضافة -->
-                    <i class="icon">
-                        <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 2a1 1 0 011 1v18a1 1 0 11-2 0V3a1 1 0 011-1z"/>
-                            <path d="M2 12a1 1 0 011-1h18a1 1 0 110 2H3a1 1 0 01-1-1z"/>
-                        </svg>
-                    </i>
-                    <span class="item-name">إضافة شركة</span>
-                </a>
-            </li>
-        </ul>
-    </li>
-    <li class="nav-item"><a class="nav-link" href="/company-admins"><i class="icon">👤</i> <span class="item-name">مدراء الشركات</span></a></li>
-    <li class="nav-item"><a class="nav-link" href="/system-users"><i class="icon">👥</i> <span class="item-name">مستخدمو النظام</span></a></li>
-    <li class="nav-item"><a class="nav-link" href="/settings"><i class="icon">⚙️</i> <span class="item-name">إعدادات النظام</span></a></li>
-<% } %>
-
-                <!-- COMPANY_ADMIN Menu -->
-                <% if(user?.role === 'COMPANY_ADMIN'){ %>
-                    <li class="nav-title">إدارة الشركة</li>
-<li class="nav-item">
-    <a class="nav-link"
-       data-bs-toggle="collapse"
-       href="#areas-submenu"
-       role="button"
-       aria-expanded="false"
-       aria-controls="areas-submenu">
-
-        <i class="icon">
-            <!-- Map Icon -->
-            <svg class="icon-18" xmlns="http://www.w3.org/2000/svg" fill="none"
-                 viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M9 20l-5-2V4l5 2 6-2 5 2v14l-5-2-6 2z"/>
-            </svg>
-        </i>
-
-        <span class="item-name">المناطق</span>
-
-        <i class="right-icon">
-            <svg class="icon-18" xmlns="http://www.w3.org/2000/svg" fill="none"
-                 viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M9 5l7 7-7 7"/>
-            </svg>
-        </i>
-    </a>
-
-    <ul class="sub-nav collapse" id="areas-submenu" data-bs-parent="#sidebar-menu">
-
-        <!-- عرض المناطق الرئيسية -->
-        <li class="nav-item">
-            <a class="nav-link" href="/company-admin/main-areas">
-                <i class="icon">
-                    <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                         viewBox="0 0 24 24">
-                        <circle cx="12" cy="12" r="4"/>
-                    </svg>
-                </i>
-                <span class="item-name">عرض المناطق الرئيسية</span>
-            </a>
-        </li>
-
-        <!-- إضافة منطقة رئيسية -->
-        <li class="nav-item">
-            <a class="nav-link" href="/company-admin/areas/create">
-                <i class="icon">
-                    <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                         viewBox="0 0 24 24">
-                        <path d="M12 2a1 1 0 011 1v18a1 1 0 11-2 0V3a1 1 0 011-1z"/>
-                        <path d="M2 12a1 1 0 011-1h18a1 1 0 110 2H3a1 1 0 01-1-1z"/>
-                    </svg>
-                </i>
-                <span class="item-name">إضافة منطقة رئيسية</span>
-            </a>
-        </li>
-
-    </ul>
-</li>
-       
-<li class="nav-item">
-    <a class="nav-link"
-       data-bs-toggle="collapse"
-       href="#subscribers-submenu"
-       role="button"
-       aria-expanded="false"
-       aria-controls="subscribers-submenu">
-
-        <i class="icon">
-            <!-- Map Icon -->
-            <svg class="icon-18" xmlns="http://www.w3.org/2000/svg" fill="none"
-                 viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M9 20l-5-2V4l5 2 6-2 5 2v14l-5-2-6 2z"/>
-            </svg>
-        </i>
-
-        <span class="item-name">المشتركين</span>
-
-        <i class="right-icon">
-            <svg class="icon-18" xmlns="http://www.w3.org/2000/svg" fill="none"
-                 viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M9 5l7 7-7 7"/>
-            </svg>
-        </i>
-    </a>
-
-    <ul class="sub-nav collapse" id="subscribers-submenu" data-bs-parent="#subscribers-submenu">
-
-        <!-- عرض المناطق الرئيسية -->
-        <li class="nav-item">
-            <a class="nav-link" href="/company-admin/subscribers">
-                <i class="icon">
-                    <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                         viewBox="0 0 24 24">
-                        <circle cx="12" cy="12" r="4"/>
-                    </svg>
-                </i>
-                <span class="item-name">عرض المشتركين</span>
-            </a>
-        </li>
-
-        <!-- إضافة منطقة رئيسية -->
-        <li class="nav-item">
-            <a class="nav-link" href="/company-admin/subscribers/create">
-                <i class="icon">
-                    <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                         viewBox="0 0 24 24">
-                        <path d="M12 2a1 1 0 011 1v18a1 1 0 11-2 0V3a1 1 0 011-1z"/>
-                        <path d="M2 12a1 1 0 011-1h18a1 1 0 110 2H3a1 1 0 01-1-1z"/>
-                    </svg>
-                </i>
-                <span class="item-name">إضافة مشترك</span>
-            </a>
-        </li>
-
-    </ul>
-</li>                    <li class="nav-item"><a class="nav-link" href="/meters"><i class="icon">🔢</i> <span class="item-name">العدادات</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/readings"><i class="icon">📷</i> <span class="item-name">القراءات</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/invoices"><i class="icon">🧾</i> <span class="item-name">الفواتير</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/payments"><i class="icon">💰</i> <span class="item-name">الدفعات</span></a></li>
+                    <!-- الباقات - مع submenu (collapse) -->
                     <li class="nav-item">
-    <a class="nav-link"
-       data-bs-toggle="collapse"
-       href="#transactions-submenu"
-       role="button"
-       aria-expanded="false"
-       aria-controls="transactions-submenu">
+                        <a class="nav-link" data-bs-toggle="collapse" href="#plans-submenu" role="button"
+                            aria-expanded="false" aria-controls="plans-submenu">
+                            <i class="icon">📦</i>
+                            <span class="item-name">الباقات</span>
+                            <i class="right-icon">
+                                <svg class="icon-18" xmlns="http://www.w3.org/2000/svg" width="18" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 5l7 7-7 7" />
+                                </svg>
+                            </i>
+                        </a>
+                        <ul class="sub-nav collapse" id="plans-submenu" data-bs-parent="#sidebar-menu">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/super-admin/plans">
+                                    <i class="icon">
+                                        <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10"
+                                            viewBox="0 0 24 24" fill="currentColor">
+                                            <circle cx="12" cy="12" r="4" fill="currentColor" />
+                                        </svg>
+                                    </i>
+                                    <span class="item-name">عرض الباقات</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/super-admin/plans/create">
+                                    <!-- أو /plans/new أو أي مسار عندك للإضافة -->
+                                    <i class="icon">
+                                        <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10"
+                                            viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M12 2a1 1 0 011 1v18a1 1 0 11-2 0V3a1 1 0 011-1z" />
+                                            <path d="M2 12a1 1 0 011-1h18a1 1 0 110 2H3a1 1 0 01-1-1z" />
+                                        </svg>
+                                    </i>
+                                    <span class="item-name">إضافة باقة</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
 
-        <i class="icon">
-        💰
-        </i>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="collapse" href="#companies-submenu" role="button"
+                            aria-expanded="false" aria-controls="companies-submenu">
+                            <i class="icon">🏢</i>
+                            <span class="item-name">الشركات</span>
+                            <i class="right-icon">
+                                <svg class="icon-18" xmlns="http://www.w3.org/2000/svg" width="18" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 5l7 7-7 7" />
+                                </svg>
+                            </i>
+                        </a>
+                        <ul class="sub-nav collapse" id="companies-submenu" data-bs-parent="#sidebar-menu">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/super-admin/companies">
+                                    <i class="icon">
+                                        <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10"
+                                            viewBox="0 0 24 24" fill="currentColor">
+                                            <circle cx="12" cy="12" r="4" fill="currentColor" />
+                                        </svg>
+                                    </i>
+                                    <span class="item-name">عرض الشركات</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/super-admin/companies/create">
+                                    <!-- أو /companies/new أو أي مسار عندك للإضافة -->
+                                    <i class="icon">
+                                        <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10"
+                                            viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M12 2a1 1 0 011 1v18a1 1 0 11-2 0V3a1 1 0 011-1z" />
+                                            <path d="M2 12a1 1 0 011-1h18a1 1 0 110 2H3a1 1 0 01-1-1z" />
+                                        </svg>
+                                    </i>
+                                    <span class="item-name">إضافة شركة</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="/company-admins"><i class="icon">👤</i> <span
+                                class="item-name">مدراء الشركات</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="/system-users"><i class="icon">👥</i> <span
+                                class="item-name">مستخدمو النظام</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="/settings"><i class="icon">⚙️</i> <span
+                                class="item-name">إعدادات النظام</span></a></li>
+                    <% } %>
 
-        <span class="item-name">الحركات المالية</span>
+                        <!-- COMPANY_ADMIN Menu -->
+                        <% if(user?.role==='COMPANY_ADMIN' ){ %>
+                            <li class="nav-title">إدارة الشركة</li>
 
-        <i class="right-icon">
-            <svg class="icon-18" xmlns="http://www.w3.org/2000/svg" fill="none"
-                 viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M9 5l7 7-7 7"/>
-            </svg>
-        </i>
-    </a>
+                            <!-- 1. المشتركين -->
+                            <li class="nav-item">
+                                <a class="nav-link" data-bs-toggle="collapse" href="#subscribers-submenu" role="button"
+                                    aria-expanded="false">
+                                    <i class="icon">👥</i>
+                                    <span class="item-name">المشتركين</span>
+                                    <i class="right-icon">
+                                        <svg class="icon-18" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 5l7 7-7 7" />
+                                        </svg>
+                                    </i>
+                                </a>
+                                <ul class="sub-nav collapse" id="subscribers-submenu" data-bs-parent="#sidebar-menu">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/company-admin/subscribers">
+                                            <i class="icon"><svg class="icon-10" fill="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <circle cx="12" cy="12" r="4" />
+                                                </svg></i>
+                                            <span class="item-name">عرض المشتركين</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/company-admin/subscribers/create">
+                                            <i class="icon"><svg class="icon-10" fill="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path
+                                                        d="M12 2a1 1 0 011 1v18a1 1 0 11-2 0V3a1 1 0 011-1zM2 12a1 1 0 011-1h18a1 1 0 110 2H3a1 1 0 01-1-1z" />
+                                                </svg></i>
+                                            <span class="item-name">إضافة مشترك</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
 
-    <ul class="sub-nav collapse" id="transactions-submenu" data-bs-parent="#transactions-submenu">
+                            <!-- 2. القراءات والفواتير -->
+                            <li class="nav-item">
+                                <a class="nav-link" data-bs-toggle="collapse" href="#readings-submenu" role="button"
+                                    aria-expanded="false">
+                                    <i class="icon">📋</i>
+                                    <span class="item-name">القراءات والفواتير</span>
+                                    <i class="right-icon">
+                                        <svg class="icon-18" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 5l7 7-7 7" />
+                                        </svg>
+                                    </i>
+                                </a>
+                                <ul class="sub-nav collapse" id="readings-submenu" data-bs-parent="#sidebar-menu">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/company-admin/readings">
+                                            <i class="icon"><svg class="icon-10" fill="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <circle cx="12" cy="12" r="4" />
+                                                </svg></i>
+                                            <span class="item-name">قراءات المحصلين</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/company-admin/invoices">
+                                            <i class="icon"><svg class="icon-10" fill="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <circle cx="12" cy="12" r="4" />
+                                                </svg></i>
+                                            <span class="item-name">إدارة الفواتير</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/company-admin/payments">
+                                            <i class="icon"><svg class="icon-10" fill="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <circle cx="12" cy="12" r="4" />
+                                                </svg></i>
+                                            <span class="item-name">سجل التحصيل</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
 
-        <!-- عرض المناطق الرئيسية -->
-        <li class="nav-item">
-            <a class="nav-link" href="/company-admin/transactions">
-                <i class="icon">
-                    <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                         viewBox="0 0 24 24">
-                        <circle cx="12" cy="12" r="4"/>
-                    </svg>
-                </i>
-                <span class="item-name">عرض الحركات المالية</span>
-            </a>
-        </li>
+                            <!-- 3. المحصلين -->
+                            <li class="nav-item">
+                                <a class="nav-link" data-bs-toggle="collapse" href="#collectors-submenu" role="button"
+                                    aria-expanded="false">
+                                    <i class="icon">🚶‍♂️</i>
+                                    <span class="item-name">المحصلين</span>
+                                    <i class="right-icon">
+                                        <svg class="icon-18" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 5l7 7-7 7" />
+                                        </svg>
+                                    </i>
+                                </a>
+                                <ul class="sub-nav collapse" id="collectors-submenu" data-bs-parent="#sidebar-menu">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/company-admin/collectors">
+                                            <i class="icon"><svg class="icon-10" fill="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <circle cx="12" cy="12" r="4" />
+                                                </svg></i>
+                                            <span class="item-name">عرض المحصلين</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/company-admin/collectors/create">
+                                            <i class="icon"><svg class="icon-10" fill="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path
+                                                        d="M12 2a1 1 0 011 1v18a1 1 0 11-2 0V3a1 1 0 011-1zM2 12a1 1 0 011-1h18a1 1 0 110 2H3a1 1 0 01-1-1z" />
+                                                </svg></i>
+                                            <span class="item-name">إضافة محصل</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
 
-        <!-- إضافة منطقة رئيسية -->
-        <li class="nav-item">
-            <a class="nav-link" href="/company-admin/transactions/create">
-                <i class="icon">
-                    <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                         viewBox="0 0 24 24">
-                        <path d="M12 2a1 1 0 011 1v18a1 1 0 11-2 0V3a1 1 0 011-1z"/>
-                        <path d="M2 12a1 1 0 011-1h18a1 1 0 110 2H3a1 1 0 01-1-1z"/>
-                    </svg>
-                </i>
-                <span class="item-name">إضافة حركة مالية</span>
-            </a>
-        </li>
+                            <!-- 4. المناطق -->
+                            <li class="nav-item">
+                                <a class="nav-link" data-bs-toggle="collapse" href="#areas-submenu" role="button"
+                                    aria-expanded="false">
+                                    <i class="icon">📍</i>
+                                    <span class="item-name">المناطق</span>
+                                    <i class="right-icon">
+                                        <svg class="icon-18" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 5l7 7-7 7" />
+                                        </svg>
+                                    </i>
+                                </a>
+                                <ul class="sub-nav collapse" id="areas-submenu" data-bs-parent="#sidebar-menu">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/company-admin/main-areas">
+                                            <i class="icon"><svg class="icon-10" fill="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <circle cx="12" cy="12" r="4" />
+                                                </svg></i>
+                                            <span class="item-name">عرض المناطق</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/company-admin/areas/create">
+                                            <i class="icon"><svg class="icon-10" fill="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path
+                                                        d="M12 2a1 1 0 011 1v18a1 1 0 11-2 0V3a1 1 0 011-1zM2 12a1 1 0 011-1h18a1 1 0 110 2H3a1 1 0 01-1-1z" />
+                                                </svg></i>
+                                            <span class="item-name">إضافة منطقة</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
 
-    </ul>
-</li> 
+                            <!-- 5. الحركات المالية والصناديق -->
+                            <li class="nav-item">
+                                <a class="nav-link" data-bs-toggle="collapse" href="#finance-submenu" role="button"
+                                    aria-expanded="false">
+                                    <i class="icon">💰</i>
+                                    <span class="item-name">المالية</span>
+                                    <i class="right-icon">
+                                        <svg class="icon-18" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 5l7 7-7 7" />
+                                        </svg>
+                                    </i>
+                                </a>
+                                <ul class="sub-nav collapse" id="finance-submenu" data-bs-parent="#sidebar-menu">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/company-admin/funds">
+                                            <i class="icon"><svg class="icon-10" fill="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <circle cx="12" cy="12" r="4" />
+                                                </svg></i>
+                                            <span class="item-name">الصناديق</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/company-admin/transactions">
+                                            <i class="icon"><svg class="icon-10" fill="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <circle cx="12" cy="12" r="4" />
+                                                </svg></i>
+                                            <span class="item-name">السجل المالي</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/company-admin/transactions/create">
+                                            <i class="icon"><svg class="icon-10" fill="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path
+                                                        d="M12 2a1 1 0 011 1v18a1 1 0 11-2 0V3a1 1 0 011-1zM2 12a1 1 0 011-1h18a1 1 0 110 2H3a1 1 0 01-1-1z" />
+                                                </svg></i>
+                                            <span class="item-name">إضافة حركة مالية</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
 
-<li class="nav-item">
-    <a class="nav-link"
-       data-bs-toggle="collapse"
-       href="#funds-submenu"
-       role="button"
-       aria-expanded="false"
-       aria-controls="funds-submenu">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/company-admin/reports">
+                                    <i class="icon">📈</i>
+                                    <span class="item-name">التقارير</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/profile">
+                                    <i class="icon">👤</i>
+                                    <span class="item-name">الملف الشخصي</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/company-admin/settings">
+                                    <i class="icon">⚙️</i>
+                                    <span class="item-name">إعدادات الشركة</span>
+                                </a>
+                            </li>
+                            <% } %>
 
-        <i class="icon">
-            <!-- Map Icon -->
-           🏦
-        </i>
+                                <!-- باقي الأدوار (ACCOUNTANT, COLLECTOR, SUBSCRIBER) نفس الطريقة، بس ضفت <i class="icon"> للإيموجي عشان يظهر في الـ mini -->
+                                <!-- ACCOUNTANT -->
+                                <% if(user?.role==='ACCOUNTANT' ){ %>
+                                    <li class="nav-title">المحاسبة</li>
+                                    <li class="nav-item"><a class="nav-link" href="/invoices"><i class="icon">🧾</i>
+                                            <span class="item-name">الفواتير</span></a></li>
+                                    <li class="nav-item"><a class="nav-link" href="/payments"><i class="icon">💳</i>
+                                            <span class="item-name">الدفعات</span></a></li>
+                                    <li class="nav-item"><a class="nav-link" href="/funds"><i class="icon">🏦</i> <span
+                                                class="item-name">الصناديق</span></a></li>
+                                    <li class="nav-item"><a class="nav-link" href="/reports"><i class="icon">📊</i>
+                                            <span class="item-name">التقارير</span></a></li>
+                                    <% } %>
 
-        <span class="item-name">الصناديق</span>
+                                        <!-- COLLECTOR -->
+                                        <% if(user?.role==='COLLECTOR' ){ %>
+                                            <li class="nav-title">المحصل</li>
+                                            <li class="nav-item"><a class="nav-link" href="/collector/my-subscribers"><i
+                                                        class="icon">👥</i> <span class="item-name">مشتركي</span></a>
+                                            </li>
+                                            <li class="nav-item"><a class="nav-link" href="/collector/readings/new"><i
+                                                        class="icon">📸</i> <span class="item-name">تسجيل
+                                                        قراءة</span></a></li>
+                                  
+                                            <li class="nav-item"><a class="nav-link" href="/collector/sync"><i
+                                                        class="icon">🔄</i> <span class="item-name">مزامنة</span></a>
+                                            </li>
+                                            <% } %>
 
-        <i class="right-icon">
-            <svg class="icon-18" xmlns="http://www.w3.org/2000/svg" fill="none"
-                 viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M9 5l7 7-7 7"/>
-            </svg>
-        </i>
-    </a>
+                                                <!-- SUBSCRIBER -->
+                                                <% if(user?.role==='SUBSCRIBER' ){ %>
+                                                    <li class="nav-title">حسابي</li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="/subscriber">
+                                                            <i class="icon">📊</i> <span class="item-name">لوحة
+                                                                المعلومات</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="/subscriber/readings">
+                                                            <i class="icon">⚡</i> <span class="item-name">سجل
+                                                                القراءات</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="/subscriber/invoices">
+                                                            <i class="icon">🧾</i> <span
+                                                                class="item-name">فواتيري</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="/subscriber/payment-history">
+                                                            <i class="icon">📜</i> <span class="item-name">سجل
+                                                                الدفعات</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="/profile">
+                                                            <i class="icon">👤</i> <span class="item-name">الملف
+                                                                الشخصي</span>
+                                                        </a>
+                                                    </li>
+                                                    <% } %>
 
-    <ul class="sub-nav collapse" id="funds-submenu" data-bs-parent="#funds-submenu">
-
-        <!-- عرض المناطق الرئيسية -->
-        <li class="nav-item">
-            <a class="nav-link" href="/company-admin/funds">
-                <i class="icon">
-                    <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                         viewBox="0 0 24 24">
-                        <circle cx="12" cy="12" r="4"/>
-                    </svg>
-                </i>
-                <span class="item-name">عرض الصناديق</span>
-            </a>
-        </li>
-
-        <!-- إضافة منطقة رئيسية -->
-        <li class="nav-item">
-            <a class="nav-link" href="/company-admin/funds/create">
-                <i class="icon">
-                    <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                         viewBox="0 0 24 24">
-                        <path d="M12 2a1 1 0 011 1v18a1 1 0 11-2 0V3a1 1 0 011-1z"/>
-                        <path d="M2 12a1 1 0 011-1h18a1 1 0 110 2H3a1 1 0 01-1-1z"/>
-                    </svg>
-                </i>
-                <span class="item-name">إضافة صندوق</span>
-            </a>
-        </li>
-
-    </ul>
-</li><li class="nav-item">
-    <a class="nav-link"
-       data-bs-toggle="collapse"
-       href="#collectors-submenu"
-       role="button"
-       aria-expanded="false"
-       aria-controls="collectors-submenu">
-
-        <i class="icon">
-          <!-- Collector Icon -->
-<svg class="icon-18" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-  <!-- شخص -->
-  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-        d="M16 14a4 4 0 10-8 0v1a4 4 0 008 0v-1z"/>
-  <!-- رأس الشخص -->
-  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-        d="M12 7a4 4 0 110-8 4 4 0 010 8z"/>
-</svg>
-
-        </i>
-
-        <span class="item-name">المحصلين</span>
-
-        <i class="right-icon">
-            <svg class="icon-18" xmlns="http://www.w3.org/2000/svg" fill="none"
-                 viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M9 5l7 7-7 7"/>
-            </svg>
-        </i>
-    </a>
-
-    <ul class="sub-nav collapse" id="collectors-submenu" data-bs-parent="#collectors-submenu">
-
-        <!-- عرض المناطق الرئيسية -->
-        <li class="nav-item">
-            <a class="nav-link" href="/company-admin/collectors">
-                <i class="icon">
-                    <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                         viewBox="0 0 24 24">
-                        <circle cx="12" cy="12" r="4"/>
-                    </svg>
-                </i>
-                <span class="item-name">عرض المحصلين</span>
-            </a>
-        </li>
-
-        <!-- إضافة منطقة رئيسية -->
-        <li class="nav-item">
-            <a class="nav-link" href="/company-admin/collectors/create">
-                <i class="icon">
-                    <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                         viewBox="0 0 24 24">
-                        <path d="M12 2a1 1 0 011 1v18a1 1 0 11-2 0V3a1 1 0 011-1z"/>
-                        <path d="M2 12a1 1 0 011-1h18a1 1 0 110 2H3a1 1 0 01-1-1z"/>
-                    </svg>
-                </i>
-                <span class="item-name">إضافة محصل</span>
-            </a>
-        </li>
-
-    </ul>
-</li>                    <li class="nav-item"><a class="nav-link" href="/accountants"><i class="icon">📒</i> <span class="item-name">المحاسبين</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/reports"><i class="icon">📈</i> <span class="item-name">التقارير</span></a></li>
-                <% } %>
-
-                <!-- باقي الأدوار (ACCOUNTANT, COLLECTOR, SUBSCRIBER) نفس الطريقة، بس ضفت <i class="icon"> للإيموجي عشان يظهر في الـ mini -->
-                <!-- ACCOUNTANT -->
-                <% if(user?.role === 'ACCOUNTANT'){ %>
-                    <li class="nav-title">المحاسبة</li>
-                    <li class="nav-item"><a class="nav-link" href="/invoices"><i class="icon">🧾</i> <span class="item-name">الفواتير</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/payments"><i class="icon">💳</i> <span class="item-name">الدفعات</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/funds"><i class="icon">🏦</i> <span class="item-name">الصناديق</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/reports"><i class="icon">📊</i> <span class="item-name">التقارير</span></a></li>
-                <% } %>
-
-                <!-- COLLECTOR -->
-                <% if(user?.role === 'COLLECTOR'){ %>
-                    <li class="nav-title">عملي</li>
-                    <li class="nav-item"><a class="nav-link" href="/my-subscribers"><i class="icon">👥</i> <span class="item-name">مشتركي</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/readings/new"><i class="icon">📸</i> <span class="item-name">تسجيل قراءة</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/my-invoices"><i class="icon">🧾</i> <span class="item-name">فواتيري</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/my-fund"><i class="icon">💼</i> <span class="item-name">صندوقي</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/sync"><i class="icon">🔄</i> <span class="item-name">مزامنة</span></a></li>
-                <% } %>
-
-                <!-- SUBSCRIBER -->
-                <% if(user?.role === 'SUBSCRIBER'){ %>
-                    <li class="nav-title">حسابي</li>
-                    <li class="nav-item"><a class="nav-link" href="/my-bills"><i class="icon">🧾</i> <span class="item-name">فواتيري</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/payment-history"><i class="icon">📜</i> <span class="item-name">سجل الدفعات</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/profile"><i class="icon">👤</i> <span class="item-name">الملف الشخصي</span></a></li>
-                <% } %>
-
-                <!-- Logout (دائمًا موجود) -->
-                <li class="nav-item logout">
-                    <a class="nav-link text-danger" href="/logout">
-                        <i class="icon">🚪</i> <span class="item-name">تسجيل الخروج</span>
-                    </a>
-                </li>
+                                                        <!-- Logout (دائمًا موجود) -->
+                                                        <li class="nav-item logout">
+                                                            <a class="nav-link text-danger" href="/auth/logout">
+                                                                <i class="icon">🚪</i> <span class="item-name">تسجيل
+                                                                    الخروج</span>
+                                                            </a>
+                                                        </li>
             </ul>
         </div>
     </div>
