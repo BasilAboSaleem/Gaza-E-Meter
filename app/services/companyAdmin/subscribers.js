@@ -1,3 +1,5 @@
+const mongoose = require('mongoose');
+
 const Subscriber = require('../../models/Subscriber');
 const Meter = require('../../models/Meter');
 const User = require('../../models/User');
@@ -134,4 +136,165 @@ exports.getSubscriberDetails = async (companyId, subscriberId) => {
     lastReading: readings[0] || null,
     lastInvoice: invoices[0] || null
   };
+};
+
+exports.updateSubscriberWithMeter = async (
+  companyId,
+  subscriberId,
+  subscriberData = {},
+  meterData = {}
+) => {
+
+  const subscriber = await Subscriber.findOne({
+    _id: subscriberId,
+    company: companyId
+  });
+
+  if (!subscriber) throw new Error('المشترك غير موجود');
+
+  const meter = await Meter.findOne({
+    _id: subscriber.meterId,
+    company: companyId
+  });
+
+  /*
+  =========================
+  🔎 1️⃣ التحقق من رقم الهاتف
+  =========================
+  */
+  if (
+    subscriberData.phone &&
+    subscriberData.phone !== subscriber.phone
+  ) {
+    const existingPhone = await Subscriber.findOne({
+      company: companyId,
+      phone: subscriberData.phone,
+      _id: { $ne: subscriberId }
+    });
+
+    if (existingPhone) {
+      throw new Error('رقم الهاتف مستخدم مسبقاً');
+    }
+  }
+
+  /*
+  =========================
+  🔎 2️⃣ التحقق من رقم العداد
+  =========================
+  */
+  if (
+    meter &&
+    meterData.serialNumber &&
+    meterData.serialNumber !== meter.serialNumber
+  ) {
+    const existingMeter = await Meter.findOne({
+      company: companyId,
+      serialNumber: meterData.serialNumber,
+      _id: { $ne: meter._id }
+    });
+
+    if (existingMeter) {
+      throw new Error('رقم العداد مستخدم مسبقاً');
+    }
+  }
+
+  /*
+  =========================
+  ✏️ 3️⃣ تحديث المشترك فقط بالحقول المرسلة
+  =========================
+  */
+
+  Object.keys(subscriberData).forEach(key => {
+    if (
+      subscriberData[key] !== undefined &&
+      subscriberData[key] !== null
+    ) {
+      subscriber[key] = subscriberData[key];
+    }
+  });
+
+  await subscriber.save();
+
+  /*
+  =========================
+  ✏️ 4️⃣ تحديث العداد
+  =========================
+  */
+
+  if (meter) {
+    Object.keys(meterData).forEach(key => {
+      if (
+        meterData[key] !== undefined &&
+        meterData[key] !== null
+      ) {
+        meter[key] = meterData[key];
+      }
+    });
+
+    await meter.save();
+  }
+
+  return {
+    subscriber,
+    meter
+  };
+};
+
+exports.deleteSubscriber = async (companyId, subscriberId) => {
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
+  try {
+    const subscriber = await Subscriber.findOne({
+      _id: subscriberId,
+      company: companyId
+    }).session(session);
+
+    if (!subscriber) {
+      throw new Error('المشترك غير موجود');
+    }
+
+    // حذف العداد
+    const meter = await Meter.findOne({
+      subscriber: subscriber._id
+    }).session(session);
+
+    if (meter) {
+      // حذف القراءات
+      await Reading.deleteMany({
+        meter: meter._id
+      }).session(session);
+
+      // حذف الفواتير
+      await Invoice.deleteMany({
+        subscriber: subscriber._id
+      }).session(session);
+
+      await Meter.deleteOne({
+        _id: meter._id
+      }).session(session);
+    }
+
+    // حذف المستخدم المرتبط
+    if (subscriber.user) {
+      await User.deleteOne({
+        _id: subscriber.user
+      }).session(session);
+    }
+
+    // حذف المشترك
+    await Subscriber.deleteOne({
+      _id: subscriber._id
+    }).session(session);
+
+    await session.commitTransaction();
+    session.endSession();
+
+    return true;
+
+  } catch (error) {
+    await session.abortTransaction();
+    session.endSession();
+    throw error;
+  }
 };

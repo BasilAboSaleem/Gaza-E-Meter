@@ -150,36 +150,59 @@ exports.createCompany = async (req, res) => {
   } catch (error) {
   console.error('Create Company Error:', error);
 
-  if (error.message.includes('البريد الإلكتروني') || error.code === 11000) {
+  // معالجة أخطاء Mongoose validation
+  if (error.name === 'ValidationError') {
+    const errors = {};
+    Object.keys(error.errors).forEach(key => {
+      errors[key] = error.errors[key].message;
+    });
     return res.status(422).json({
       message: 'فشل التحقق من البيانات',
-      errors: {
-        adminEmail: 'البريد الإلكتروني مستخدم مسبقًا'
-      }
+      errors
+    });
+  }
+
+  // معالجة أخطاء التكرار (Duplicate key)
+  if (error.code === 11000) {
+    const field = Object.keys(error.keyPattern)[0];
+    let message = 'هذه القيمة مستخدمة مسبقًا';
+    
+    if (field === 'email') message = 'البريد الإلكتروني مستخدم مسبقًا';
+    if (field === 'phone') message = 'رقم الهاتف مستخدم مسبقًا';
+    if (field === 'name') message = 'اسم الشركة مستخدم مسبقًا';
+
+    return res.status(422).json({
+      message: 'فشل التحقق من البيانات',
+      errors: { [field]: message }
+    });
+  }
+
+  // معالجة الأخطاء المخصصة من الـ Service
+  if (error.message.includes('البريد الإلكتروني')) {
+    return res.status(422).json({
+      message: 'فشل التحقق من البيانات',
+      errors: { adminEmail: error.message }
     });
   }
 
   if (error.message.includes('اسم الشركة')) {
     return res.status(422).json({
       message: 'فشل التحقق من البيانات',
-      errors: {
-        companyName: 'اسم الشركة مستخدم مسبقًا'
-      }
+      errors: { companyName: error.message }
     });
   }
 
   if (error.message.includes('رقم الهاتف')) {
     return res.status(422).json({
       message: 'فشل التحقق من البيانات',
-      errors: {
-        adminPhone: 'رقم الهاتف مستخدم مسبقًا'
-      }
+      errors: { adminPhone: error.message }
     });
   }
 
+  // خطأ عام
   return res.status(500).json({
     message: 'حدث خطأ غير متوقع أثناء إنشاء الشركة',
-    error: error.message // لعرض سبب الخطأ الحقيقي أثناء التطوير
+    error: process.env.NODE_ENV === 'development' ? error.message : undefined
   });
 }
 
@@ -240,5 +263,28 @@ exports.renderCompanyDetailsPage = async (req, res) => {
   } catch (error) {
     console.error(error);
     return res.status(500).send('خطأ في تحميل صفحة تفاصيل الشركة');
+  }
+};
+
+/**
+ * DELETE | حذف شركة
+ */
+exports.deleteCompany = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    await CompanyService.deleteCompany(id);
+
+    return res.status(200).json({
+      success: true,
+      message: 'تم حذف الشركة بنجاح'
+    });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(400).json({
+      success: false,
+      message: error.message || 'فشل حذف الشركة'
+    });
   }
 };

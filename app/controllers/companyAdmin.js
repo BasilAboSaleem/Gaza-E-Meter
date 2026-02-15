@@ -817,3 +817,65 @@ exports.showSubscriberDetails = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.showEditSubscriberForm = async (req, res, next) => {
+  try {
+    const companyId = req.user.company;
+    const subscriberId = req.params.id;
+    const details = await subscriberService.getSubscriberDetails(companyId, subscriberId);
+
+    // جلب المحصلين والمناطق الرئيسية للخيارات
+    const collectors = await collectorService.getCollectorsByCompany(companyId);
+    const areas = await areaService.getPrimaryAreasByCompany(companyId);
+
+ res.render('dashboard/companyAdmin/subscribers/edit-subsicriber', {
+  title: 'تعديل بيانات المشترك',
+  subscriber: details.subscriber,
+  meter: details.subscriber.meterId, // 👈 الحل هنا
+  collectors,
+  areas
+});
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.updateSubscriber = async (req, res, next) => {
+  try {
+    const companyId = req.user.company;
+    const subscriberId = req.params.id;
+
+    const { subscriber: subscriberData, meter: meterData } = req.body;
+
+    const updated = await subscriberService.updateSubscriberWithMeter(
+      companyId,
+      subscriberId,
+      subscriberData,
+      meterData
+    );
+
+    res.json({
+      message: 'تم تحديث بيانات المشترك بنجاح',
+      data: updated
+    });
+
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+exports.deleteSubscriber = async (req, res, next) => {
+  try {
+    const companyId = req.user.company;
+    const subscriberId = req.params.id;
+
+    await subscriberService.deleteSubscriber(companyId, subscriberId);
+
+  res.redirect('/company-admin/subscribers');
+  } catch (error) {
+    next(error);
+  }
+};
+
+  

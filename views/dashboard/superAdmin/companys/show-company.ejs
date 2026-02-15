@@ -1,104 +1,125 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <%- include('../../../partials/head.ejs') %>
-<body class="">
 
-<%- include('../../../partials/sidebar.ejs') %>
+  <body class="">
 
-<main class="main-content">
-  <div class="position-relative iq-banner">
-    <%- include('../../../partials/navbar.ejs') %>
-  </div>
+    <%- include('../../../partials/sidebar.ejs') %>
 
-  <div class="container-fluid content-inner mt-n5 py-4">
-
-    <!-- Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <h3 class="mb-0">تفاصيل الشركة</h3>
-      <a href="/super-admin/companies/<%= company._id %>/edit" class="btn btn-primary">
-        <i class="fas fa-edit me-1"></i> تعديل الشركة
-      </a>
-    </div>
-
-    <div class="row g-3">
-
-      <!-- بطاقة بيانات الشركة -->
-      <div class="col-lg-6">
-        <div class="card shadow-sm">
-          <div class="card-header">
-            <h5 class="mb-0">بيانات الشركة</h5>
-          </div>
-          <div class="card-body">
-            <ul class="list-group list-group-flush">
-              <li class="list-group-item"><strong>اسم الشركة:</strong> <%= company.name %></li>
-              <li class="list-group-item"><strong>اسم المالك:</strong> <%= company.ownerName || 'غير محدد' %></li>
-              <li class="list-group-item"><strong>هاتف الشركة:</strong> <%= company.phone || 'غير محدد' %></li>
-              <li class="list-group-item"><strong>الباقة:</strong> <%= company.plan?.name || 'غير محددة' %></li>
-<%
-  const subscriptionTypeMap = {
-    monthly: 'شهري',
-    '3month': '3 أشهر',
-    '6month': '6 أشهر',
-    yearly: 'سنوي',
-    permanent: 'دائم'
-  };
-%>
-
-<li class="list-group-item">
-  <strong>مدة الاشتراك:</strong>
-  <%= subscriptionTypeMap[company.subscriptionType] || 'غير محددة' %>
-</li>
-              
-              <li class="list-group-item">
-                <strong>حالة الاشتراك:</strong>
-                <span class="<%= company.status === 'active' ? 'text-success' : 'text-danger' %>">
-                  <%= company.status === 'active' ? 'فعّالة' : 'منتهية' %>
-                </span>
-              </li>
-              <li class="list-group-item"><strong>بداية الاشتراك:</strong> <%= company.subscriptionStart ? new Date(company.subscriptionStart).toLocaleDateString('ar-EG') : 'غير محدد' %></li>
-              <li class="list-group-item"><strong>نهاية الاشتراك:</strong> <%= company.subscriptionEnd ? new Date(company.subscriptionEnd).toLocaleDateString('ar-EG') : 'غير محدد' %></li>
-            </ul>
-          </div>
+      <main class="main-content">
+        <div class="position-relative iq-banner">
+          <%- include('../../../partials/navbar.ejs') %>
         </div>
-      </div>
 
-      <!-- بطاقة بيانات المدير -->
-      <div class="col-lg-6">
-        <div class="card shadow-sm">
-          <div class="card-header">
-            <h5 class="mb-0">بيانات مدير الشركة</h5>
+        <div class="container-fluid content-inner mt-n5 py-4">
+
+          <!-- Header -->
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="mb-0">تفاصيل الشركة</h3>
+            <a href="/super-admin/companies/<%= company._id %>/edit" class="btn btn-primary">
+              <i class="fas fa-edit me-1"></i> تعديل الشركة
+            </a>
           </div>
-          <div class="card-body">
-            <% if (admin) { %>
-              <ul class="list-group list-group-flush">
-                <li class="list-group-item"><strong>اسم المدير:</strong> <%= admin.fullName %></li>
-                <li class="list-group-item"><strong>البريد الإلكتروني:</strong> <%= admin.email || 'غير محدد' %></li>
-                <li class="list-group-item"><strong>هاتف المدير:</strong> <%= admin.phone || 'غير محدد' %></li>
-                <li class="list-group-item">
-                  <strong>الحالة:</strong>
-                  <span class="<%= admin.isActive ? 'text-success' : 'text-danger' %>">
-                    <%= admin.isActive ? 'مفعّل' : 'غير مفعّل' %>
-                  </span>
-                </li>
-              </ul>
-            <% } else { %>
-              <div class="alert alert-info d-flex align-items-center">
-                <i class="fas fa-info-circle me-2"></i>
-                لا يوجد مدير (COMPANY_ADMIN) مرتبط بهذه الشركة حالياً
+
+          <div class="row g-3">
+
+            <!-- بطاقة بيانات الشركة -->
+            <div class="col-lg-6">
+              <div class="card shadow-sm">
+                <div class="card-header">
+                  <h5 class="mb-0">بيانات الشركة</h5>
+                </div>
+                <div class="card-body">
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><strong>اسم الشركة:</strong>
+                      <%= company.name %>
+                    </li>
+                    <li class="list-group-item"><strong>اسم المالك:</strong>
+                      <%= company.ownerName || 'غير محدد' %>
+                    </li>
+                    <li class="list-group-item"><strong>هاتف الشركة:</strong>
+                      <%= company.phone || 'غير محدد' %>
+                    </li>
+                    <li class="list-group-item"><strong>الباقة:</strong>
+                      <%= company.plan?.name || 'غير محددة' %>
+                    </li>
+                    <% const subscriptionTypeMap={ monthly: 'شهري' , '3month' : '3 أشهر' , '6month' : '6 أشهر' ,
+                      yearly: 'سنوي' , permanent: 'دائم' }; %>
+
+                      <li class="list-group-item">
+                        <strong>مدة الاشتراك:</strong>
+                        <%= subscriptionTypeMap[company.subscriptionType] || 'غير محددة' %>
+                      </li>
+
+                      <li class="list-group-item">
+                        <strong>حالة الاشتراك:</strong>
+                        <span class="<%= company.status === 'active' ? 'text-success' : 'text-danger' %>">
+                          <%= company.status==='active' ? 'فعّالة' : 'منتهية' %>
+                        </span>
+                      </li>
+                      <li class="list-group-item"><strong>بداية الاشتراك:</strong>
+                        <%= company.subscriptionStart ? new Date(company.subscriptionStart).toLocaleDateString('ar-EG')
+                          : 'غير محدد' %>
+                      </li>
+                      <li class="list-group-item">
+                        <strong>نهاية الاشتراك:</strong>
+                        <% if (company.subscriptionType==='permanent' ) { %>
+                          <span class="badge bg-info">دائم</span>
+                          <% } else if (company.subscriptionEnd) { %>
+                            <%= new Date(company.subscriptionEnd).toLocaleDateString('ar-EG') %>
+                              <% } else { %>
+                                غير محدد
+                                <% } %>
+                      </li>
+                  </ul>
+                </div>
               </div>
-            <% } %>
+            </div>
+
+            <!-- بطاقة بيانات المدير -->
+            <div class="col-lg-6">
+              <div class="card shadow-sm">
+                <div class="card-header">
+                  <h5 class="mb-0">بيانات مدير الشركة</h5>
+                </div>
+                <div class="card-body">
+                  <% if (admin) { %>
+                    <ul class="list-group list-group-flush">
+                      <li class="list-group-item"><strong>اسم المدير:</strong>
+                        <%= admin.fullName %>
+                      </li>
+                      <li class="list-group-item"><strong>البريد الإلكتروني:</strong>
+                        <%= admin.email || 'غير محدد' %>
+                      </li>
+                      <li class="list-group-item"><strong>هاتف المدير:</strong>
+                        <%= admin.phone || 'غير محدد' %>
+                      </li>
+                      <li class="list-group-item">
+                        <strong>الحالة:</strong>
+                        <span class="<%= admin.isActive ? 'text-success' : 'text-danger' %>">
+                          <%= admin.isActive ? 'مفعّل' : 'غير مفعّل' %>
+                        </span>
+                      </li>
+                    </ul>
+                    <% } else { %>
+                      <div class="alert alert-info d-flex align-items-center">
+                        <i class="fas fa-info-circle me-2"></i>
+                        لا يوجد مدير (COMPANY_ADMIN) مرتبط بهذه الشركة حالياً
+                      </div>
+                      <% } %>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
-      </div>
 
-    </div>
-  </div>
+        <%- include('../../../partials/footer.ejs') %>
+      </main>
 
-  <%- include('../../../partials/footer.ejs') %>
-</main>
+      <%- include('../../../partials/offcanvas.ejs') %>
+        <%- include('../../../partials/scripts.ejs') %>
 
-<%- include('../../../partials/offcanvas.ejs') %>
-<%- include('../../../partials/scripts.ejs') %>
+  </body>
 
-</body>
 </html>

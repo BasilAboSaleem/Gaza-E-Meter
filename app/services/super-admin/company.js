@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 const CompanyRepository = require('../../repositories/super-admin/company');
 const UserRepository = require('../../repositories/super-admin/user');
 const User = require('../../models/User');
-const Fund = require('../../models/Fund')
+const Fund = require('../../models/Fund');
+const Company = require('../../models/Company');
 
 class CompanyService {
 
@@ -80,18 +81,15 @@ class CompanyService {
       );
 
       //انشاء صندوق الشركة
-      const fundCompany = await Fund.create({
+      const fundCompany = await Fund.create([{
         company: newCompany._id,
         name: `الصندوق الرئيسي لشركة ${newCompany.name}`,
         type: 'COMPANY',
-        owner: newCompany.name,
+        owner: null, // صندوق الشركة الرئيسي ليس له مالك محدد
         balance: 0,
         currency: 'شيكل',
         isActive: true
-
-      }
-        
-      )
+      }], { session });
 
 
       await session.commitTransaction();
@@ -215,10 +213,41 @@ class CompanyService {
   );
 }
 
+  /**
+   * حذف شركة وجميع البيانات المرتبطة بها
+   */
+  static async deleteCompany(companyId) {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
+    try {
+      // التحقق من وجود الشركة
+      const company = await CompanyRepository.findById(companyId);
+      if (!company) {
+        throw new Error('الشركة غير موجودة');
+      }
+
+      // حذف جميع المستخدمين المرتبطين بالشركة
+      await User.deleteMany({ company: companyId }, { session });
+
+      // حذف جميع الصناديق المرتبطة بالشركة
+      await Fund.deleteMany({ company: companyId }, { session });
+
+      // حذف الشركة نفسها
+      await Company.findByIdAndDelete(companyId, { session });
+
+      await session.commitTransaction();
+      session.endSession();
+
+      return true;
+
+    } catch (err) {
+      await session.abortTransaction();
+      session.endSession();
+      throw err;
+    }
+  }
+
 }
-
-
-
-
 
 module.exports = CompanyService;

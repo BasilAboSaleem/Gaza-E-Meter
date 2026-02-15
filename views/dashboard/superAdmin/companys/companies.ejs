@@ -63,7 +63,13 @@
                                       <% } %>
                                 </td>
                                 <td>
-                                  <%= new Date(company.subscriptionEnd).toLocaleDateString('ar-EG') %>
+                                  <% if (company.subscriptionType==='permanent' ) { %>
+                                    <span class="badge bg-info">دائم</span>
+                                    <% } else if (company.subscriptionEnd) { %>
+                                      <%= new Date(company.subscriptionEnd).toLocaleDateString('ar-EG') %>
+                                        <% } else { %>
+                                          -
+                                          <% } %>
                                 </td>
                                 <td>
                                   <a href="/super-admin/companies/<%= company._id %>/view"

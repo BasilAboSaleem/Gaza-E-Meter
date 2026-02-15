@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en" dir="rtl">
+  <%- include('../../../partials/head.ejs') %>
+  <body>
+
+    <div id="loading">
+      <div class="loader simple-loader">
+        <div class="loader-body"></div>
+      </div>
+    </div>
+
+    <%- include('../../../partials/sidebar.ejs') %>
+
+    <main class="main-content">
+      <div class="position-relative iq-banner">
+        <%- include('../../../partials/navbar.ejs') %>
+      </div>
+
+      <div class="container-fluid content-inner mt-n5 py-0">
+        <div class="row">
+          <div class="col-lg-10 mx-auto">
+            <div class="card">
+              <div class="card-header">
+                <h4 class="card-title mb-0">تعديل بيانات المشترك</h4>
+                <p class="text-muted mt-1">يمكنك تعديل البيانات المطلوبة فقط</p>
+              </div>
+
+              <div class="card-body">
+                <form id="form-wizard1" class="mt-3 text-center" novalidate autocomplete="off">
+
+                  <!-- بيانات المشترك -->
+                  <div class="step active">
+                    <div class="form-card text-start">
+                      <h3 class="mb-4">بيانات المشترك</h3>
+
+                      <div class="row">
+
+                        <div class="col-md-6 mb-3">
+                          <label class="form-label">الاسم الكامل *</label>
+                          <input type="text" id="fullName" class="form-control"
+                            value="<%= subscriber.fullName %>">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                          <label class="form-label">رقم الهاتف *</label>
+                          <input type="text" id="phone" class="form-control"
+                            value="<%= subscriber.phone %>">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                          <label class="form-label">رقم الهوية</label>
+                          <input type="text" id="nationalId" class="form-control"
+                            value="<%= subscriber.nationalId || '' %>">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                          <label class="form-label">العنوان</label>
+                          <input type="text" id="address" class="form-control"
+                            value="<%= subscriber.address || '' %>">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                          <label class="form-label">المنطقة الرئيسية *</label>
+                          <select id="primaryArea" class="form-select">
+                            <option value="">--- اختر المنطقة الرئيسية ---</option>
+                            <% areas.forEach(area => { %>
+                              <option value="<%= area._id %>"
+                                <%= subscriber.primaryArea?._id.toString() === area._id.toString() ? 'selected' : '' %>>
+                                <%= area.name %>
+                              </option>
+                            <% }) %>
+                          </select>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                          <label class="form-label">المنطقة الفرعية</label>
+                          <select id="secondaryArea" class="form-select">
+                            <option value="">---</option>
+                          </select>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                          <label class="form-label">نوع الاشتراك</label>
+                          <select id="type" class="form-select">
+                            <option value="HOME" <%= subscriber.type === 'HOME' ? 'selected' : '' %>>منزلي</option>
+                            <option value="COMMERCIAL" <%= subscriber.type === 'COMMERCIAL' ? 'selected' : '' %>>تجاري</option>
+                          </select>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                          <label class="form-label">دورية التحصيل</label>
+                          <select id="collectionFrequency" class="form-select">
+                            <option value="MONTHLY" <%= subscriber.collectionFrequency === 'MONTHLY' ? 'selected' : '' %>>شهري</option>
+                            <option value="WEEKLY" <%= subscriber.collectionFrequency === 'WEEKLY' ? 'selected' : '' %>>أسبوعي</option>
+                            <option value="DAILY" <%= subscriber.collectionFrequency === 'DAILY' ? 'selected' : '' %>>يومي</option>
+                          </select>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                          <label class="form-label">المحصل *</label>
+                          <select id="assignedCollector" class="form-select">
+                            <% collectors.forEach(c => { %>
+                              <option value="<%= c._id %>"
+                                <%= subscriber.assignedCollector?._id.toString() === c._id.toString() ? 'selected' : '' %>>
+                                <%= c.fullName %>
+                              </option>
+                            <% }) %>
+                          </select>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                          <label class="form-label d-block">الحالة</label>
+                          <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="isActive"
+                              <%= subscriber.isActive ? 'checked' : '' %>>
+                            <label class="form-check-label">مفعّل</label>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- بيانات العداد -->
+                  <div class="step active">
+                    <div class="form-card text-start mt-4">
+                      <h3 class="mb-4">بيانات العداد</h3>
+
+                      <div class="row">
+                        <div class="col-md-6 mb-3">
+                          <label class="form-label">رقم العداد *</label>
+                          <input type="text" id="serialNumber" class="form-control"
+                            value="<%= meter.serialNumber %>">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                          <label class="form-label">تاريخ التركيب *</label>
+                          <input type="date" id="installationDate" class="form-control"
+                            value="<%= meter.installationDate.toISOString().split('T')[0] %>">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                          <label class="form-label">القراءة الأولية</label>
+                          <input type="number" id="initialReading" class="form-control"
+                            value="<%= meter.initialReading %>">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                          <label class="form-label">حالة العداد</label>
+                          <select id="meterStatus" class="form-select">
+                            <option value="ACTIVE" <%= meter.status === 'ACTIVE' ? 'selected' : '' %>>مفعل</option>
+                            <option value="INACTIVE" <%= meter.status === 'INACTIVE' ? 'selected' : '' %>>غير مفعل</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-success px-5">تحديث البيانات</button>
+                  </div>
+
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <%- include('../../../partials/footer.ejs') %>
+    </main>
+
+    <%- include('../../../partials/scripts.ejs') %>
+
+<script>
+const form = document.getElementById('form-wizard1');
+const secondaryAreaSelect = document.getElementById('secondaryArea');
+const primaryAreaSelect = document.getElementById('primaryArea');
+
+window.addEventListener('DOMContentLoaded', async () => {
+  const primaryId = "<%= subscriber.primaryArea?._id %>";
+  const secondaryId = "<%= subscriber.secondaryArea?._id || '' %>";
+
+  if (!primaryId) return;
+
+  const res = await fetch(`/company-admin/areas/${primaryId}/sub-areas`);
+  const subAreas = await res.json();
+
+  subAreas.forEach(area => {
+    const opt = document.createElement('option');
+    opt.value = area._id;
+    opt.textContent = area.name;
+    if (area._id === secondaryId) opt.selected = true;
+    secondaryAreaSelect.appendChild(opt);
+  });
+});
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const data = {
+    subscriber: {
+      fullName: fullName.value.trim(),
+      phone: phone.value.trim(),
+      nationalId: nationalId.value.trim() || null,
+      address: address.value.trim() || null,
+      primaryArea: primaryAreaSelect.value,
+      secondaryArea: secondaryAreaSelect.value || null,
+      type: type.value,
+      collectionFrequency: collectionFrequency.value,
+      assignedCollector: assignedCollector.value,
+      isActive: isActive.checked
+    },
+    meter: {
+      serialNumber: serialNumber.value.trim(),
+      initialReading: Number(initialReading.value) || 0,
+      installationDate: installationDate.value,
+      status: meterStatus.value
+    }
+  };
+
+  const res = await fetch('/company-admin/subscribers/<%= subscriber._id %>', {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  });
+
+  if (res.ok) {
+    alert("تم تحديث البيانات بنجاح");
+    window.location.href = '/company-admin/subscribers';
+  } else {
+    alert("حدث خطأ أثناء التحديث");
+  }
+});
+</script>
+
+  </body>
+</html>

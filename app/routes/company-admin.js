@@ -57,6 +57,28 @@ router.get(
   companyAdminController.showSubscriberDetails
 );
 
+router.get(
+  '/subscribers/:id/edit',
+  authMiddleware,
+  authorizMiddleware('COMPANY_ADMIN'),
+  companyAdminController.showEditSubscriberForm
+);
+
+
+router.patch(
+  '/subscribers/:id',
+  authMiddleware,
+  authorizMiddleware('COMPANY_ADMIN'),
+  companyAdminController.updateSubscriber
+);
+
+router.delete(
+  '/subscribers/:id',
+  authMiddleware,
+  authorizMiddleware('COMPANY_ADMIN'),
+  companyAdminController.deleteSubscriber
+);
+
 router.get("/funds", authMiddleware, authorizMiddleware("COMPANY_ADMIN"), companyAdminController.listFunds);
 router.get("/funds/create", authMiddleware, authorizMiddleware("COMPANY_ADMIN"), companyAdminController.showCreateFundForm);
 router.post("/funds/create", authMiddleware, authorizMiddleware("COMPANY_ADMIN"), companyAdminController.createFund);

@@ -255,11 +255,21 @@
                   const result = await res.json();
 
                   if (res.ok) {
+                    alert('تم إنشاء الشركة بنجاح');
                     window.location.href = '/super-admin/companies';
                   } else {
-                    alert(result.message || 'حدث خطأ');
+                    // عرض الأخطاء للمستخدم
+                    let errorMessage = result.message || 'حدث خطأ';
+                    if (result.errors) {
+                      errorMessage += ':\n';
+                      Object.keys(result.errors).forEach(key => {
+                        errorMessage += `- ${result.errors[key]}\n`;
+                      });
+                    }
+                    alert(errorMessage);
                   }
                 } catch (err) {
+                  console.error(err);
                   alert('خطأ في الاتصال بالخادم');
                 }
               });

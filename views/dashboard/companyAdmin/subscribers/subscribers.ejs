@@ -121,9 +121,31 @@
                                   <span class="badge bg-danger">غير مفعل</span>
                                   <% } %>
                             </td>
-                            <td>
-                              <a href="/company-admin/subscribers/<%= s._id %>" class="btn btn-info btn-sm">عرض</a>
-                            </td>
+                          <td class="d-flex gap-1">
+
+  <!-- عرض -->
+  <a href="/company-admin/subscribers/<%= s._id %>" 
+     class="btn btn-info btn-sm">
+    عرض
+  </a>
+
+  <!-- تعديل -->
+  <a href="/company-admin/subscribers/<%= s._id %>/edit" 
+     class="btn btn-warning btn-sm">
+    تعديل
+  </a>
+
+  <!-- حذف -->
+  <form action="/company-admin/subscribers/<%= s._id %>?_method=DELETE" 
+        method="POST" 
+        onsubmit="return confirm('هل أنت متأكد من حذف هذا المشترك؟')">
+    <button type="submit" class="btn btn-danger btn-sm">
+      حذف
+    </button>
+  </form>
+
+</td>
+
                           </tr>
                           <% }) %>
 
