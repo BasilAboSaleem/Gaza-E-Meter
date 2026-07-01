@@ -23,7 +23,7 @@
               <div class="card-header">
                 <h4 class="card-title mb-0">إضافة صندوق جديد</h4>
                 <p class="text-muted mt-1 mb-0">
-                  يمكنك إضافة صناديق من نوع بنك، مصروفات أو أخرى
+                  يمكنك إضافة صندوق شركة أو صندوق بنك أو مصروفات أو أي صندوق آخر حسب الحاجة
                 </p>
               </div>
 
@@ -52,6 +52,7 @@
                         required
                       >
                         <option value="">اختر النوع</option>
+                        <option value="COMPANY">صندوق شركة</option>
                         <option value="BANK">بنك</option>
                         <option value="EXPENSES">مصروفات</option>
                         <option value="OTHER">أخرى</option>
@@ -69,6 +70,20 @@
                         value="شيكل"
                       >
                       <div class="text-danger small mt-1 error-currency"></div>
+                    </div>
+
+                    <!-- الرصيد الافتتاحي -->
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">الرصيد الافتتاحي</label>
+                      <input
+                        type="number"
+                        id="fundInitialBalance"
+                        class="form-control"
+                        value="0"
+                        min="0"
+                        step="0.01"
+                      >
+                      <div class="text-danger small mt-1 error-initialBalance"></div>
                     </div>
 
                     <!-- ملاحظات -->
@@ -131,6 +146,7 @@
           name: document.getElementById('fundName').value,
           type: document.getElementById('fundType').value,
           currency: document.getElementById('fundCurrency').value,
+          initialBalance: document.getElementById('fundInitialBalance').value,
           notes: document.getElementById('fundNotes').value
         };
 

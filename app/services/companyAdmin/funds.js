@@ -11,7 +11,9 @@ exports.createFund = async ({
   name,
   type,
   currency = 'شيكل',
-  notes
+  notes,
+  initialBalance = 0,
+  performedBy
 }) => {
   // 1️⃣ Validation أساسي
   if (!name || !name.trim()) {
@@ -29,7 +31,7 @@ exports.createFund = async ({
   }
 
   // 2️⃣ منع إنشاء أنواع غير مسموحة
-  const ALLOWED_TYPES = ['BANK', 'EXPENSES', 'OTHER'];
+  const ALLOWED_TYPES = ['COMPANY', 'BANK', 'EXPENSES', 'OTHER'];
 
   if (!ALLOWED_TYPES.includes(type)) {
     const err = new Error('نوع الصندوق غير مسموح');
@@ -51,6 +53,15 @@ exports.createFund = async ({
     throw err;
   }
 
+  const openingBalance = Number(initialBalance) || 0;
+
+  if (openingBalance < 0) {
+    const err = new Error('الرصيد الافتتاحي لا يمكن أن يكون سالباً');
+    err.statusCode = 400;
+    err.field = 'initialBalance';
+    throw err;
+  }
+
   // 4️⃣ إنشاء الصندوق
   const fund = await fundRepo.create({
     company: companyId,
@@ -61,6 +72,25 @@ exports.createFund = async ({
     currency,
     notes
   });
+
+  if (openingBalance > 0) {
+    await transactionRepo.create({
+      company: companyId,
+      fund: fund._id,
+      destinationFund: fund._id,
+      type: 'ADJUSTMENT',
+      direction: 'IN',
+      amount: openingBalance,
+      description: 'رصيد افتتاحي للصندوق',
+      performedBy,
+      metadata: {
+        source: 'manual-fund-create'
+      }
+    });
+
+    fund.balance = openingBalance;
+    await fund.save();
+  }
 
   return fund;
 };

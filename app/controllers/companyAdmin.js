@@ -553,7 +553,7 @@ exports.showCreateFundForm = (req, res) => {
 
 exports.createFund = async (req, res, next) => {
   try {
-    const { name, type, currency, notes } = req.body; // ✅ type موجود الآن
+    const { name, type, currency, notes, initialBalance } = req.body; // ✅ type موجود الآن
     const companyId = req.user.company;
 
     // Validate اسم الصندوق فقط (type يتم التحقق منه بالسيرفس)
@@ -566,7 +566,9 @@ exports.createFund = async (req, res, next) => {
       name,
       type,
       currency,
-      notes
+      notes,
+      initialBalance,
+      performedBy: req.user._id
     });
 
     return res.status(201).json(fund);
