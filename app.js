@@ -17,9 +17,6 @@ const morgan = require("morgan");
 const session = require("express-session");
 const flash = require("connect-flash");
 
-// --------- Database ----------
-const connectDB = require("./app/config/db");
-
 // --------- Custom Middlewares ----------
 const authMiddleware = require("./app/middlewares/auth");
 const fixStaticPaths = require('./app/middlewares/fixStaticPaths');
@@ -47,10 +44,8 @@ const app = express();
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
-// --------- Database Init ----------
-connectDB();
-
 // --------- Global Middlewares ----------
+app.set('trust proxy', 1);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -83,9 +78,13 @@ if (process.env.NODE_ENV !== "production") {
 // --------- Session ----------
 app.use(
   session({
-    secret: process.env.SESSION_SECRET || "secret",
+    secret: process.env.SESSION_SECRET || process.env.JWT_SECRET || 'change-me-in-production',
     resave: false,
     saveUninitialized: false,
+    cookie: {
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+    },
   })
 );
 
@@ -100,7 +99,7 @@ app.use((req, res, next) => {
 });
 
 // --------- Global User & Roles ----------
-const { USER_ROLES } = require("./app/models/User");
+const USER_ROLES = ['SUPER_ADMIN', 'COMPANY_ADMIN', 'COLLECTOR', 'ACCOUNTANT', 'SUBSCRIBER'];
 
 app.use((req, res, next) => {
   res.locals.user = req.user
@@ -118,6 +117,11 @@ app.use((req, res, next) => {
 
   res.locals.USER_ROLES = USER_ROLES;
   next();
+});
+
+// --------- Health Check (Render) ----------
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok' });
 });
 
 // --------- Routes Mounting ----------

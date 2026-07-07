@@ -28,18 +28,22 @@ exports.loginUser = async (req, res) => {
     user.lastLoginAt = new Date();
     await user.save();
 
+    if (!process.env.JWT_SECRET) {
+      throw new Error('JWT_SECRET is not configured');
+    }
+
     const token = jwt.sign(
       { userId: user._id, role: user.role, company: user.company },
       process.env.JWT_SECRET,
       { expiresIn: '7d' }
     );
 
-    // حفظ التوكن في cookie
-    res.cookie("token", token, {
-  httpOnly: true,
-  sameSite: "lax",
-  maxAge: 7 * 24 * 60 * 60 * 1000
-});
+    res.cookie('token', token, {
+      httpOnly: true,
+      sameSite: 'lax',
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
 
     // إعادة توجيه للداشبورد العام
     res.redirect("/");
